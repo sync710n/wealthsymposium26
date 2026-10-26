@@ -93,7 +93,8 @@ const initial = {
 
 export function painText(state: Pick<SessionState, "painId" | "painOwn">) {
   if (state.painId === "own") return state.painOwn.trim();
-  return PAINPOINTS.find((item) => item.id === state.painId)?.text ?? "";
+  const item = PAINPOINTS.find((point) => point.id === state.painId);
+  return item ? `${item.title}. ${item.text}` : "";
 }
 
 export function briefReady(brief: Brief) {

@@ -26,19 +26,6 @@
       --tw-ring-offset-width: 0px;
       --tw-ring-offset-color: #fff;
       --tw-ring-offset-shadow: 0 0 #0000;
-      --tw-blur: initial;
-      --tw-brightness: initial;
-      --tw-contrast: initial;
-      --tw-grayscale: initial;
-      --tw-hue-rotate: initial;
-      --tw-invert: initial;
-      --tw-opacity: initial;
-      --tw-saturate: initial;
-      --tw-sepia: initial;
-      --tw-drop-shadow: initial;
-      --tw-drop-shadow-color: initial;
-      --tw-drop-shadow-alpha: 100%;
-      --tw-drop-shadow-size: initial;
     }
   }
 }
@@ -500,6 +487,10 @@
     z-index: 50;
   }
 
+  .col-span-3 {
+    grid-column: span 3 / span 3;
+  }
+
   .mx-2 {
     margin-inline: calc(var(--spacing) * 2);
   }
@@ -570,11 +561,6 @@
   .size-5 {
     width: calc(var(--spacing) * 5);
     height: calc(var(--spacing) * 5);
-  }
-
-  .size-6 {
-    width: calc(var(--spacing) * 6);
-    height: calc(var(--spacing) * 6);
   }
 
   .size-10 {
@@ -706,12 +692,16 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .grid-cols-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  .grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .grid-rows-3 {
     grid-template-rows: repeat(3, minmax(0, 1fr));
+  }
+
+  .grid-rows-4 {
+    grid-template-rows: repeat(4, minmax(0, 1fr));
   }
 
   .flex-col {
@@ -1170,10 +1160,6 @@
   .shadow-lg {
     --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, #0000001a), 0 4px 6px -4px var(--tw-shadow-color, #0000001a);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-
-  .filter {
-    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
   }
 
   .last\:border-r-0:last-child {
@@ -2415,72 +2401,6 @@ button.text-rule {
   syntax: "*";
   inherits: false;
   initial-value: 0 0 #0000;
-}
-
-@property --tw-blur {
-  syntax: "*";
-  inherits: false
-}
-
-@property --tw-brightness {
-  syntax: "*";
-  inherits: false
-}
-
-@property --tw-contrast {
-  syntax: "*";
-  inherits: false
-}
-
-@property --tw-grayscale {
-  syntax: "*";
-  inherits: false
-}
-
-@property --tw-hue-rotate {
-  syntax: "*";
-  inherits: false
-}
-
-@property --tw-invert {
-  syntax: "*";
-  inherits: false
-}
-
-@property --tw-opacity {
-  syntax: "*";
-  inherits: false
-}
-
-@property --tw-saturate {
-  syntax: "*";
-  inherits: false
-}
-
-@property --tw-sepia {
-  syntax: "*";
-  inherits: false
-}
-
-@property --tw-drop-shadow {
-  syntax: "*";
-  inherits: false
-}
-
-@property --tw-drop-shadow-color {
-  syntax: "*";
-  inherits: false
-}
-
-@property --tw-drop-shadow-alpha {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 100%;
-}
-
-@property --tw-drop-shadow-size {
-  syntax: "*";
-  inherits: false
 }
 /*$vite$:1*/</style>
   </head>
@@ -13918,13 +13838,6 @@ button.text-rule {
 		module.exports = require_react_dom_client_production();
 	}));
 	//#endregion
-	//#region desktop-local/shims/tanstack-start.ts
-	var import_react = /* @__PURE__ */ __toESM(require_react());
-	var import_client = require_client();
-	function useServerFn(fn) {
-		return fn;
-	}
-	//#endregion
 	//#region node_modules/lucide-react/dist/esm/shared/src/utils.js
 	/**
 	* @license lucide-react v0.510.0 - ISC
@@ -13965,6 +13878,7 @@ button.text-rule {
 	};
 	//#endregion
 	//#region node_modules/lucide-react/dist/esm/Icon.js
+	var import_react = /* @__PURE__ */ __toESM(require_react());
 	/**
 	* @license lucide-react v0.510.0 - ISC
 	*
@@ -14006,34 +13920,6 @@ button.text-rule {
 	* This source code is licensed under the ISC license.
 	* See the LICENSE file in the root directory of this source tree.
 	*/
-	var AppWindow = createLucideIcon("app-window", [
-		["rect", {
-			x: "2",
-			y: "4",
-			width: "20",
-			height: "16",
-			rx: "2",
-			key: "izxlao"
-		}],
-		["path", {
-			d: "M10 4v4",
-			key: "pp8u80"
-		}],
-		["path", {
-			d: "M2 8h20",
-			key: "d11cs7"
-		}],
-		["path", {
-			d: "M6 4v4",
-			key: "1svtjw"
-		}]
-	]);
-	/**
-	* @license lucide-react v0.510.0 - ISC
-	*
-	* This source code is licensed under the ISC license.
-	* See the LICENSE file in the root directory of this source tree.
-	*/
 	var Bot = createLucideIcon("bot", [
 		["path", {
 			d: "M12 8V4H8",
@@ -14064,19 +13950,6 @@ button.text-rule {
 			key: "rq6x2g"
 		}]
 	]);
-	/**
-	* @license lucide-react v0.510.0 - ISC
-	*
-	* This source code is licensed under the ISC license.
-	* See the LICENSE file in the root directory of this source tree.
-	*/
-	var ChartLine = createLucideIcon("chart-line", [["path", {
-		d: "M3 3v16a2 2 0 0 0 2 2h16",
-		key: "c24i48"
-	}], ["path", {
-		d: "m19 9-5 5-4-4-3 3",
-		key: "2osh9i"
-	}]]);
 	/**
 	* @license lucide-react v0.510.0 - ISC
 	*
@@ -14169,24 +14042,6 @@ button.text-rule {
 	* This source code is licensed under the ISC license.
 	* See the LICENSE file in the root directory of this source tree.
 	*/
-	var Copy = createLucideIcon("copy", [["rect", {
-		width: "14",
-		height: "14",
-		x: "8",
-		y: "8",
-		rx: "2",
-		ry: "2",
-		key: "17jyea"
-	}], ["path", {
-		d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2",
-		key: "zix9uf"
-	}]]);
-	/**
-	* @license lucide-react v0.510.0 - ISC
-	*
-	* This source code is licensed under the ISC license.
-	* See the LICENSE file in the root directory of this source tree.
-	*/
 	var Expand = createLucideIcon("expand", [
 		["path", {
 			d: "m15 15 6 6",
@@ -14227,26 +14082,40 @@ button.text-rule {
 	* This source code is licensed under the ISC license.
 	* See the LICENSE file in the root directory of this source tree.
 	*/
-	var FileText = createLucideIcon("file-text", [
-		["path", {
-			d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z",
-			key: "1rqfz7"
+	var Globe = createLucideIcon("globe", [
+		["circle", {
+			cx: "12",
+			cy: "12",
+			r: "10",
+			key: "1mglay"
 		}],
 		["path", {
-			d: "M14 2v4a2 2 0 0 0 2 2h4",
-			key: "tnqrlb"
+			d: "M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20",
+			key: "13o1zl"
 		}],
 		["path", {
-			d: "M10 9H8",
-			key: "b1mrlr"
+			d: "M2 12h20",
+			key: "9i4pu4"
+		}]
+	]);
+	/**
+	* @license lucide-react v0.510.0 - ISC
+	*
+	* This source code is licensed under the ISC license.
+	* See the LICENSE file in the root directory of this source tree.
+	*/
+	var Goal = createLucideIcon("goal", [
+		["path", {
+			d: "M12 13V2l8 4-8 4",
+			key: "5wlwwj"
 		}],
 		["path", {
-			d: "M16 13H8",
-			key: "t4e002"
+			d: "M20.561 10.222a9 9 0 1 1-12.55-5.29",
+			key: "1c0wjv"
 		}],
 		["path", {
-			d: "M16 17H8",
-			key: "z1uh3a"
+			d: "M8.002 9.997a5 5 0 1 0 8.9 2.02",
+			key: "gb1g7m"
 		}]
 	]);
 	/**
@@ -14303,17 +14172,32 @@ button.text-rule {
 	* This source code is licensed under the ISC license.
 	* See the LICENSE file in the root directory of this source tree.
 	*/
-	var Mail = createLucideIcon("mail", [["path", {
-		d: "m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7",
-		key: "132q7q"
-	}], ["rect", {
-		x: "2",
-		y: "4",
-		width: "20",
-		height: "16",
-		rx: "2",
-		key: "izxlao"
-	}]]);
+	var ListTodo = createLucideIcon("list-todo", [
+		["rect", {
+			x: "3",
+			y: "5",
+			width: "6",
+			height: "6",
+			rx: "1",
+			key: "1defrl"
+		}],
+		["path", {
+			d: "m3 17 2 2 4-4",
+			key: "1jhpwq"
+		}],
+		["path", {
+			d: "M13 6h8",
+			key: "15sg57"
+		}],
+		["path", {
+			d: "M13 12h8",
+			key: "h98zly"
+		}],
+		["path", {
+			d: "M13 18h8",
+			key: "oe0vm4"
+		}]
+	]);
 	/**
 	* @license lucide-react v0.510.0 - ISC
 	*
@@ -14348,30 +14232,26 @@ button.text-rule {
 	* This source code is licensed under the ISC license.
 	* See the LICENSE file in the root directory of this source tree.
 	*/
-	var NotebookPen = createLucideIcon("notebook-pen", [
+	var Newspaper = createLucideIcon("newspaper", [
 		["path", {
-			d: "M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4",
-			key: "re6nr2"
+			d: "M15 18h-5",
+			key: "95g1m2"
 		}],
 		["path", {
-			d: "M2 6h4",
-			key: "aawbzj"
+			d: "M18 14h-8",
+			key: "sponae"
 		}],
 		["path", {
-			d: "M2 10h4",
-			key: "l0bgd4"
+			d: "M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9a2 2 0 0 1 2-2h2",
+			key: "39pd36"
 		}],
-		["path", {
-			d: "M2 14h4",
-			key: "1gsvsf"
-		}],
-		["path", {
-			d: "M2 18h4",
-			key: "1bu2t1"
-		}],
-		["path", {
-			d: "M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z",
-			key: "pqwjuv"
+		["rect", {
+			width: "8",
+			height: "4",
+			x: "10",
+			y: "6",
+			rx: "1",
+			key: "aywv1n"
 		}]
 	]);
 	/**
@@ -14387,6 +14267,34 @@ button.text-rule {
 		d: "m15 5 4 4",
 		key: "1mk7zo"
 	}]]);
+	/**
+	* @license lucide-react v0.510.0 - ISC
+	*
+	* This source code is licensed under the ISC license.
+	* See the LICENSE file in the root directory of this source tree.
+	*/
+	var Scale = createLucideIcon("scale", [
+		["path", {
+			d: "m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z",
+			key: "7g6ntu"
+		}],
+		["path", {
+			d: "m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z",
+			key: "ijws7r"
+		}],
+		["path", {
+			d: "M7 21h10",
+			key: "1b0cd5"
+		}],
+		["path", {
+			d: "M12 3v18",
+			key: "108xh3"
+		}],
+		["path", {
+			d: "M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2",
+			key: "3gwbw2"
+		}]
+	]);
 	/**
 	* @license lucide-react v0.510.0 - ISC
 	*
@@ -14432,69 +14340,24 @@ button.text-rule {
 	* This source code is licensed under the ISC license.
 	* See the LICENSE file in the root directory of this source tree.
 	*/
-	var SlidersHorizontal = createLucideIcon("sliders-horizontal", [
-		["line", {
-			x1: "21",
-			x2: "14",
-			y1: "4",
-			y2: "4",
-			key: "obuewd"
+	var Users = createLucideIcon("users", [
+		["path", {
+			d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2",
+			key: "1yyitq"
 		}],
-		["line", {
-			x1: "10",
-			x2: "3",
-			y1: "4",
-			y2: "4",
-			key: "1q6298"
+		["path", {
+			d: "M16 3.128a4 4 0 0 1 0 7.744",
+			key: "16gr8j"
 		}],
-		["line", {
-			x1: "21",
-			x2: "12",
-			y1: "12",
-			y2: "12",
-			key: "1iu8h1"
+		["path", {
+			d: "M22 21v-2a4 4 0 0 0-3-3.87",
+			key: "kshegd"
 		}],
-		["line", {
-			x1: "8",
-			x2: "3",
-			y1: "12",
-			y2: "12",
-			key: "ntss68"
-		}],
-		["line", {
-			x1: "21",
-			x2: "16",
-			y1: "20",
-			y2: "20",
-			key: "14d8ph"
-		}],
-		["line", {
-			x1: "12",
-			x2: "3",
-			y1: "20",
-			y2: "20",
-			key: "m0wm8r"
-		}],
-		["line", {
-			x1: "14",
-			x2: "14",
-			y1: "2",
-			y2: "6",
-			key: "14e1ph"
-		}],
-		["line", {
-			x1: "8",
-			x2: "8",
-			y1: "10",
-			y2: "14",
-			key: "1i6ji0"
-		}],
-		["line", {
-			x1: "16",
-			x2: "16",
-			y1: "18",
-			y2: "22",
-			key: "1lctlv"
+		["circle", {
+			cx: "9",
+			cy: "7",
+			r: "4",
+			key: "nufk8"
 		}]
 	]);
 	/**
@@ -14512,129 +14375,117 @@ button.text-rule {
 	}]]);
 	//#endregion
 	//#region src/lib/content.ts
+	var import_client = require_client();
 	var PAINPOINTS = [
 		{
 			id: "01",
-			icon: "search",
-			text: "The leads I get are too generic, so I cannot tell who is actually worth a call."
+			icon: "users",
+			title: "Lack of clear client priorities",
+			text: "With so many clients to look after, I struggle to know who to contact first, what has changed, and how to make the conversation relevant."
 		},
 		{
 			id: "02",
-			icon: "filter",
-			text: "I can only filter clients by age, holdings, and funds."
+			icon: "clock",
+			title: "Lengthy, manual meeting preparation",
+			text: "Before a client meeting, I spend too much time gathering information about their holdings, previous discussions, and outstanding needs."
 		},
 		{
 			id: "03",
-			icon: "mail",
-			text: "A campaign email went out in my name, and I did not know."
+			icon: "layers",
+			title: "Scattered client information",
+			text: "Client information is spread across systems and records. I struggle to get a clear picture of their wealth relationship and what needs attention."
 		},
 		{
 			id: "04",
-			icon: "copy",
-			text: "I copy codes between systems just to check a profit margin."
+			icon: "goal",
+			title: "Difficulty connecting client goals and priorities",
+			text: "Clients often have several goals and competing priorities. I struggle to bring these together and work out what to explore first."
 		},
 		{
 			id: "05",
-			icon: "layers",
-			text: "I jump across 7–8 systems, and I cannot search a client by name."
+			icon: "scale",
+			title: "Time-consuming comparisons and complex explanations",
+			text: "I spend too much time comparing wealth options and explaining their features, risks, and trade-offs in a way the client can understand."
 		},
 		{
 			id: "06",
-			icon: "clock",
-			text: "I sometimes open a stale portfolio. The client sees the update before I do."
+			icon: "clipboard",
+			title: "Manual, lengthy onboarding and client reviews",
+			text: "I spend too much time gathering documents, chasing missing information, and working out what is needed next to progress onboarding or a client review."
 		},
 		{
 			id: "07",
-			icon: "chart",
-			text: "I spend 20–30 minutes per client on charts, bond quotes, FX, and insurance."
+			icon: "list",
+			title: "Manual request tracking and client updates",
+			text: "When a client request involves several teams, I struggle to see what is holding it up, who needs to act next, and what I can tell the client."
 		},
 		{
 			id: "08",
-			icon: "tabs",
-			text: "I keep too many tabs open across the client record, products, and forms."
+			icon: "globe",
+			title: "Complex cross-border requirements",
+			text: "When a client is based overseas or engaging with us across borders, I struggle to know what needs checking and when to seek specialist guidance."
 		},
 		{
 			id: "09",
-			icon: "clipboard",
-			text: "The sales process feels too bureaucratic to move while the client is with me."
-		},
-		{
-			id: "10",
-			icon: "file",
-			text: "EDD reports take more of my time than the client conversation."
-		},
-		{
-			id: "11",
-			icon: "notes",
-			text: "In a meeting I take notes by hand, and I cannot answer until I look it up later."
+			icon: "news",
+			title: "Scattered market insights and information overload",
+			text: "There is too much market commentary and house-view material spread across different sources. I struggle to absorb it all and work out what matters for each client's holdings, goals, and concerns, so I can have a timely, personalised conversation."
 		}
 	];
 	var ASK = {
 		"01": {
-			name: "What would you call the person who tells you which lead is worth a call? Don't use the word leads.",
-			does: "A lead arrives with almost nothing on it. What would the assistant have to work out before you would pick up the phone?",
-			sees: "You open the morning. What is on the screen that makes you call one person and leave another?",
-			benefits: "If this worked tomorrow, what would you stop doing, and what would that client notice?"
+			name: "What would you call the person who tells you who to call first? Don't say priorities.",
+			does: "The book is long and something has changed. What does the assistant work out before you decide who gets the call?",
+			sees: "You open the morning. What is on the screen that makes one conversation relevant and another one wait?",
+			benefits: "Who hears from you that would not have, and what do you stop guessing?"
 		},
 		"02": {
-			name: "What would you call the person who lets you ask a question your filters cannot? Don't say filter.",
-			does: "Age, holdings, and funds are not the question you have. What question is it, and what would the assistant do with it?",
-			sees: "What would you need to see before you trusted a name on that new list?",
-			benefits: "Who gets a call they would not have got today, and what do you get back?"
+			name: "What would you call the person who has the meeting ready before you walk in? Don't say preparation.",
+			does: "Holdings, the last conversation, and what is still open. What does the assistant gather, and what do you still decide?",
+			sees: "What has to be in front of you so you stop hunting before the client sits down?",
+			benefits: "What does the client notice in the first five minutes, and what do you stop doing the night before?"
 		},
 		"03": {
-			name: "What would you call the person who stops something going out in your name? Don't say campaign.",
-			does: "Something is about to send in your name. What should the assistant catch, and what should it leave for you to decide?",
-			sees: "What would you need in front of you to say yes, or to stop it?",
-			benefits: "What changes for the client who would have received it, and for you the next morning?"
+			name: "What would you call the person who puts the relationship on one page? Don't say systems.",
+			does: "The picture is split across records. What does the assistant pull together, and what does it leave out?",
+			sees: "What single view would let you see the wealth relationship and what needs attention?",
+			benefits: "What does the client stop watching you search for?"
 		},
 		"04": {
-			name: "What would you call the person who gets you the margin without the copying? Don't say code.",
-			does: "You are in the meeting and the number is in another system. What does the assistant do so you don't leave the client to go and get it?",
-			sees: "What has to be on the screen for you to say the number out loud?",
-			benefits: "What does the client get in the room that they usually get later?"
+			name: "What would you call the person who helps you choose what to explore first? Don't say goals.",
+			does: "Several goals are competing. What does the assistant line up, and what is still your call?",
+			sees: "What would you need to see before you pick the first thing to talk about?",
+			benefits: "What does the client leave clearer about, and what do you stop holding in your head?"
 		},
 		"05": {
-			name: "What would you call the person who finds the client while you stay in the conversation? Don't say system.",
-			does: "The client is in front of you and their record is somewhere in those seven or eight systems. What does the assistant go and do?",
-			sees: "What single thing, if it appeared, would let you stop searching?",
-			benefits: "What does the client stop watching you do?"
+			name: "What would you call the person who makes the trade-off explainable? Don't say comparison.",
+			does: "Features, risks, and trade-offs take too long. What does the assistant compare, and what do you still say in your own words?",
+			sees: "What would have to be on the page for the client to understand it without a second meeting?",
+			benefits: "What does the client grasp in the room, and what explanation do you stop rebuilding?"
 		},
 		"06": {
-			name: "What would you call the person who checks the book before you open it? Don't say stale.",
-			does: "You are about to show a portfolio the client may already have seen updated. What should the assistant check first?",
-			sees: "What warning, or what picture, would you need before you share the screen?",
-			benefits: "What would the client notice is different about how prepared you are?"
+			name: "What would you call the person who keeps the review moving? Don't say onboarding.",
+			does: "Documents are missing and the next step is unclear. What does the assistant chase or draft, and what do you still check?",
+			sees: "What would you want in front of you so you know what is needed next?",
+			benefits: "What does the client stop waiting on, and what chase do you get back?"
 		},
 		"07": {
-			name: "What would you call the person who does the 20 minutes of charts, bonds, FX, and insurance? Don't list the products in the name.",
-			does: "Those 20–30 minutes happen before you can talk. Which part of that hunt is the assistant's, and which part is still yours?",
-			sees: "You walk into the meeting. What is already on the page, and what is deliberately not there?",
-			benefits: "What do you do with the time you get back, and what does the client feel in the first five minutes?"
+			name: "What would you call the person who shows you where a request is stuck? Don't say tracking.",
+			does: "Several teams are involved. What does the assistant find out, and what do you still tell the client?",
+			sees: "What would you need to see to know who acts next, and what you can say?",
+			benefits: "What does the client hear sooner, and what status chase do you stop making?"
 		},
 		"08": {
-			name: "What would you call the person who puts the meeting on one screen? Don't say tabs.",
-			does: "The record, the products, and the form are in different places. What does the assistant bring together, and what does it leave out?",
-			sees: "If you could only glance once, what must be on that screen?",
-			benefits: "What does the client stop waiting for you to find?"
+			name: "What would you call the person who flags the cross-border check? Don't say overseas.",
+			does: "The client is across a border. What should the assistant check, and when should it hand you to a specialist?",
+			sees: "What warning or checklist would you need before you proceed?",
+			benefits: "What does the client avoid being surprised by, and what do you stop assuming?"
 		},
 		"09": {
-			name: "What would you call the person who keeps the sale moving while the client is still there? Don't say process.",
-			does: "The client is ready and the process is not. What does the assistant push forward, and what must you still do yourself?",
-			sees: "What would you need on the screen to finish before they stand up?",
-			benefits: "What does the client leave with that they usually leave without?"
-		},
-		"10": {
-			name: "What would you call the person who takes the EDD pack off the meeting? A fun name, not the word report.",
-			does: "The pack takes longer than the conversation. What does the assistant draft or collect, and what do you still have to check?",
-			sees: "What would you want in your hands so the meeting stays about the client?",
-			benefits: "What do you give back to the conversation, and what still has to be right for the client?"
-		},
-		"11": {
-			name: "What would you call the person who answers while the client is still in the room? Don't say notes.",
-			does: "You are writing, and the client is waiting. What should the assistant capture, and what should it look up before you do?",
-			sees: "What would have to appear on the screen for you to answer now, not after the meeting?",
-			benefits: "What does the client no longer have to wait for, and what do you no longer do afterwards?"
+			name: "What would you call the person who tells you what the market noise means for this client? Don't say insights.",
+			does: "Commentary is everywhere. What does the assistant keep, what does it drop, and what does it tie to this client's holdings and goals?",
+			sees: "What would you want on one page before a timely conversation?",
+			benefits: "What does the client hear that is about them, and what reading do you stop doing?"
 		},
 		own: {
 			name: "What would you call the person who takes this moment off you? Two or three words you would actually say. Not the name of the problem.",
@@ -14649,8 +14500,8 @@ button.text-rule {
 			"Is it a screen, a wait, a thing you copy, or a question you cannot answer in the room? Pick the real one.",
 			"If the sentence could be anyone's job, it is not specific enough yet. No client names and no account numbers."
 		].join("\n\n");
-		if (painId) return ["Read it once, then ask the group: is this the moment that actually gets in the way of a client conversation?", "If someone has a sharper version, write that in box 12. If the room nods, keep the card. Don't polish the sentence."].join("\n\n");
-		return ["Which of these happens to you with a client in front of you?", "Pick the card the group argues about, not the one that sounds impressive. If none of them is yours, write the real one in box 12."].join("\n\n");
+		if (painId) return ["Read it once, then ask the group: is this the moment that actually gets in the way of a client conversation?", "If someone has a sharper version, write that in the row along the bottom. If the room nods, keep the card. Don't polish the sentence."].join("\n\n");
+		return ["Which of these happens to you with a client in front of you?", "Pick the card the group argues about, not the one that sounds impressive. If none of them is yours, write the real one in the row along the bottom."].join("\n\n");
 	}
 	function briefGuide(key, painId, scenario) {
 		const ask = ASK[painId] ?? ASK.own;
@@ -14666,17 +14517,15 @@ button.text-rule {
 		return [moment ? `You are designing for this moment only: ${moment}` : "Pick a scenario first. The brief has to answer that moment.", "Click a box. The question on the right is for the group to answer. Don't look for a sample sentence."].join("\n\n");
 	}
 	var SCENE_HINTS = {
-		"01": "Design three screens. What are the three steps your assistant takes with generic leads: who is worth a call, why, and how you open? Describe each screen.",
-		"02": "Design three screens. What are the three steps your assistant takes when age, holdings, and funds are not enough: the better question, the sharper list, and who you see today?",
-		"03": "Design three screens. What are the three steps your assistant takes before a campaign goes out in your name: what it catches, what it shows you, and what you approve?",
-		"04": "Design three screens. What are the three steps your assistant takes so you stop copying codes for a margin: what it pulls, the number it shows, and how you use it in the meeting?",
-		"05": "Design three screens. What are the three steps your assistant takes across those 7 or 8 systems: the name search, the one view, and what you do from it?",
-		"06": "Design three screens. What are the three steps your assistant takes so you are not looking at a stale portfolio: the check, the warning, and the fresh screen you open?",
-		"07": "Design three screens. What are the three steps your assistant takes with charts, bonds, FX, and insurance: what it gathers, the one page, and you walking in with it?",
-		"08": "Design three screens. What are the three steps your assistant takes with the client record, products, and forms: what it combines, what stays on screen, and how you use it with the client?",
-		"09": "Design three screens. What are the three steps your assistant takes so the sale moves while the client is still there: what it pushes on, what it puts in front of you, and what the client leaves with?",
-		"10": "Design three screens. What are the three steps your assistant takes on the EDD pack: what it drafts, what you still check, and you getting the meeting back?",
-		"11": "Design three screens. What are the three steps your assistant takes in the meeting: what it captures, the answer it surfaces while the client is there, and you replying in the room?",
+		"01": "Design three screens. What are the three steps your assistant takes when the book is too big: who has changed, who to contact first, and how you open so it is relevant?",
+		"02": "Design three screens. What are the three steps your assistant takes before the meeting: what it gathers, the one page of holdings and open needs, and you walking in with it?",
+		"03": "Design three screens. What are the three steps your assistant takes when the client is split across records: what it pulls together, the picture of the relationship, and what needs attention?",
+		"04": "Design three screens. What are the three steps your assistant takes with competing goals: how it lines them up, what you explore first, and what you leave for later?",
+		"05": "Design three screens. What are the three steps your assistant takes with a comparison: the options, the trade-offs in plain language, and you explaining it with the client?",
+		"06": "Design three screens. What are the three steps your assistant takes on onboarding or a review: what is missing, what it chases, and what you do next?",
+		"07": "Design three screens. What are the three steps your assistant takes on a request that spans teams: where it is stuck, who acts next, and what you can tell the client?",
+		"08": "Design three screens. What are the three steps your assistant takes when the client is cross-border: what it checks, when it flags a specialist, and what you still decide?",
+		"09": "Design three screens. What are the three steps your assistant takes with market noise: what it keeps, what it ties to this client's holdings and goals, and the conversation you have?",
 		own: "Design three screens. What are the three steps your assistant takes in the moment you wrote? For each screen, say what is on it, what the assistant does, and what you do."
 	};
 	var EMPTY_BRIEF = {
@@ -14738,41 +14587,17 @@ button.text-rule {
 		}
 	];
 	//#endregion
-	//#region desktop-local/browser-ai.ts
-	function settings() {
-		return {
-			url: window.localStorage.getItem("cya-supabase-fn")?.trim() ?? "",
-			anon: window.localStorage.getItem("cya-supabase-anon")?.trim() ?? ""
-		};
-	}
-	async function post(action, data) {
-		const { url, anon } = settings();
-		if (!url) return {
-			ok: false,
-			error: "Double-click Wealth Symposium and paste the Supabase function URL."
-		};
-		let response;
-		try {
-			response = await fetch(url, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					...anon ? {
-						Authorization: `Bearer ${anon}`,
-						apikey: anon
-					} : {}
-				},
-				body: JSON.stringify({
-					action,
-					data
-				})
-			});
-		} catch (error) {
-			return {
-				ok: false,
-				error: error instanceof Error ? error.message : "The Supabase function did not answer."
-			};
-		}
+	//#region src/lib/workshop-api.ts
+	var WORKSHOP_URL = "https://yquxqmduxotoqusrlfbd.supabase.co/functions/v1/workshop";
+	async function workshopCall(action, data) {
+		const response = await fetch(WORKSHOP_URL, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				action,
+				data
+			})
+		});
 		const text = await response.text();
 		try {
 			return JSON.parse(text);
@@ -14783,12 +14608,9 @@ button.text-rule {
 			};
 		}
 	}
-	var coachDraft = (input) => post("coach", input.data);
-	var generateSceneImage = (input) => post("image", input.data);
-	var generatePrototype = (input) => post("prototype", input.data);
-	var refinePrototype = (input) => post("refine", input.data);
-	var readDebugLog = () => post("log", {});
-	var clearServerDebugLog = () => post("clear", {});
+	function workshopAction(action) {
+		return (input) => workshopCall(action, input?.data ?? {});
+	}
 	//#endregion
 	//#region src/lib/debug.ts
 	var clientLog = [];
@@ -15235,7 +15057,8 @@ button.text-rule {
 	};
 	function painText(state) {
 		if (state.painId === "own") return state.painOwn.trim();
-		return PAINPOINTS.find((item) => item.id === state.painId)?.text ?? "";
+		const item = PAINPOINTS.find((point) => point.id === state.painId);
+		return item ? `${item.title}. ${item.text}` : "";
 	}
 	function briefReady(brief) {
 		return [
@@ -16136,17 +15959,15 @@ setTimeout(function(){pin();faces();},40);
 		const ready = painId && painId !== "own" || ownReady;
 		const ownOn = painId === "own";
 		const icons = {
-			search: Search,
-			filter: SlidersHorizontal,
-			mail: Mail,
-			copy: Copy,
-			layers: Layers,
+			users: Users,
 			clock: Clock,
-			chart: ChartLine,
-			tabs: AppWindow,
+			layers: Layers,
+			goal: Goal,
+			scale: Scale,
 			clipboard: ClipboardList,
-			file: FileText,
-			notes: NotebookPen
+			list: ListTodo,
+			globe: Globe,
+			news: Newspaper
 		};
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "flex h-full min-h-0 flex-col",
@@ -16171,7 +15992,7 @@ setTimeout(function(){pin();faces();},40);
 					})]
 				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "mt-2 grid min-h-0 flex-1 grid-cols-4 grid-rows-3 gap-2",
+				className: "mt-2 grid min-h-0 flex-1 grid-cols-3 grid-rows-4 gap-2",
 				children: [PAINPOINTS.map((item) => {
 					const selected = painId === item.id;
 					const Icon = icons[item.icon] ?? Search;
@@ -16181,32 +16002,38 @@ setTimeout(function(){pin();faces();},40);
 							selectPain(item.id);
 							if (useSession.getState().focus?.kind === "pain") useSession.getState().setFocus(null);
 						},
-						className: `flex h-full min-h-0 flex-col overflow-hidden rounded-xl border px-2 py-2 text-left type-seen ${selected ? "border-rule bg-soft" : "border-line bg-sheet"}`,
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
-								className: "size-6 shrink-0 text-rule",
-								"aria-hidden": true
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "mt-1 font-medium text-rule",
-								children: item.id
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "mt-0.5 leading-snug",
-								children: item.text
-							})
-						]
+						className: `flex h-full min-h-0 flex-col overflow-hidden rounded-xl border px-3 py-2 text-left type-seen ${selected ? "border-rule bg-soft" : "border-line bg-sheet"}`,
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "flex items-center gap-2",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
+									className: "size-5 shrink-0 text-rule",
+									"aria-hidden": true
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-medium text-rule",
+									children: item.id
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-medium leading-tight",
+									children: item.title
+								})
+							]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "mt-1 text-base leading-snug",
+							children: item.text
+						})]
 					}, item.id);
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-					className: `flex h-full min-h-0 flex-col rounded-xl border-2 px-2 py-2 ${ownOn ? "border-rule bg-soft" : "border-line bg-sheet"}`,
+					className: `col-span-3 flex h-full min-h-0 flex-row items-start gap-3 rounded-xl border-2 px-3 py-2 ${ownOn ? "border-rule bg-soft" : "border-line bg-sheet"}`,
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pencil, {
-							className: "size-6 shrink-0 text-rule",
+							className: "mt-1 size-5 shrink-0 text-rule",
 							"aria-hidden": true
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "mt-1 font-medium text-rule",
-							children: "12"
+							className: "mt-0.5 shrink-0 font-medium text-rule",
+							children: "Your own"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
 							value: painOwn,
@@ -16217,7 +16044,7 @@ setTimeout(function(){pin();faces();},40);
 							onChange: (event) => setPainOwn(event.target.value),
 							placeholder: "Or write a scenario that hurts more.",
 							"aria-label": "Or add your own",
-							className: "mt-0.5 min-h-0 w-full flex-1 resize-none bg-transparent text-xl leading-snug"
+							className: "min-h-0 w-full flex-1 resize-none bg-transparent text-lg leading-snug"
 						})
 					]
 				})]
@@ -16322,7 +16149,7 @@ setTimeout(function(){pin();faces();},40);
 		const setImage = useSession((state) => state.setImage);
 		const go = useSession((state) => state.go);
 		const focus = useSession((state) => state.focus);
-		const imageFn = useServerFn(generateSceneImage);
+		const imageFn = workshopAction("image");
 		const [busy, setBusy] = (0, import_react.useState)({});
 		const [errors, setErrors] = (0, import_react.useState)({});
 		const [full, setFull] = (0, import_react.useState)(null);
@@ -16534,7 +16361,7 @@ setTimeout(function(){pin();faces();},40);
 	}
 	async function readPrototypeStream(payload, onDelta, onReset, fallback) {
 		try {
-			const localUrl = typeof window !== "undefined" ? window.localStorage.getItem("cya-supabase-fn")?.trim() : "";
+			const localUrl = (typeof window !== "undefined" ? window.localStorage.getItem("cya-supabase-fn")?.trim() : "") || "https://yquxqmduxotoqusrlfbd.supabase.co/functions/v1/workshop";
 			const anon = typeof window !== "undefined" ? window.localStorage.getItem("cya-supabase-anon")?.trim() ?? "" : "";
 			const res = await fetch(localUrl || "/api/prototype", {
 				method: "POST",
@@ -16611,7 +16438,7 @@ setTimeout(function(){pin();faces();},40);
 		const prototypeBasis = useSession((state) => state.prototypeBasis);
 		const setPrototype = useSession((state) => state.setPrototype);
 		const go = useSession((state) => state.go);
-		const protoFn = useServerFn(generatePrototype);
+		const protoFn = workshopAction("prototype");
 		const frameRef = (0, import_react.useRef)(null);
 		const stageRef = (0, import_react.useRef)(null);
 		const keptFrame = (0, import_react.useRef)({});
@@ -16845,16 +16672,10 @@ setTimeout(function(){pin();faces();},40);
 			]
 		});
 	}
-	function briefWait(key) {
-		const next = BRIEF_FIELDS[BRIEF_FIELDS.findIndex((item) => item.key === key) + 1];
-		const busy = key === "name" ? "the name" : key === "agentDoes" ? "what the agent is doing" : key === "rmSees" ? "what you expect to see" : "the benefits";
-		if (!next) return `I am working on ${busy}.`;
-		return `I am working on ${busy}. Please wait a moment before I ideate "${next.label}" with you.`;
-	}
 	function CoachPanel({ open, forceHidden, onClose }) {
 		const step = useSession((state) => state.step);
 		const focus = useSession((state) => state.focus);
-		const assistField = useSession((state) => state.assistField);
+		useSession((state) => state.assistField);
 		const activeScene = useSession((state) => state.activeScene);
 		const scenario = useSession((state) => painText(state));
 		const painId = useSession((state) => state.painId);
@@ -16869,8 +16690,8 @@ setTimeout(function(){pin();faces();},40);
 		const [busy, setBusy] = (0, import_react.useState)(false);
 		const [allScenes, setAllScenes] = (0, import_react.useState)(true);
 		const seconds = useSeconds(busy);
-		const coach = useServerFn(coachDraft);
-		const refine = useServerFn(refinePrototype);
+		const coach = workshopAction("coach");
+		const refine = workshopAction("refine");
 		(0, import_react.useEffect)(() => {
 			setDraft(null);
 			setError("");
@@ -16890,7 +16711,7 @@ setTimeout(function(){pin();faces();},40);
 		const blank = step === "pain" ? painId === "own" || !painId ? !painOwn.trim() : false : step === "brief" ? !String(field ? brief[field.key] : "").trim() : step === "scenes" ? allScenes ? scenes.every((scene) => !scene.trim()) : !scenes[sceneIndex]?.trim() : false;
 		const subject = step === "brief" ? field?.refineAs ?? "" : step === "scenes" ? allScenes ? "the three screens" : `screen ${sceneIndex + 1}` : step === "pain" ? "your scenario" : protoStep ? `step ${protoStep}` : "";
 		const moment = scenario.replace(/[.?!]\s*$/, "");
-		const hint = step === "overview" ? "Nominate one person as group leader. They drive the laptop. At the end, your group presents the prototype to the other groups." : step === "pain" ? painGuide(painId) : step === "brief" ? briefGuide(field?.key ?? "", painId, scenario) : step === "scenes" ? painId && SCENE_HINTS[painId] || (scenario ? SCENE_HINTS.own : "Design three screens. What are the three steps your assistant takes? Describe each screen.") : protoStep ? scenario ? `One change for this step, still about this scenario: ${moment}. The other two steps stay as they are.` : "Tell me the one change for this step. The other two stay as they are." : "Pick a step above the prototype. I'll only change that one.";
+		const hint = step === "overview" ? "Nominate one person as group leader. They drive the laptop. At the end, your group presents the prototype to the other groups." : step === "pain" ? painGuide(painId ?? "") : step === "brief" ? briefGuide(field?.key ?? "", painId ?? "", scenario) : step === "scenes" ? painId && SCENE_HINTS[painId] || (scenario ? SCENE_HINTS.own : "Design three screens. What are the three steps your assistant takes? Describe each screen.") : protoStep ? scenario ? `One change for this step, still about this scenario: ${moment}. The other two steps stay as they are.` : "Tell me the one change for this step. The other two stay as they are." : "Pick a step above the prototype. I'll only change that one.";
 		async function suggest() {
 			const state = useSession.getState();
 			setBusy(true);
@@ -17057,7 +16878,7 @@ setTimeout(function(){pin();faces();},40);
 							disabled: busy || step === "prototype" && (direction.trim().length < 3 || !useSession.getState().prototypeHtml),
 							onClick: () => void suggest(),
 							className: "h-12 btn-glow text-xl font-medium disabled:opacity-40",
-							children: busy ? `Thinking · ${seconds}s` : blank ? "Get some inspiration" : step === "brief" ? "Enrich selected" : "Enrich"
+							children: busy ? `Thinking · ${seconds}s` : blank ? "Get some inspiration" : "Enrich"
 						}),
 						step === "prototype" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "border border-line p-3",
@@ -17078,7 +16899,7 @@ setTimeout(function(){pin();faces();},40);
 							className: "flex flex-col items-center gap-1",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AgentBot, { mini: true }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "text-center text-base leading-snug text-muted",
-								children: step === "brief" && assistField ? briefWait(assistField) : `Thinking · ${seconds}s`
+								children: `Thinking · ${seconds}s`
 							})]
 						}) : null
 					] })] }) : null,
@@ -17184,8 +17005,8 @@ setTimeout(function(){pin();faces();},40);
 		});
 	}
 	function DebugMenu({ onClose, onEngine }) {
-		const readLog = useServerFn(readDebugLog);
-		const clearServer = useServerFn(clearServerDebugLog);
+		const readLog = workshopAction("log");
+		const clearServer = workshopAction("clear");
 		const [models, setModels] = (0, import_react.useState)(() => debugModels());
 		const [engine, setEngine] = (0, import_react.useState)(() => chosenEngine());
 		const [clientLines, setClientLines] = (0, import_react.useState)(() => debugClientLog());

@@ -1,24 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  AppWindow,
   Bot,
-  ChartLine,
   Check,
   Clapperboard,
   ClipboardList,
   Clock,
-  Copy,
   Expand,
-  FileText,
+  Globe,
+  Goal,
   Layers,
   ListChecks,
-  Mail,
+  ListTodo,
   MonitorSmartphone,
-  NotebookPen,
+  Newspaper,
   Pencil,
+  Scale,
   Search,
   Shrink,
-  SlidersHorizontal,
+  Users,
   X,
 } from "lucide-react";
 import { BRIEF_FIELDS, FLOW, PAINPOINTS, SCENE_HINTS, briefGuide, painGuide, type Brief, type BriefKey, type StepId } from "@/lib/content";
@@ -609,17 +608,15 @@ function PainStep() {
   const ready = (painId && painId !== "own") || ownReady;
   const ownOn = painId === "own";
   const icons = {
-    search: Search,
-    filter: SlidersHorizontal,
-    mail: Mail,
-    copy: Copy,
-    layers: Layers,
+    users: Users,
     clock: Clock,
-    chart: ChartLine,
-    tabs: AppWindow,
+    layers: Layers,
+    goal: Goal,
+    scale: Scale,
     clipboard: ClipboardList,
-    file: FileText,
-    notes: NotebookPen,
+    list: ListTodo,
+    globe: Globe,
+    news: Newspaper,
   };
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -639,7 +636,7 @@ function PainStep() {
           </button>
         </div>
       </div>
-      <div className="mt-2 grid min-h-0 flex-1 grid-cols-4 grid-rows-3 gap-2">
+      <div className="mt-2 grid min-h-0 flex-1 grid-cols-3 grid-rows-4 gap-2">
         {PAINPOINTS.map((item) => {
           const selected = painId === item.id;
           const Icon = icons[item.icon as keyof typeof icons] ?? Search;
@@ -651,21 +648,24 @@ function PainStep() {
                 selectPain(item.id);
                 if (useSession.getState().focus?.kind === "pain") useSession.getState().setFocus(null);
               }}
-              className={`flex h-full min-h-0 flex-col overflow-hidden rounded-xl border px-2 py-2 text-left type-seen ${
+              className={`flex h-full min-h-0 flex-col overflow-hidden rounded-xl border px-3 py-2 text-left type-seen ${
                 selected ? "border-rule bg-soft" : "border-line bg-sheet"
               }`}
             >
-              <Icon className="size-6 shrink-0 text-rule" aria-hidden />
-              <span className="mt-1 font-medium text-rule">{item.id}</span>
-              <span className="mt-0.5 leading-snug">{item.text}</span>
+              <span className="flex items-center gap-2">
+                <Icon className="size-5 shrink-0 text-rule" aria-hidden />
+                <span className="font-medium text-rule">{item.id}</span>
+                <span className="font-medium leading-tight">{item.title}</span>
+              </span>
+              <span className="mt-1 text-base leading-snug">{item.text}</span>
             </button>
           );
         })}
         <label
-          className={`flex h-full min-h-0 flex-col rounded-xl border-2 px-2 py-2 ${ownOn ? "border-rule bg-soft" : "border-line bg-sheet"}`}
+          className={`col-span-3 flex h-full min-h-0 flex-row items-start gap-3 rounded-xl border-2 px-3 py-2 ${ownOn ? "border-rule bg-soft" : "border-line bg-sheet"}`}
         >
-          <Pencil className="size-6 shrink-0 text-rule" aria-hidden />
-          <span className="mt-1 font-medium text-rule">12</span>
+          <Pencil className="mt-1 size-5 shrink-0 text-rule" aria-hidden />
+          <span className="mt-0.5 shrink-0 font-medium text-rule">Your own</span>
           <textarea
             value={painOwn}
             onFocus={() => {
@@ -675,7 +675,7 @@ function PainStep() {
             onChange={(event) => setPainOwn(event.target.value)}
             placeholder="Or write a scenario that hurts more."
             aria-label="Or add your own"
-            className="mt-0.5 min-h-0 w-full flex-1 resize-none bg-transparent text-xl leading-snug"
+            className="min-h-0 w-full flex-1 resize-none bg-transparent text-lg leading-snug"
           />
         </label>
       </div>
