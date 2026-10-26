@@ -111,3 +111,20 @@ export function debugModels(): DebugModels {
 export function saveDebugModels(next: DebugModels) {
   window.localStorage.setItem("cya-debug-models", JSON.stringify(next));
 }
+
+const OPENROUTER_KEY = "cya-openrouter-key";
+
+export function savedOpenRouterKey() {
+  if (typeof window === "undefined") return "";
+  try {
+    return window.localStorage.getItem(OPENROUTER_KEY)?.trim() ?? "";
+  } catch {
+    return "";
+  }
+}
+
+export function saveOpenRouterKey(value: string) {
+  const next = value.trim();
+  if (next) window.localStorage.setItem(OPENROUTER_KEY, next);
+  else window.localStorage.removeItem(OPENROUTER_KEY);
+}

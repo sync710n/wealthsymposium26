@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { BRIEF_FIELDS, FLOW, PAINPOINTS, SCENE_HINTS, briefGuide, painGuide, type Brief, type BriefKey, type StepId } from "@/lib/content";
 import { coachDraft, generatePrototype, generateSceneImage, refinePrototype, readDebugLog, clearServerDebugLog, type PrototypeEngine } from "@/lib/ai.functions";
-import { debugClearClient, debugClientLog, debugModels, debugPush, debugSubscribe, MODEL_OPTIONS, saveDebugModels, traced, type DebugModels } from "@/lib/debug";
+import { debugClearClient, debugClientLog, debugModels, debugPush, debugSubscribe, MODEL_OPTIONS, saveDebugModels, saveOpenRouterKey, savedOpenRouterKey, traced, type DebugModels } from "@/lib/debug";
 import { loadImages, loadPrototype, saveImage } from "@/lib/media-db";
 import {
   briefReady,
@@ -942,6 +942,7 @@ async function readPrototypeStream(
     images: string[];
     engine: PrototypeEngine;
     htmlModel?: string;
+    openRouterKey?: string;
   },
   onDelta: (delta: string) => void,
   onReset: () => void,
@@ -1096,6 +1097,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
           images: shots,
           engine: chosenEngine(),
           htmlModel: debugModels().html,
+          openRouterKey: savedOpenRouterKey(),
         };
         const streamed = await traced(`prototype-step-${stepNo}`, payload, () =>
           readPrototypeStream(payload, push, () => setStreamText(""), (body) => protoFn({ data: body })),
@@ -1401,6 +1403,7 @@ function CoachPanel({
               images: shots,
               engine: chosenEngine(),
               htmlModel: debugModels().html,
+              openRouterKey: savedOpenRouterKey(),
             },
           }),
         );
@@ -1423,6 +1426,7 @@ function CoachPanel({
             brief: state.brief,
             scenes: [...state.scenes],
             model: debugModels().coach,
+            openRouterKey: savedOpenRouterKey(),
           },
         }),
       );
@@ -1652,6 +1656,7 @@ function DebugMenu({ onClose, onEngine }: { onClose: () => void; onEngine: (engi
   const [clientLines, setClientLines] = useState(() => debugClientLog());
   const [serverLines, setServerLines] = useState<{ at: string; name: string; ms?: number; ok?: boolean; detail: string }[]>([]);
   const [copied, setCopied] = useState(false);
+  const [routerKey, setRouterKey] = useState(() => savedOpenRouterKey());
 
   const refresh = async () => {
     setClientLines(debugClientLog());
@@ -1739,6 +1744,23 @@ function DebugMenu({ onClose, onEngine }: { onClose: () => void; onEngine: (engi
             </select>
           </label>
         ))}
+        <label className="text-base">
+          Bring your own key
+          <input
+            type="password"
+            autoComplete="off"
+            spellCheck={false}
+            placeholder="OpenRouter key for DeepSeek"
+            value={routerKey}
+            onChange={(event) => {
+              const value = event.target.value;
+              setRouterKey(value);
+              saveOpenRouterKey(value);
+            }}
+            className="mt-1 h-10 w-full border border-line bg-sheet px-2 text-base"
+          />
+        </label>
+        <p className="text-sm leading-snug text-muted">Stays in this browser. Sent only when DeepSeek runs.</p>
         <div className="flex flex-wrap gap-2">
           <button type="button" className="h-10 border border-line px-3 text-base" onClick={() => void refresh()}>
             Refresh log

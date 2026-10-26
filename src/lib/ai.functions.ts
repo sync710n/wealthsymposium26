@@ -181,7 +181,12 @@ export type PrototypeEngine = "grok" | "deepseek";
 
 let openRouterKeyProblem = "";
 
-async function openRouterKey() {
+async function openRouterKey(pasted?: string) {
+  const fromClient = pasted?.trim();
+  if (fromClient) {
+    shared.__cyaOpenRouterKey = fromClient;
+    return fromClient;
+  }
   if (shared.__cyaOpenRouterKey) return shared.__cyaOpenRouterKey;
   const env = process.env as Record<string, string | undefined>;
   const fromEnv = env["OPENROUTER_API_KEY"]?.trim();
@@ -318,10 +323,16 @@ async function streamHtml(
   temperature: number,
   onDelta: (delta: string) => void,
   htmlModel?: string,
+  openRouter?: string,
 ) {
   if (engine === "deepseek") {
-    const key = await openRouterKey();
-    if (!key) return { ok: false as const, error: "DeepSeek is not available. Switch to Grok." };
+    const key = await openRouterKey(openRouter);
+    if (!key) {
+      debugNote("deepseek", { fallback: "grok", reason: openRouterKeyProblem || "OpenRouter key missing" });
+      const keyed = keyOrError();
+      if (typeof keyed !== "string") return keyed;
+      return streamChat(keyed, messages, maxTokens, temperature, onDelta, modelList(htmlModel, HTML_MODELS));
+    }
     const ask = (body: unknown[]) =>
       postJson(OPENROUTER_URL, key, {
         model: DEEPSEEK_MODEL,
@@ -350,10 +361,15 @@ async function streamHtml(
   return streamChat(keyed, messages, maxTokens, temperature, onDelta, modelList(htmlModel, HTML_MODELS));
 }
 
-async function chatHtml(engine: PrototypeEngine, messages: unknown[], maxTokens: number, temperature: number, htmlModel?: string) {
+async function chatHtml(engine: PrototypeEngine, messages: unknown[], maxTokens: number, temperature: number, htmlModel?: string, openRouter?: string) {
   if (engine === "deepseek") {
-    const key = await openRouterKey();
-    if (!key) return { ok: false as const, error: "DeepSeek is not available. Switch to Grok." };
+    const key = await openRouterKey(openRouter);
+    if (!key) {
+      debugNote("deepseek", { fallback: "grok", reason: openRouterKeyProblem || "OpenRouter key missing" });
+      const keyed = keyOrError();
+      if (typeof keyed !== "string") return keyed;
+      return chat(keyed, messages, maxTokens, temperature, modelList(htmlModel, HTML_MODELS));
+    }
     const ask = (body: unknown[]) =>
       postJson(OPENROUTER_URL, key, {
         model: DEEPSEEK_MODEL,
@@ -384,6 +400,7 @@ export type CoachInput = {
   brief: Brief;
   scenes: string[];
   model?: string;
+  openRouterKey?: string;
 };
 
 export const coachDraft = createServerFn({ method: "POST" })
@@ -436,7 +453,7 @@ export const coachDraft = createServerFn({ method: "POST" })
 
     const coachModels = modelList(data.model, COACH_MODELS);
     const askCoach = (msgs: unknown[], max: number, temperature: number, models = coachModels) =>
-      data.model === "deepseek" ? chatHtml("deepseek", msgs, max, temperature) : chat(keyed, msgs, max, temperature, models);
+      data.model === "deepseek" ? chatHtml("deepseek", msgs, max, temperature, undefined, data.openRouterKey) : chat(keyed, msgs, max, temperature, models);
     let result = await askCoach(messages, 700, 0.4);
     if (!result.ok) return result;
 
@@ -602,6 +619,7 @@ type PrototypeInput = {
   images?: string[];
   engine?: PrototypeEngine;
   htmlModel?: string;
+  openRouterKey?: string;
 };
 
 function engineOf(value: string | undefined): PrototypeEngine {
@@ -673,7 +691,7 @@ export const generatePrototype = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<Ok<{ html: string }> | Err> => {
     const engine = engineOf(data.engine);
     const { step, previous, messages } = prototypeRequest(data);
-    const ask = (extra: string) => chatHtml(engine, messages(extra), 8000, step === 1 ? 0.3 : 0.5, data.htmlModel);
+    const ask = (extra: string) => chatHtml(engine, messages(extra), 8000, step === 1 ? 0.3 : 0.5, data.htmlModel, data.openRouterKey);
     let result = await ask("");
     if (!result.ok) return result;
     let html = assemblePrototype(result.text, data, step, previous);
@@ -694,7 +712,7 @@ export function openPrototypeStream(data: PrototypeInput) {
         const engine = engineOf(data.engine);
         const { step, previous, messages } = prototypeRequest(data);
         const temperature = step === 1 ? 0.3 : 0.5;
-        let result = await streamHtml(engine, messages(""), 8000, temperature, (delta) => send({ delta }), data.htmlModel);
+        let result = await streamHtml(engine, messages(""), 8000, temperature, (delta) => send({ delta }), data.htmlModel, data.openRouterKey);
         if (!result.ok) {
           send({ error: result.error });
           return;
@@ -703,7 +721,7 @@ export function openPrototypeStream(data: PrototypeInput) {
         if (!html) {
           send({ reset: true });
           const extra = plainText(extractSection(result.text, step)).length < 40 ? prompts.prototype.emptyRetry : prompts.prototype.repeatRetry;
-          result = await streamHtml(engine, messages(extra), 8000, temperature, (delta) => send({ delta }), data.htmlModel);
+          result = await streamHtml(engine, messages(extra), 8000, temperature, (delta) => send({ delta }), data.htmlModel, data.openRouterKey);
           if (result.ok) html = assemblePrototype(result.text, data, step, previous);
         }
         if (!html) {
@@ -904,6 +922,7 @@ export const refinePrototype = createServerFn({ method: "POST" })
       images?: string[];
       engine?: PrototypeEngine;
       htmlModel?: string;
+      openRouterKey?: string;
     }) => input,
   )
   .handler(async ({ data }): Promise<Ok<{ html: string }> | Err> => {
@@ -951,6 +970,7 @@ export const refinePrototype = createServerFn({ method: "POST" })
         8000,
         0.4,
         data.htmlModel,
+        data.openRouterKey,
       );
     let result = await ask("");
     if (!result.ok) return result;
