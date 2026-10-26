@@ -1,0 +1,32 @@
+[
+  {
+    "label": "three-images",
+    "ms": 13959
+  },
+  {
+    "label": "scenes-move",
+    "enabled": true
+  },
+  {
+    "label": "prototype-ready",
+    "ms": 49147
+  },
+  {
+    "label": "iframe",
+    "steps": [
+      {
+        "step": "1",
+        "hidden": false,
+        "text": "M Meeting Copilot Listening · Review in progress Room B-4 · 14:20 Session #MC-4821 Agent collapsed noise from 6 systems → 1 live panel Open client record PULLED LIVE Riverstone Hol",
+        "h": 523,
+        "client": 523
+      }
+    ],
+    "body": "M Meeting Copilot Listening · Review in progress Room B-4 · 14:20 Session #MC-4821 Agent collapsed noise from 6 systems → 1 live panel Open client record PULLED LIVE Riverstone Holdings LLC Relationship · Commercial banking · Review cycle Q2 CLIENT ID RH-20914 AUM / EXPOSURE $4.2M RM DESK North Desk LAST REVIEW 11 weeks ago Priority 2 forms open KYC current Matching products 3 FITS Liquidity Sweep",
+    "imgs": 0
+  },
+  {
+    "label": "present",
+    "fullscreen": true
+  }
+]
