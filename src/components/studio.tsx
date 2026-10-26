@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useServerFn } from "@tanstack/react-start";
 import {
   AppWindow,
   Bot,
@@ -23,7 +22,8 @@ import {
   X,
 } from "lucide-react";
 import { BRIEF_FIELDS, FLOW, PAINPOINTS, SCENE_HINTS, briefGuide, painGuide, type Brief, type BriefKey, type StepId } from "@/lib/content";
-import { coachDraft, generatePrototype, generateSceneImage, refinePrototype, readDebugLog, clearServerDebugLog, type PrototypeEngine } from "@/lib/ai.functions";
+import { type PrototypeEngine } from "@/lib/ai.functions";
+import { WORKSHOP_URL, workshopAction } from "@/lib/workshop-api";
 import { debugClearClient, debugClientLog, debugModels, debugPush, debugSubscribe, MODEL_OPTIONS, saveDebugModels, saveOpenRouterKey, savedOpenRouterKey, traced, type DebugModels } from "@/lib/debug";
 import { loadImages, loadPrototype, saveImage } from "@/lib/media-db";
 import {
@@ -760,7 +760,7 @@ function ScenesStep() {
   const setImage = useSession((state) => state.setImage);
   const go = useSession((state) => state.go);
   const focus = useSession((state) => state.focus);
-  const imageFn = useServerFn(generateSceneImage);
+  const imageFn = workshopAction<{ ok: true; dataUrl: string } | { ok: false; error: string }>("image");
   const [busy, setBusy] = useState<Record<number, boolean>>({});
   const [errors, setErrors] = useState<Record<number, string>>({});
   const [full, setFull] = useState<string | null>(null);
@@ -966,7 +966,8 @@ async function readPrototypeStream(
   }) => Promise<{ ok: true; html: string } | { ok: false; error: string }>,
 ) {
   try {
-    const localUrl = typeof window !== "undefined" ? window.localStorage.getItem("cya-supabase-fn")?.trim() : "";
+    const saved = typeof window !== "undefined" ? window.localStorage.getItem("cya-supabase-fn")?.trim() : "";
+    const localUrl = saved || WORKSHOP_URL;
     const anon = typeof window !== "undefined" ? window.localStorage.getItem("cya-supabase-anon")?.trim() ?? "" : "";
     const res = await fetch(localUrl || "/api/prototype", {
       method: "POST",
@@ -1028,7 +1029,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
   const prototypeBasis = useSession((state) => state.prototypeBasis);
   const setPrototype = useSession((state) => state.setPrototype);
   const go = useSession((state) => state.go);
-  const protoFn = useServerFn(generatePrototype);
+  const protoFn = workshopAction<{ ok: true; html: string } | { ok: false; error: string }>("prototype");
   const frameRef = useRef<HTMLIFrameElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const keptFrame = useRef<Partial<Record<1 | 2 | 3, string>>>({});
@@ -1301,8 +1302,8 @@ function CoachPanel({
   const [busy, setBusy] = useState(false);
   const [allScenes, setAllScenes] = useState(true);
   const seconds = useSeconds(busy);
-  const coach = useServerFn(coachDraft);
-  const refine = useServerFn(refinePrototype);
+  const coach = workshopAction<{ ok: true; text?: string; paragraph?: string; paragraphs?: string[]; brief?: Brief; pain?: string } | { ok: false; error: string }>("coach");
+  const refine = workshopAction<{ ok: true; html: string } | { ok: false; error: string }>("refine");
 
   useEffect(() => {
     setDraft(null);
@@ -1363,9 +1364,9 @@ function CoachPanel({
     step === "overview"
       ? "Nominate one person as group leader. They drive the laptop. At the end, your group presents the prototype to the other groups."
       : step === "pain"
-        ? painGuide(painId)
+        ? painGuide(painId ?? "")
         : step === "brief"
-          ? briefGuide(field?.key ?? "", painId, scenario)
+          ? briefGuide(field?.key ?? "", painId ?? "", scenario)
           : step === "scenes"
             ? (painId && SCENE_HINTS[painId]) ||
               (scenario
@@ -1543,7 +1544,7 @@ function CoachPanel({
                   onClick={() => void suggest()}
                   className="h-12 btn-glow text-xl font-medium disabled:opacity-40"
                 >
-                  {busy ? `Thinking · ${seconds}s` : blank ? "Get some inspiration" : step === "brief" ? "Enrich selected" : "Enrich"}
+                  {busy ? `Thinking · ${seconds}s` : blank ? "Get some inspiration" : "Enrich"}
                 </button>
                 {step === "prototype" ? (
                   <div className="border border-line p-3">
@@ -1560,7 +1561,7 @@ function CoachPanel({
                   <div className="flex flex-col items-center gap-1">
                     <AgentBot mini />
                     <p className="text-center text-base leading-snug text-muted">
-                      {step === "brief" && assistField ? briefWait(assistField) : `Thinking · ${seconds}s`}
+                      {`Thinking · ${seconds}s`}
                     </p>
                   </div>
                 ) : null}
@@ -1661,8 +1662,8 @@ function CoachPanel({
 }
 
 function DebugMenu({ onClose, onEngine }: { onClose: () => void; onEngine: (engine: PrototypeEngine) => void }) {
-  const readLog = useServerFn(readDebugLog);
-  const clearServer = useServerFn(clearServerDebugLog);
+  const readLog = workshopAction<{ at: string; name: string; ms?: number; ok?: boolean; detail: string }[]>("log");
+  const clearServer = workshopAction<{ ok: boolean }>("clear");
   const [models, setModels] = useState<DebugModels>(() => debugModels());
   const [engine, setEngine] = useState<PrototypeEngine>(() => chosenEngine());
   const [clientLines, setClientLines] = useState(() => debugClientLog());

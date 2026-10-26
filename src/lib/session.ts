@@ -324,7 +324,7 @@ export function loadSavedSession() {
       parsed && typeof parsed === "object" && "state" in parsed && parsed.state && typeof parsed.state === "object"
         ? parsed.state
         : (parsed as Record<string, unknown>);
-    applySaved(state);
+    applySaved(state as Record<string, unknown>);
   } catch {
     useSession.setState({ hydrated: true });
   }

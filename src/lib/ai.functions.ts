@@ -64,9 +64,29 @@ function modelFields(model: string) {
 }
 
 function keyOrError(): string | Err {
-  const apiKey = process.env.XAI_API_KEY;
-  if (!apiKey) return { ok: false, error: "AI is not available in this environment. Ask a facilitator." };
-  return apiKey;
+  const xai = process.env.XAI_API_KEY?.trim();
+  if (xai) return xai;
+  const open = process.env.OPENROUTER_API_KEY?.trim() || shared.__cyaOpenRouterKey || "";
+  if (open) return open;
+  return { ok: false, error: "AI is not available in this environment. Ask a facilitator." };
+}
+
+function routeModel(apiKey: string, model: string) {
+  const xai = process.env.XAI_API_KEY?.trim();
+  if (xai && apiKey === xai) {
+    return { url: "https://api.x.ai/v1/chat/completions", model, extra: modelFields(model) };
+  }
+  const known: Record<string, string> = {
+    "grok-4.7": "x-ai/grok-4.7",
+    "grok-4.5": "x-ai/grok-4.5",
+    "grok-4-1-fast-non-reasoning": "x-ai/grok-4.5",
+    "grok-code-fast-1": "x-ai/grok-4.5",
+  };
+  return {
+    url: "https://openrouter.ai/api/v1/chat/completions",
+    model: model.includes("/") ? model : (known[model] ?? "x-ai/grok-4.5"),
+    extra: {},
+  };
 }
 
 async function readError(res: Response) {
@@ -150,9 +170,10 @@ async function chat(apiKey: string, messages: unknown[], maxTokens: number, temp
   for (let i = 0; i < models.length; i++) {
     const started = Date.now();
     debugNote("chat", { model: models[i], maxTokens, temperature, messages: summarizeMessages(messages) });
-    const res = await postJson("https://api.x.ai/v1/chat/completions", apiKey, {
-      model: models[i],
-      ...modelFields(models[i]),
+    const route = routeModel(apiKey, models[i]);
+    const res = await postJson(route.url, apiKey, {
+      model: route.model,
+      ...route.extra,
       temperature,
       max_tokens: maxTokens,
       messages,
@@ -292,9 +313,10 @@ async function streamChat(
   for (let i = 0; i < models.length; i++) {
     const started = Date.now();
     debugNote("stream", { model: models[i], maxTokens, temperature, messages: summarizeMessages(messages) });
-    const res = await postJson("https://api.x.ai/v1/chat/completions", apiKey, {
-      model: models[i],
-      ...modelFields(models[i]),
+    const route = routeModel(apiKey, models[i]);
+    const res = await postJson(route.url, apiKey, {
+      model: route.model,
+      ...route.extra,
       temperature,
       max_tokens: maxTokens,
       stream: true,

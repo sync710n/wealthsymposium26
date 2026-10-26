@@ -280,12 +280,32 @@ function modelFields(model) {
 	return model === "grok-4.7" ? { reasoning_effort: "low" } : {};
 }
 function keyOrError() {
-	const apiKey = process.env.XAI_API_KEY;
-	if (!apiKey) return {
+	const xai = process.env.XAI_API_KEY?.trim();
+	if (xai) return xai;
+	const open = process.env.OPENROUTER_API_KEY?.trim() || shared.__cyaOpenRouterKey || "";
+	if (open) return open;
+	return {
 		ok: false,
 		error: "AI is not available in this environment. Ask a facilitator."
 	};
-	return apiKey;
+}
+function routeModel(apiKey, model) {
+	const xai = process.env.XAI_API_KEY?.trim();
+	if (xai && apiKey === xai) return {
+		url: "https://api.x.ai/v1/chat/completions",
+		model,
+		extra: modelFields(model)
+	};
+	return {
+		url: "https://openrouter.ai/api/v1/chat/completions",
+		model: model.includes("/") ? model : {
+			"grok-4.7": "x-ai/grok-4.7",
+			"grok-4.5": "x-ai/grok-4.5",
+			"grok-4-1-fast-non-reasoning": "x-ai/grok-4.5",
+			"grok-code-fast-1": "x-ai/grok-4.5"
+		}[model] ?? "x-ai/grok-4.5",
+		extra: {}
+	};
 }
 async function readError(res) {
 	const text = await res.text().catch(() => "");
@@ -362,9 +382,10 @@ async function chat(apiKey, messages, maxTokens, temperature, models = PROTOTYPE
 			temperature,
 			messages: summarizeMessages(messages)
 		});
-		const res = await postJson("https://api.x.ai/v1/chat/completions", apiKey, {
-			model: models[i],
-			...modelFields(models[i]),
+		const route = routeModel(apiKey, models[i]);
+		const res = await postJson(route.url, apiKey, {
+			model: route.model,
+			...route.extra,
 			temperature,
 			max_tokens: maxTokens,
 			messages
@@ -503,9 +524,10 @@ async function streamChat(apiKey, messages, maxTokens, temperature, onDelta, mod
 			temperature,
 			messages: summarizeMessages(messages)
 		});
-		const res = await postJson("https://api.x.ai/v1/chat/completions", apiKey, {
-			model: models[i],
-			...modelFields(models[i]),
+		const route = routeModel(apiKey, models[i]);
+		const res = await postJson(route.url, apiKey, {
+			model: route.model,
+			...route.extra,
 			temperature,
 			max_tokens: maxTokens,
 			stream: true,
