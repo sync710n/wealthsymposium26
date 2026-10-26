@@ -86,7 +86,7 @@ export const prompts = {
         `Scenario: ${scenario || "(not chosen)"}`,
         "Idea brief:",
         ideaBrief(brief),
-        `Cut scene ${index + 1} now: ${current || "(empty)"}`,
+        `Screen ${index + 1} now: ${current || "(empty)"}`,
         'JSON: {"paragraph":"..."}',
       ]);
     },
@@ -115,7 +115,7 @@ export const prompts = {
   prototype: {
     system: "You output one HTML section and nothing else. No markdown.",
     emptyRetry: "That section was empty. Put the whole screen inside the section and do not close it early.",
-    repeatRetry: "Keep the same header and the same right-hand agent panel. Change the work area so it matches this cut scene, not the previous table.",
+    repeatRetry: "Keep the same header and the same right-hand agent panel. Change the work area so it matches this screen, not the previous table.",
     styleFallback: "Match the attached picture. Do not invent a simpler screen.",
     styleWithColors(colors: string[]) {
       return `Use these colors only${colors.length ? ` (${colors.join(", ")})` : ""}. Do not copy the previous step's cards or layout.`;
@@ -158,7 +158,7 @@ export const prompts = {
         `Agent name: ${input.brief.name || "Do not invent a brand. Call it the agent."}`,
         `What the agent does: ${input.brief.agentDoes}`,
         `What the RM expects to see and receive: ${input.brief.rmSees}`,
-        `This step's cut scene: ${input.scene}`,
+        `This step's screen: ${input.scene}`,
         `The other steps, which you must not repeat:\n${input.others}`,
         input.already ? `Do not repeat this content:\n${input.already}` : "",
       ]);
@@ -169,7 +169,7 @@ export const prompts = {
     instruction(input: { step: number; direction: string; pain: string; brief: Brief; scene: string; current: string }) {
       return [
         `Revise ONLY <section data-step="${input.step}">. Return that one section and nothing else.`,
-        "The attached picture is this step's original cut scene. Keep what the agent does and what the RM sees in that picture.",
+        "The attached picture is this step's original screen. Keep what the agent does and what the RM sees in that picture.",
         "Keep visual continuity with the other steps: same navigation, gradient colors, type, spacing, and the right-hand agent chat. Do not invent a new shell.",
         "Nothing may overlap. Work area plus chat, and at most two columns inside the work area. Extra cards go on the next row. Readable at 900px wide, not only full screen. No position:absolute or position:fixed.",
         "The right-hand agent panel stays the same card: same colors, border, radius, title, and reply box. Change only the message text. Do not restyle it.",
@@ -180,7 +180,7 @@ export const prompts = {
         `Edit: ${input.direction}`,
         `Painpoint scenario: ${input.pain}`,
         `Agent name: ${input.brief.name || "Do not invent a brand. Call it the agent."}`,
-        `This cut scene: ${input.scene}`,
+        `This screen: ${input.scene}`,
         "",
         "Current section:",
         input.current,

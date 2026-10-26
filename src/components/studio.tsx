@@ -22,7 +22,7 @@ import {
   SlidersHorizontal,
   X,
 } from "lucide-react";
-import { BRIEF_FIELDS, BRIEF_HINTS, FLOW, PAINPOINTS, SCENE_HINTS, type Brief, type BriefKey, type StepId } from "@/lib/content";
+import { BRIEF_FIELDS, FLOW, PAINPOINTS, SCENE_HINTS, briefGuide, painGuide, type Brief, type BriefKey, type StepId } from "@/lib/content";
 import { coachDraft, generatePrototype, generateSceneImage, refinePrototype, readDebugLog, clearServerDebugLog, type PrototypeEngine } from "@/lib/ai.functions";
 import { debugClearClient, debugClientLog, debugModels, debugPush, debugSubscribe, MODEL_OPTIONS, saveDebugModels, traced, type DebugModels } from "@/lib/debug";
 import { loadImages, loadPrototype, saveImage } from "@/lib/media-db";
@@ -542,7 +542,7 @@ function Overview({ onFresh, onResume }: { onFresh: () => void; onResume: () => 
   const phases = [
     { n: "0", title: "Scenario", body: "Choose the moment your group feels most. If it is not listed, write your own.", icon: ListChecks },
     { n: "1", title: "Idea brief", body: "Name the agent. Say what it does, what you receive, and who it helps.", icon: Bot },
-    { n: "2", title: "Cut scenes", body: "Describe three screens in order, then generate a picture for each.", icon: Clapperboard },
+    { n: "2", title: "Design 3 screens", body: "Design three screens in order, then generate a picture for each.", icon: Clapperboard },
     { n: "3", title: "Prototype", body: "Generate the clickable prototype, make one or two edits, then present it.", icon: MonitorSmartphone },
   ];
   return (
@@ -696,7 +696,7 @@ function BriefStep() {
       <div className="flex items-end justify-between gap-3">
         <div>
           <h1 className="text-3xl leading-tight">Phase 1: Idea brief</h1>
-          <p className="mt-1 text-xl text-muted">Click a box if you want the assistant to help with that one.</p>
+          <p className="mt-1 text-xl text-muted">Click a box. The assistant tells you what to write. The group fills it in.</p>
         </div>
         <div className="flex gap-2">
           <button type="button" className="h-12 rounded-full px-3 text-xl font-medium text-rule" onClick={() => go("pain")}>
@@ -814,11 +814,11 @@ function ScenesStep() {
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <h1 className="text-3xl leading-tight">Phase 2: Three cut scenes</h1>
+          <h1 className="text-3xl leading-tight">Phase 2: Design 3 screens</h1>
           <p className="mt-1 text-xl text-muted">
             {anyStale
               ? "A picture is out of date. Generate it again before you move on."
-              : "Write one or two sentences, then generate the image. Click a box if you want help with that scene."}
+              : "Write one or two sentences, then generate the image. Click a box if you want help with that screen."}
           </p>
         </div>
         <div className="flex shrink-0 justify-end gap-2">
@@ -858,7 +858,7 @@ function ScenesStep() {
             >
               <div className="flex min-w-0 flex-1 flex-col">
                 <header className={`shrink-0 border-b border-line px-3 py-1 text-xl font-medium leading-tight ${picked ? "bg-soft" : ""}`}>
-                  <span className="text-rule">0{index + 1}</span> Cut scene
+                  <span className="text-rule">0{index + 1}</span> Screen
                 </header>
                 <textarea
                   value={scene}
@@ -893,7 +893,7 @@ function ScenesStep() {
                     <button
                       type="button"
                       className="absolute top-1 right-1 inline-flex size-10 items-center justify-center border border-line bg-sheet"
-                      aria-label={`Open cut scene ${index + 1} full screen`}
+                      aria-label={`Open screen ${index + 1} full screen`}
                       onClick={() => setFull(slot.dataUrl)}
                     >
                       <Expand className="size-5" aria-hidden />
@@ -1196,7 +1196,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
         }
       >
         {present ? null : (
-          <div className="flex shrink-0 border-b border-line" aria-label="Cut scenes">
+          <div className="flex shrink-0 border-b border-line" aria-label="Screens">
             {stepTabs}
           </div>
         )}
@@ -1212,7 +1212,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
                 className="absolute inset-0 h-full w-full bg-sheet"
               />
             ) : !busy ? (
-              <p className="px-4 py-6 text-xl text-muted">The prototype appears here, one cut scene at a time.</p>
+              <p className="px-4 py-6 text-xl text-muted">The prototype appears here, one screen at a time.</p>
             ) : null}
             {busy && view === writing ? (
               <pre
@@ -1225,7 +1225,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
           </div>
         </div>
         {present ? (
-          <div className="sticky bottom-0 z-10 flex shrink-0 border-t border-line bg-sheet" aria-label="Cut scenes">
+          <div className="sticky bottom-0 z-10 flex shrink-0 border-t border-line bg-sheet" aria-label="Screens">
             {stepTabs}
             <button
               type="button"
@@ -1314,7 +1314,7 @@ function CoachPanel({
 
   if (forceHidden) return null;
 
-  const canSuggest = step === "pain" || step === "brief" || step === "scenes" || step === "prototype";
+  const canSuggest = step === "scenes" || step === "prototype";
   const field = focus?.kind === "field" ? BRIEF_FIELDS.find((item) => item.key === focus.key) : undefined;
   const sceneIndex = focus?.kind === "scene" ? focus.index : activeScene;
   const protoStep = focus?.kind === "prototype" ? focus.step : null;
@@ -1337,8 +1337,8 @@ function CoachPanel({
       ? (field?.refineAs ?? "")
       : step === "scenes"
         ? allScenes
-          ? "the three cut scenes"
-          : `cut scene ${sceneIndex + 1}`
+          ? "the three screens"
+          : `screen ${sceneIndex + 1}`
         : step === "pain"
           ? "your scenario"
           : protoStep
@@ -1349,15 +1349,14 @@ function CoachPanel({
     step === "overview"
       ? "Nominate one person as group leader. They drive the laptop. At the end, your group presents the prototype to the other groups."
       : step === "pain"
-        ? "Pick the scenario your group feels most. If yours is missing, write it in box 12 and I'll help you shape it."
+        ? painGuide(painId)
         : step === "brief"
-          ? (painId && BRIEF_HINTS[painId]) ||
-            (scenario ? BRIEF_HINTS.own : "Pick a scenario first. The idea brief has to answer that moment.")
+          ? briefGuide(field?.key ?? "", painId, scenario)
           : step === "scenes"
             ? (painId && SCENE_HINTS[painId]) ||
               (scenario
                 ? SCENE_HINTS.own
-                : "Imagine you are the director. What are the three steps your assistant takes? Describe each screen.")
+                : "Design three screens. What are the three steps your assistant takes? Describe each screen.")
             : protoStep
               ? scenario
                 ? `One change for this step, still about this scenario: ${moment}. The other two steps stay as they are.`
@@ -1473,24 +1472,30 @@ function CoachPanel({
         </button>
       </div>
       <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 py-3">
-        <p className="text-xl leading-snug text-muted">{hint}</p>
+        <div className="grid gap-3">
+          {hint.split(/\n\n+/).map((line) => (
+            <p key={line} className="text-xl leading-snug text-muted">
+              {line}
+            </p>
+          ))}
+        </div>
         {canSuggest ? (
           <>
             {step === "scenes" ? (
-              <div className="ios-segment flex" aria-label="How many scenes to draft">
+              <div className="ios-segment flex" aria-label="How many screens to draft">
                 <button
                   type="button"
                   className={`h-9 flex-1 rounded-full px-2 text-lg ${allScenes ? "ios-seg-on" : "text-ink"}`}
                   onClick={() => setAllScenes(true)}
                 >
-                  All 3 scenes
+                  All 3 screens
                 </button>
                 <button
                   type="button"
                   className={`h-9 flex-1 rounded-full px-2 text-lg ${allScenes ? "text-ink" : "ios-seg-on"}`}
                   onClick={() => setAllScenes(false)}
                 >
-                  This scene
+                  This screen
                 </button>
               </div>
             ) : null}
@@ -1555,7 +1560,7 @@ function CoachPanel({
             {draft.kind === "field" ? <p className="mt-2 text-xl">{draft.text}</p> : null}
             {draft.kind === "scene" ? (
               <p className="mt-2 text-xl">
-                <span className="font-medium">Scene {draft.index + 1}. </span>
+                <span className="font-medium">Screen {draft.index + 1}. </span>
                 {draft.text}
               </p>
             ) : null}

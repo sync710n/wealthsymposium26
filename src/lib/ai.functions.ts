@@ -926,7 +926,7 @@ export const refinePrototype = createServerFn({ method: "POST" })
     const userContent = picture.startsWith("data:image/")
       ? [
           { type: "text", text: instruction },
-          { type: "text", text: `Original cut scene for step ${step}. Match this picture's content. Keep the same visual style as the other steps.` },
+          { type: "text", text: `Original screen for step ${step}. Match this picture's content. Keep the same visual style as the other steps.` },
           { type: "image_url", image_url: { url: picture, detail: "high" } },
           ...shots.flatMap((url, index) =>
             !url.startsWith("data:image/") || index + 1 === step
