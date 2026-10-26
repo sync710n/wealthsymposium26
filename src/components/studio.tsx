@@ -548,9 +548,14 @@ function Overview({ onFresh, onResume }: { onFresh: () => void; onResume: () => 
   return (
     <div className="flex h-full min-h-0 flex-col">
       <h1 className="text-4xl leading-tight">Create your agent</h1>
-      <p className="mt-2 max-w-4xl text-xl leading-snug text-muted">
-        About 30 minutes on one laptop. No real client names or account numbers.
-      </p>
+        <p className="mt-2 max-w-4xl text-xl leading-snug text-muted">
+          About 30 minutes on one laptop. No real client names or account numbers.
+        </p>
+        {typeof window !== "undefined" && window.localStorage?.getItem("cya-desktop") === "1" && !window.localStorage.getItem("cya-supabase-fn") ? (
+          <p className="mt-2 max-w-4xl text-xl leading-snug">
+            This copy calls Supabase. Double-click Wealth Symposium and paste the function URL before you start.
+          </p>
+        ) : null}
       <div className="mt-3 grid min-h-0 flex-1 grid-cols-2 gap-3">
         {phases.map((phase) => (
           <article key={phase.n} className="flex min-h-0 flex-col rounded-2xl border border-line bg-soft p-4">
@@ -870,7 +875,9 @@ function ScenesStep() {
                   onChange={(event) => setScene(sceneIndex, event.target.value)}
                   className={`min-h-0 w-full flex-1 resize-none border-0 px-3 py-2 text-xl leading-snug ${picked ? "bg-soft" : "bg-sheet"}`}
                 />
-                {errors[index] ? <p className="px-3 text-base text-rule">{errors[index]}</p> : null}
+                {errors[index] ? (
+                  <p className="max-h-10 shrink-0 overflow-hidden px-3 text-base leading-tight text-rule">The picture did not come back. Try again.</p>
+                ) : null}
                 <button
                   type="button"
                   disabled={!sceneReady(scene) || busy[index]}
@@ -959,10 +966,15 @@ async function readPrototypeStream(
   }) => Promise<{ ok: true; html: string } | { ok: false; error: string }>,
 ) {
   try {
-    const res = await fetch("/api/prototype", {
+    const localUrl = typeof window !== "undefined" ? window.localStorage.getItem("cya-supabase-fn")?.trim() : "";
+    const anon = typeof window !== "undefined" ? window.localStorage.getItem("cya-supabase-anon")?.trim() ?? "" : "";
+    const res = await fetch(localUrl || "/api/prototype", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+        ...(localUrl && anon ? { Authorization: `Bearer ${anon}`, apikey: anon } : {}),
+      },
+      body: JSON.stringify(localUrl ? { action: "prototype-stream", data: payload } : payload),
       signal: AbortSignal.timeout(180000),
     });
     if (!res.ok || !res.body || !res.headers.get("content-type")?.includes("text/event-stream")) {
@@ -1657,11 +1669,15 @@ function DebugMenu({ onClose, onEngine }: { onClose: () => void; onEngine: (engi
   const [serverLines, setServerLines] = useState<{ at: string; name: string; ms?: number; ok?: boolean; detail: string }[]>([]);
   const [copied, setCopied] = useState(false);
   const [routerKey, setRouterKey] = useState(() => savedOpenRouterKey());
+  const desktop = typeof window !== "undefined" && window.localStorage?.getItem("cya-desktop") === "1";
+  const [supabaseUrl, setSupabaseUrl] = useState(() => window.localStorage?.getItem("cya-supabase-fn") ?? "");
+  const [supabaseAnon, setSupabaseAnon] = useState(() => window.localStorage?.getItem("cya-supabase-anon") ?? "");
 
   const refresh = async () => {
     setClientLines(debugClientLog());
     try {
-      setServerLines(await readLog());
+      const lines = await readLog();
+      setServerLines(Array.isArray(lines) ? lines : []);
     } catch (error) {
       debugPush({ name: "debug-log", ok: false, detail: error instanceof Error ? error.message : "Could not read the server log." });
     }
@@ -1761,6 +1777,46 @@ function DebugMenu({ onClose, onEngine }: { onClose: () => void; onEngine: (engi
           />
         </label>
         <p className="text-sm leading-snug text-muted">Stays in this browser. Sent only when DeepSeek runs.</p>
+        {desktop ? (
+          <>
+            <label className="text-base">
+              Supabase function URL
+              <input
+                type="url"
+                autoComplete="off"
+                spellCheck={false}
+                placeholder="https://xxxx.supabase.co/functions/v1/workshop"
+                value={supabaseUrl}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setSupabaseUrl(value);
+                  const next = value.trim();
+                  if (next) window.localStorage.setItem("cya-supabase-fn", next);
+                  else window.localStorage.removeItem("cya-supabase-fn");
+                }}
+                className="mt-1 h-10 w-full border border-line bg-sheet px-2 text-base"
+              />
+            </label>
+            <label className="text-base">
+              Supabase anon key
+              <input
+                type="password"
+                autoComplete="off"
+                spellCheck={false}
+                placeholder="Only if the function asks for it"
+                value={supabaseAnon}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  setSupabaseAnon(value);
+                  const next = value.trim();
+                  if (next) window.localStorage.setItem("cya-supabase-anon", next);
+                  else window.localStorage.removeItem("cya-supabase-anon");
+                }}
+                className="mt-1 h-10 w-full border border-line bg-sheet px-2 text-base"
+              />
+            </label>
+          </>
+        ) : null}
         <div className="flex flex-wrap gap-2">
           <button type="button" className="h-10 border border-line px-3 text-base" onClick={() => void refresh()}>
             Refresh log

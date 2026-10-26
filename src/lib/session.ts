@@ -318,28 +318,14 @@ export function loadSavedSession() {
     useSession.setState({ hydrated: true });
     return;
   }
-  const worker = new Worker(
-    URL.createObjectURL(
-      new Blob(
-        [
-          "self.onmessage=function(event){try{var parsed=JSON.parse(event.data);var state=parsed&&parsed.state?parsed.state:parsed;self.postMessage({ok:true,state:state});}catch(e){self.postMessage({ok:false});}};",
-        ],
-        { type: "text/javascript" },
-      ),
-    ),
-  );
-  const done = (ok: boolean, state?: Record<string, unknown>) => {
-    worker.terminate();
-    if (abandonHydration) return;
-    if (!ok || !state) {
-      useSession.setState({ hydrated: true });
-      return;
-    }
+  try {
+    const parsed = JSON.parse(raw) as { state?: Record<string, unknown> } | Record<string, unknown>;
+    const state =
+      parsed && typeof parsed === "object" && "state" in parsed && parsed.state && typeof parsed.state === "object"
+        ? parsed.state
+        : (parsed as Record<string, unknown>);
     applySaved(state);
-  };
-  worker.onmessage = (event: MessageEvent<{ ok?: boolean; state?: Record<string, unknown> }>) => {
-    done(Boolean(event.data?.ok), event.data?.state);
-  };
-  worker.onerror = () => done(false);
-  worker.postMessage(raw);
+  } catch {
+    useSession.setState({ hydrated: true });
+  }
 }
