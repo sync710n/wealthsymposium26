@@ -15,7 +15,7 @@ export const Route = createRootRoute({
       {
         name: "description",
         content:
-          "A 30-minute workshop. Groups ideate an AI agent: a pinpoint, an idea brief, three screens, and a clickable prototype.",
+          "A 30-minute workshop. Groups ideate an AI agent: a painpoint, an idea brief, three screens, and a clickable prototype.",
       },
     ],
     links: [

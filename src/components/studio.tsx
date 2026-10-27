@@ -570,9 +570,9 @@ function Overview({ onFresh, onResume }: { onFresh: () => void; onResume: () => 
   const resumeAt = useSession((state) => state.resumeAt);
   const canResume = hydrated && Boolean(resumeAt && resumeAt !== "overview");
   const phases = [
-    { n: "0", title: "Pinpoint", body: "Choose the pinpoint your group feels most. If it is not listed, write your own.", icon: ListChecks, tone: "#F8D0D4" },
+    { n: "0", title: "Painpoint", body: "Choose the painpoint your group feels most. If it is not listed, write your own.", icon: ListChecks, tone: "#F8D0D4" },
     { n: "1", title: "Idea brief", body: "Name the agent. Say what it does, what you receive, and who it helps.", icon: Bot, tone: "#D6E4F0" },
-    { n: "2", title: "Design 3 screens", body: "Design three screens in order, then generate a picture for each.", icon: Clapperboard, tone: "#D4EDE4" },
+    { n: "2", title: "Design 3 screens", body: "Design three screens in order, then generate a screen for each.", icon: Clapperboard, tone: "#D4EDE4" },
     { n: "3", title: "Prototype", body: "Generate the clickable prototype, make one or two edits, then present it.", icon: MonitorSmartphone, tone: "#F3E6C8" },
   ];
   return (
@@ -660,7 +660,7 @@ function PainStep() {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex shrink-0 items-end justify-between gap-3">
-        <h1 className="text-3xl leading-tight">Phase 0: Which one is your biggest pinpoint as an RM?</h1>
+        <h1 className="text-3xl leading-tight">Phase 0: Which one is your biggest painpoint as an RM?</h1>
         <div className="flex gap-2">
           <button type="button" className="h-12 rounded-full px-3 text-xl font-medium text-rule" onClick={() => go("overview")}>
             Back
@@ -714,7 +714,7 @@ function PainStep() {
               useSession.getState().setFocus({ kind: "pain" });
             }}
             onChange={(event) => setPainOwn(event.target.value)}
-            placeholder="Or write a pinpoint that hurts more."
+            placeholder="Or write a painpoint that hurts more."
             aria-label="Or add your own"
             className="min-h-0 w-full flex-1 resize-none bg-transparent text-lg leading-snug"
           />
@@ -767,11 +767,11 @@ function BriefStep() {
         <div className="shrink-0 border border-dashed border-line bg-sheet px-3 py-2">
           <p className="flex items-center gap-2 text-base font-medium text-muted">
             <ClipboardList className="size-5 shrink-0" aria-hidden />
-            Pinpoint
+            Painpoint
           </p>
           <p className="mt-1 text-lg leading-snug">
             {painId === "own" ? (
-              painOwn.trim() || "Write your own pinpoint in the previous step."
+              painOwn.trim() || "Write your own painpoint in the previous step."
             ) : painId ? (
               <>
                 <span className="font-bold">{PAINPOINTS.find((item) => item.id === painId)?.title}. </span>
@@ -1501,7 +1501,7 @@ function CoachPanel({
       : step === "scenes"
         ? `screen ${sceneIndex + 1}`
         : step === "pain"
-          ? "your pinpoint"
+          ? "your painpoint"
           : protoStep
             ? `screen ${protoStep}`
             : "";
@@ -1520,7 +1520,7 @@ function CoachPanel({
                 : "Design three screens. What are the three steps your assistant takes? Describe each screen.")
             : protoStep
               ? scenario
-                ? `One change for this screen, still about this pinpoint: ${moment}. The other two screens stay as they are.`
+                ? `One change for this screen, still about this painpoint: ${moment}. The other two screens stay as they are.`
                 : "Tell me the one change for this screen. The other two stay as they are."
               : "Pick a screen above the prototype. I'll only change that one.";
 
@@ -1689,7 +1689,7 @@ function CoachPanel({
                   <div className="border border-line p-3">
                     <p className="text-lg font-medium leading-snug">If you are done, be prepared to present to other groups in 90s.</p>
                     <ol className="mt-2 list-decimal space-y-1 pl-5 text-lg leading-snug">
-                      <li>Your group pinpoint</li>
+                      <li>Your group painpoint</li>
                       <li>Your agent idea</li>
                       <li>Walk us through the prototype</li>
                       <li>The key benefit as closing</li>

@@ -111,8 +111,8 @@ const ASK: Record<string, { name: string; does: string; sees: string; benefits: 
     benefits: "What does the client hear that is about them, and what reading do you stop doing?",
   },
   own: {
-    name: "What would you call the person who takes this pinpoint off you? Two or three words you would actually say. Not the name of the problem.",
-    does: "In the pinpoint you wrote, what is the assistant doing that you are doing today?",
+    name: "What would you call the person who takes this painpoint off you? Two or three words you would actually say. Not the name of the problem.",
+    does: "In the painpoint you wrote, what is the assistant doing that you are doing today?",
     sees: "What would you need in front of you so you don't go and find it yourself?",
     benefits: "If this worked in the next meeting, what changes for you, and what changes for the client?",
   },
@@ -120,8 +120,8 @@ const ASK: Record<string, { name: string; does: string; sees: string; benefits: 
 
 export function painGuide(_painId: string): string {
   return [
-    "Which pinpoint is most painful to you as an RM? It might be something that slows you down, or something that stops you answering the client well enough in the room.",
-    "Pick the card the group finds most painful, not the one that sounds impressive. If none of them is yours, write your group's own pinpoint in the row along the bottom.",
+    "Which painpoint is most painful to you as an RM? It might be something that slows you down, or something that stops you answering the client well enough in the room.",
+    "Pick the card the group finds most painful, not the one that sounds impressive. If none of them is yours, write your group's own painpoint in the row along the bottom.",
   ].join("\n\n");
 }
 
@@ -133,7 +133,7 @@ export function briefGuide(key: BriefKey | "", painId: string, scenario: string)
   }
   if (key === "agentDoes") {
     return [
-      moment ? `Stay inside this pinpoint: ${moment}` : "Stay inside the pinpoint you picked.",
+      moment ? `Stay inside this painpoint: ${moment}` : "Stay inside the painpoint you picked.",
       ask.does,
       "Write what the assistant does, not what you do. If the sentence still describes the pain, you have not said the job.",
     ].join("\n\n");
@@ -147,11 +147,11 @@ export function briefGuide(key: BriefKey | "", painId: string, scenario: string)
   if (key === "benefits") {
     return [
       ask.benefits,
-      "One change for you. One change for the client. If the benefit could fit any agent, it is too vague for this pinpoint.",
+      "One change for you. One change for the client. If the benefit could fit any agent, it is too vague for this painpoint.",
     ].join("\n\n");
   }
   return [
-    moment ? `You are designing for this pinpoint only: ${moment}` : "Pick a pinpoint first. The brief has to answer that pinpoint.",
+    moment ? `You are designing for this painpoint only: ${moment}` : "Pick a painpoint first. The brief has to answer that painpoint.",
     "Click a box. The question on the right is for the group to answer. Don't look for a sample sentence.",
   ].join("\n\n");
 }
@@ -166,7 +166,7 @@ export const SCENE_HINTS: Record<string, string> = {
   "07": "Design three screens. What are the three steps your assistant takes on a discount or a bespoke ask: the justification, who has to decide, and the update you can give the client?",
   "08": "Design three screens. What are the three steps your assistant takes when the client is cross-border: what it checks, when it flags a specialist, and what you still decide?",
   "09": "Design three screens. What are the three steps your assistant takes with market news and in-house insights: what it keeps, what it ties to this client's holdings and concerns, and the conversation you have?",
-  own: "Design three screens. What are the three steps your assistant takes in the pinpoint you wrote? For each screen, say what is on it, what the assistant does, and what you do.",
+  own: "Design three screens. What are the three steps your assistant takes in the painpoint you wrote? For each screen, say what is on it, what the assistant does, and what you do.",
 };
 
 export type BriefKey = "name" | "agentDoes" | "rmSees" | "benefits";
@@ -210,7 +210,7 @@ export const BRIEF_FIELDS: { key: BriefKey; label: string; hint: string; refineA
 export type StepId = "overview" | "pain" | "brief" | "scenes" | "prototype";
 
 export const FLOW: { id: Exclude<StepId, "overview">; n: string; short: string; kicker: string }[] = [
-  { id: "pain", n: "0", short: "Pinpoint", kicker: "Phase 0" },
+  { id: "pain", n: "0", short: "Painpoint", kicker: "Phase 0" },
   { id: "brief", n: "1", short: "Brief", kicker: "Phase 1" },
   { id: "scenes", n: "2", short: "Screens", kicker: "Phase 2" },
   { id: "prototype", n: "3", short: "Prototype", kicker: "Phase 3" },
