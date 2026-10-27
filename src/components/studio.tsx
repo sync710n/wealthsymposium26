@@ -570,7 +570,7 @@ function Overview({ onFresh, onResume }: { onFresh: () => void; onResume: () => 
   const resumeAt = useSession((state) => state.resumeAt);
   const canResume = hydrated && Boolean(resumeAt && resumeAt !== "overview");
   const phases = [
-    { n: "0", title: "Painpoint", body: "Choose the painpoint your group feels most. If it is not listed, write your own.", icon: ListChecks, tone: "#F8D0D4" },
+    { n: "0", title: "Painpoint", body: "Choose the painpoint your group feels most strongly. If it is not listed, write your own.", icon: ListChecks, tone: "#F8D0D4" },
     { n: "1", title: "Idea brief", body: "Name the agent. Say what it does, what you receive, and who it helps.", icon: Bot, tone: "#D6E4F0" },
     { n: "2", title: "Design 3 screens", body: "Design three screens in order, then generate a screen for each.", icon: Clapperboard, tone: "#D4EDE4" },
     { n: "3", title: "Prototype", body: "Generate the clickable prototype, make one or two edits, then present it.", icon: MonitorSmartphone, tone: "#F3E6C8" },
