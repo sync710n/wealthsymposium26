@@ -105,6 +105,10 @@ function clockKey(step: StepId) {
   return null;
 }
 
+function wordCount(value: string) {
+  return value.trim().split(/\s+/).filter(Boolean).length;
+}
+
 function formatLeft(total: number) {
   const minutes = Math.floor(total / 60);
   const seconds = total % 60;
@@ -1479,8 +1483,9 @@ function CoachPanel({
 
   if (forceHidden) return null;
 
-  const canSuggest = step === "scenes" || step === "prototype";
   const field = focus?.kind === "field" ? BRIEF_FIELDS.find((item) => item.key === focus.key) : undefined;
+  const briefWords = field ? wordCount(String(brief[field.key] ?? "")) : 0;
+  const canSuggest = step === "scenes" || step === "prototype" || (step === "brief" && briefWords >= 10);
   const sceneIndex = focus?.kind === "scene" ? focus.index : activeScene;
   const protoStep = focus?.kind === "prototype" ? focus.step : null;
   const needsBox =
@@ -1512,7 +1517,10 @@ function CoachPanel({
       : step === "pain"
         ? painGuide(painId ?? "")
         : step === "brief"
-          ? briefGuide(field?.key ?? "", painId ?? "", scenario)
+          ? briefGuide(field?.key ?? "", painId ?? "", scenario) +
+            (field && field.key !== "name" && briefWords < 10
+              ? "\n\nOnce this box has at least 10 words, I can refine it with you."
+              : "")
           : step === "scenes"
             ? (painId && SCENE_HINTS[painId]) ||
               (scenario
@@ -1680,9 +1688,11 @@ function CoachPanel({
                       ? "Refine screen"
                       : step === "scenes" && !blank
                         ? "Refine prompt"
-                        : blank
-                          ? "Get some inspiration"
-                          : "Enrich"}
+                        : step === "brief"
+                          ? "Refine"
+                          : blank
+                            ? "Get some inspiration"
+                            : "Enrich"}
                 </button>
             )}
                 {step === "prototype" ? (

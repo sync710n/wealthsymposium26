@@ -17048,15 +17048,16 @@ window.addEventListener("resize",magnify);
 			setDirection("");
 		}, [focusKey]);
 		if (forceHidden) return null;
-		const canSuggest = step === "scenes" || step === "prototype";
 		const field = focus?.kind === "field" ? BRIEF_FIELDS.find((item) => item.key === focus.key) : void 0;
+		const briefWords = field ? String(brief[field.key] ?? "").trim().split(/\s+/).filter(Boolean).length : 0;
+		const canSuggest = step === "scenes" || step === "prototype" || step === "brief" && briefWords >= 10;
 		const sceneIndex = focus?.kind === "scene" ? focus.index : activeScene;
 		const protoStep = focus?.kind === "prototype" ? focus.step : null;
 		const needsBox = step === "brief" && !field || step === "pain" && focus?.kind !== "pain" || step === "prototype" && !protoStep;
 		const blank = step === "pain" ? painId === "own" || !painId ? !painOwn.trim() : false : step === "brief" ? !String(field ? brief[field.key] : "").trim() : step === "scenes" ? !scenes[sceneIndex]?.trim() : false;
 		const subject = step === "brief" ? field?.refineAs ?? "" : step === "scenes" ? `screen ${sceneIndex + 1}` : step === "pain" ? "your painpoint" : protoStep ? `screen ${protoStep}` : "";
 		const moment = scenario.replace(/[.?!]\s*$/, "");
-		const hint = step === "overview" ? "Nominate one person as group leader. They drive the laptop. At the end, your group presents the prototype to the other groups." : step === "pain" ? painGuide(painId ?? "") : step === "brief" ? briefGuide(field?.key ?? "", painId ?? "", scenario) : step === "scenes" ? painId && SCENE_HINTS[painId] || (scenario ? SCENE_HINTS.own : "Design three screens. What are the three steps your assistant takes? Describe each screen.") : protoStep ? scenario ? `One change for this screen, still about this painpoint: ${moment}. The other two screens stay as they are.` : "Tell me the one change for this screen. The other two stay as they are." : "Pick a screen above the prototype. I'll only change that one.";
+		const hint = step === "overview" ? "Nominate one person as group leader. They drive the laptop. At the end, your group presents the prototype to the other groups." : step === "pain" ? painGuide(painId ?? "") : step === "brief" ? briefGuide(field?.key ?? "", painId ?? "", scenario) + (field && field.key !== "name" && briefWords < 10 ? "\n\nOnce this box has at least 10 words, I can refine it with you." : "") : step === "scenes" ? painId && SCENE_HINTS[painId] || (scenario ? SCENE_HINTS.own : "Design three screens. What are the three steps your assistant takes? Describe each screen.") : protoStep ? scenario ? `One change for this screen, still about this painpoint: ${moment}. The other two screens stay as they are.` : "Tell me the one change for this screen. The other two stay as they are." : "Pick a screen above the prototype. I'll only change that one.";
 		async function suggest() {
 			const state = useSession.getState();
 			setBusy(true);
@@ -17212,7 +17213,7 @@ window.addEventListener("resize",magnify);
 							disabled: busy || step === "prototype" && (direction.trim().length < 3 || !useSession.getState().prototypeHtml),
 							onClick: () => void suggest(),
 							className: "h-12 btn-glow text-xl font-medium disabled:opacity-40",
-							children: busy ? `Thinking · ${seconds}s` : step === "prototype" ? "Refine screen" : step === "scenes" && !blank ? "Refine prompt" : blank ? "Get some inspiration" : "Enrich"
+							children: busy ? `Thinking · ${seconds}s` : step === "prototype" ? "Refine screen" : step === "scenes" && !blank ? "Refine prompt" : step === "brief" ? "Refine" : blank ? "Get some inspiration" : "Enrich"
 						}),
 						step === "prototype" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "border border-line p-3",

@@ -691,6 +691,11 @@ var coachDraft = createServerFn({ method: "POST" }).validator((input) => input).
 		const key = data.field ?? "agentDoes";
 		const question = BRIEF_FIELDS.find((item) => item.key === key)?.label ?? key;
 		const current = key === "name" ? data.brief.name : data.brief[key] ?? "";
+		const written = current.trim().split(/\s+/).filter(Boolean).length;
+		if (written < 10) return {
+			ok: false,
+			error: "Write at least 10 words in this box before I refine it."
+		};
 		const voice = key === "rmSees" || key === "benefits" ? "Voice: first person, as the relationship manager. Use I and my. Do not start with The agent." : key === "agentDoes" ? "Voice: third person. The assistant you want does the job that fixes the scenario. It does not cause the problem. Do not use I or you." : "";
 		user = key === "name" ? prompts.coach.agentName(current, direction, pain) : prompts.coach.field(question, current, direction, pain, voice);
 	} else if (data.target === "scenes") user = prompts.coach.scenes(scenes, direction, pain, data.brief);

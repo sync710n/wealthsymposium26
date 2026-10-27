@@ -451,6 +451,8 @@ export const coachDraft = createServerFn({ method: "POST" })
       const key = data.field ?? "agentDoes";
       const question = BRIEF_FIELDS.find((item) => item.key === key)?.label ?? key;
       const current = key === "name" ? data.brief.name : (data.brief[key] ?? "");
+      const written = current.trim().split(/\s+/).filter(Boolean).length;
+      if (written < 10) return { ok: false, error: "Write at least 10 words in this box before I refine it." };
       const voice =
         key === "rmSees" || key === "benefits"
           ? "Voice: first person, as the relationship manager. Use I and my. Do not start with The agent."
