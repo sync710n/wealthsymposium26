@@ -138,7 +138,7 @@ var prompts = {
 		bitmap: [
 			"A crisp 16:9 desktop screenshot of a futuristic wealth relationship-manager workbench. Not an illustration, not a painting, not a photo of a person or a desk, not a device mockup.",
 			"No bezel, no browser chrome, no hands, no perspective, no watermark, no caption, and do not write a screen number.",
-			"Light visual style: a white or pale page, soft gradient accents, light cards, and dark text. Not a dark theme and not a flat gray admin screen.",
+			"Light futuristic style. Not a dark theme, and not a flat white or gray admin page. A luminous pale gradient fills the background: ice blue, soft violet, and a warm blush, like light shining through glass. Cards are glossy frosted glass, translucent and rounded, with a bright rim, a soft inner highlight, and a faint colored glow. Buttons and chips shine. Text stays dark and easy to read. No dull beige, no washed-out blocks, and no matte gray panels.",
 			"If an agent name is given, that is the only product name on the screen. Do not invent a brand, a company, or a title of your own.",
 			"Show a different moment each step: what the agent is doing, and what the RM is looking at. Do not repeat the same screen.",
 			"Sharp sans-serif type, aligned controls, real buttons, and short readable English labels. Fictional sample data only."
