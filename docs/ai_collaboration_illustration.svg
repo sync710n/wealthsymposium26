@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
+  <title id="title">AI collaboration</title>
+  <desc id="desc">Two people stand on a red hexagon and shape an assistant together on one screen.</desc>
+  <rect width="1400" height="900" fill="#FFFFFF"/>
+  <polygon fill="#DB0011" points="160,500 430,300 970,300 1240,500 970,730 430,730"/>
+
+  <!-- Screen between them, behind the arms -->
+  <g id="screen">
+    <rect x="575" y="400" width="250" height="168" rx="18" fill="#3F5467"/>
+    <rect x="591" y="416" width="218" height="124" rx="6" fill="#FFFFFF"/>
+    <rect x="606" y="432" width="92" height="20" rx="5" fill="#FDECEE"/>
+    <rect x="606" y="432" width="5" height="20" fill="#DB0011"/>
+    <rect x="606" y="458" width="92" height="20" rx="5" fill="#F1EFF0"/>
+    <rect x="606" y="484" width="92" height="20" rx="5" fill="#F1EFF0"/>
+    <rect x="606" y="510" width="68" height="20" rx="5" fill="#F1EFF0"/>
+    <circle cx="742" cy="444" r="9" fill="#DB0011"/>
+    <rect x="756" y="436" width="40" height="14" rx="7" fill="#F1EFF0"/>
+    <rect x="728" y="466" width="70" height="26" rx="10" fill="#FDECEE"/>
+    <rect x="744" y="500" width="54" height="16" rx="8" fill="#F1EFF0"/>
+    <path d="M620 568 h160 l22 18 h-204 z" fill="#E4E6EA"/>
+  </g>
+
+  <!-- Left RM -->
+  <g id="rm">
+    <path fill="#1C1C1C" d="M456 500 h18 v168 h-18 z"/>
+    <path fill="#1C1C1C" d="M482 500 h18 v168 h-18 z"/>
+    <path fill="#FFFFFF" d="M444 652 h36 v8 a8 8 0 0 1 -8 8 h-20 a8 8 0 0 1 -8 -8 z"/>
+    <path fill="#FFFFFF" d="M476 652 h40 v8 a8 8 0 0 1 -8 8 h-24 a8 8 0 0 1 -8 -8 z"/>
+    <path fill="#E4E4E4" d="M444 666 h36 v3 h-36 z"/>
+    <path fill="#E4E4E4" d="M476 666 h40 v3 h-40 z"/>
+
+    <path fill="#6AAED4" d="M430 360 c-26 18 -34 58 -24 96 c6 16 18 14 22 2 c6 -28 8 -52 20 -70 c8 -12 4 -24 -18 -28 z"/>
+    <ellipse cx="404" cy="462" rx="11" ry="9" fill="#E7B48A"/>
+
+    <path fill="#7BB8DB" d="M438 348 c-4 -16 12 -30 36 -34 h40 c24 4 40 18 36 34 l12 150 c2 18 -12 30 -44 30 h-48 c-32 0 -46 -12 -44 -30 z"/>
+    <path fill="#5AA4CF" d="M468 430 h36 c8 0 10 6 8 12 l-6 26 c-2 8 -8 12 -16 12 h-8 c-8 0 -14 -4 -16 -12 l-6 -26 c-2 -6 0 -12 8 -12 z"/>
+    <path d="M478 352 v34" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M494 352 v40" stroke="#FFFFFF" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path fill="#5AA4CF" d="M456 338 c8 14 20 20 36 20 s28 -6 36 -20 c-8 8 -20 12 -36 12 s-28 -4 -36 -12 z"/>
+
+    <rect x="474" y="328" width="22" height="24" rx="8" fill="#E7B48A"/>
+    <ellipse cx="485" cy="292" rx="30" ry="36" fill="#E7B48A"/>
+    <ellipse cx="455" cy="298" rx="6" ry="9" fill="#D9A378"/>
+    <ellipse cx="515" cy="298" rx="6" ry="9" fill="#D9A378"/>
+    <path fill="#3A2E2C" d="M454 300 C452 246 468 228 486 226 C508 224 522 250 518 302 C510 262 498 248 486 248 C470 248 456 268 454 300 Z"/>
+    <circle cx="486" cy="214" r="15" fill="#3A2E2C"/>
+    <path fill="#3A2E2C" d="M468 232 C478 214 500 214 508 230 C496 224 478 226 468 232 Z"/>
+    <circle cx="474" cy="294" r="8.5" fill="#F6E0D0"/>
+    <circle cx="500" cy="294" r="8.5" fill="#F6E0D0"/>
+    <circle cx="474" cy="294" r="8.5" fill="none" stroke="#2A2A2A" stroke-width="2.2"/>
+    <circle cx="500" cy="294" r="8.5" fill="none" stroke="#2A2A2A" stroke-width="2.2"/>
+    <path d="M482 294 h10" stroke="#2A2A2A" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+    <circle cx="474" cy="295" r="2.2" fill="#1C1C1C"/>
+    <circle cx="500" cy="295" r="2.2" fill="#1C1C1C"/>
+    <path d="M476 310 q12 8 22 0" stroke="#C47B68" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+    <path fill="#6AAED4" d="M530 372 c34 20 62 58 70 96 c1 8 -8 14 -16 10 c-16 -18 -34 -44 -48 -66 c-10 -16 -12 -32 -6 -40 z"/>
+    <ellipse cx="598" cy="478" rx="12" ry="10" fill="#E7B48A"/>
+  </g>
+
+  <!-- Right colleague -->
+  <g id="colleague">
+    <path fill="#1C1C1C" d="M900 500 h18 v168 h-18 z"/>
+    <path fill="#1C1C1C" d="M926 500 h18 v168 h-18 z"/>
+    <path fill="#FFFFFF" d="M888 652 h36 v8 a8 8 0 0 1 -8 8 h-20 a8 8 0 0 1 -8 -8 z"/>
+    <path fill="#FFFFFF" d="M920 652 h40 v8 a8 8 0 0 1 -8 8 h-24 a8 8 0 0 1 -8 -8 z"/>
+    <path fill="#E4E4E4" d="M888 666 h36 v3 h-36 z"/>
+    <path fill="#E4E4E4" d="M920 666 h40 v3 h-40 z"/>
+
+    <path fill="#6AAED4" d="M1010 368 c26 16 34 54 26 94 c-4 16 -16 16 -22 2 c-8 -26 -10 -50 -22 -68 c-8 -12 -2 -26 18 -28 z"/>
+    <ellipse cx="1036" cy="468" rx="11" ry="9" fill="#E7B48A"/>
+
+    <path fill="#7BB8DB" d="M888 346 c-4 -16 12 -30 36 -34 h40 c24 4 40 18 36 34 l12 150 c2 18 -12 30 -44 30 h-48 c-32 0 -46 -12 -44 -30 z"/>
+    <path fill="#5AA4CF" d="M918 338 h48 c6 12 4 20 -2 26 h-44 c-6 -6 -8 -14 -2 -26 z"/>
+
+    <rect x="924" y="328" width="22" height="24" rx="8" fill="#E7B48A"/>
+    <ellipse cx="935" cy="292" rx="30" ry="36" fill="#E7B48A"/>
+    <ellipse cx="905" cy="298" rx="6" ry="9" fill="#D9A378"/>
+    <ellipse cx="965" cy="298" rx="6" ry="9" fill="#D9A378"/>
+    <path fill="#3A2E2C" d="M904 308 C902 248 920 228 936 226 C960 224 974 256 970 310 C960 266 948 250 936 250 C920 250 906 272 904 308 Z"/>
+    <path fill="#3A2E2C" d="M914 248 C928 220 968 222 980 246 C964 236 934 236 914 248 Z"/>
+    <circle cx="924" cy="296" r="2.6" fill="#1C1C1C"/>
+    <circle cx="950" cy="296" r="2.6" fill="#1C1C1C"/>
+    <path d="M922 312 q14 8 26 0" stroke="#C47B68" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+    <path fill="#6AAED4" d="M888 372 c-36 18 -66 56 -74 94 c-1 8 8 14 16 10 c18 -16 36 -42 50 -64 c12 -16 16 -32 8 -40 z"/>
+    <ellipse cx="812" cy="476" rx="12" ry="10" fill="#E7B48A"/>
+  </g>
+
+  <ellipse cx="700" cy="748" rx="250" ry="12" fill="#1C1C1C" opacity="0.08"/>
+</svg>
