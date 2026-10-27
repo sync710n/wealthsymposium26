@@ -15206,7 +15206,8 @@ button.text-rule {
 	//#endregion
 	//#region src/lib/session.ts
 	var emptyClocks = () => ({
-		idea: null,
+		pain: null,
+		brief: null,
 		scenes: null,
 		prototype: null
 	});
@@ -15277,13 +15278,28 @@ button.text-rule {
 			frames: state.images.map((slot) => slot?.sceneText ?? "")
 		});
 	}
+	function readClocks(value, step) {
+		const raw = value && typeof value === "object" ? value : {};
+		const stamp = (key) => typeof raw[key] === "number" ? raw[key] : null;
+		const clocks = {
+			pain: stamp("pain"),
+			brief: stamp("brief"),
+			scenes: stamp("scenes"),
+			prototype: stamp("prototype")
+		};
+		const idea = stamp("idea");
+		if (idea && step === "pain" && !clocks.pain) clocks.pain = idea;
+		if (idea && step === "brief" && !clocks.brief) clocks.brief = idea;
+		return clocks;
+	}
 	function withClock(clocks, step) {
 		const next = {
 			...emptyClocks(),
 			...clocks ?? {}
 		};
 		const now = Date.now();
-		if ((step === "pain" || step === "brief") && !next.idea) next.idea = now;
+		if (step === "pain" && !next.pain) next.pain = now;
+		if (step === "brief" && !next.brief) next.brief = now;
 		if (step === "scenes" && !next.scenes) next.scenes = now;
 		if (step === "prototype" && !next.prototype) next.prototype = now;
 		return next;
@@ -15437,10 +15453,7 @@ button.text-rule {
 					...EMPTY_BRIEF,
 					...state?.brief ?? {}
 				},
-				clocks: {
-					...emptyClocks(),
-					...state?.clocks ?? {}
-				}
+				clocks: readClocks(state?.clocks, saved)
 			});
 			if (state?.prototypeHtml) savePrototype(state.prototypeHtml).catch(() => void 0);
 		},
@@ -15477,10 +15490,7 @@ button.text-rule {
 			],
 			activeScene: state.activeScene === 1 || state.activeScene === 2 ? state.activeScene : 0,
 			prototypeBasis: typeof state.prototypeBasis === "string" ? state.prototypeBasis : null,
-			clocks: {
-				...emptyClocks(),
-				...state.clocks && typeof state.clocks === "object" ? state.clocks : {}
-			},
+			clocks: readClocks(state.clocks, saved),
 			...html ? { prototypeHtml: html } : {}
 		});
 		if (html) savePrototype(html).catch(() => void 0);
@@ -15613,14 +15623,13 @@ button.text-rule {
 		});
 	}
 	var PHASE_LIMIT = {
-		idea: 300,
-		scenes: 600,
-		prototype: 900
+		pain: 300,
+		brief: 300,
+		scenes: 480,
+		prototype: 720
 	};
 	function clockKey(step) {
-		if (step === "pain" || step === "brief") return "idea";
-		if (step === "scenes") return "scenes";
-		if (step === "prototype") return "prototype";
+		if (step === "pain" || step === "brief" || step === "scenes" || step === "prototype") return step;
 		return null;
 	}
 	function formatLeft(total) {

@@ -11,12 +11,13 @@ export type FocusTarget =
   | null;
 
 export type PhaseClocks = {
-  idea: number | null;
+  pain: number | null;
+  brief: number | null;
   scenes: number | null;
   prototype: number | null;
 };
 
-const emptyClocks = (): PhaseClocks => ({ idea: null, scenes: null, prototype: null });
+const emptyClocks = (): PhaseClocks => ({ pain: null, brief: null, scenes: null, prototype: null });
 
 export type SessionState = {
   hydrated: boolean;
@@ -122,10 +123,26 @@ export function currentBasis(state: Pick<SessionState, "painId" | "painOwn" | "b
   });
 }
 
+function readClocks(value: unknown, step: StepId | null): PhaseClocks {
+  const raw = value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+  const stamp = (key: string) => (typeof raw[key] === "number" ? raw[key] : null);
+  const clocks: PhaseClocks = {
+    pain: stamp("pain"),
+    brief: stamp("brief"),
+    scenes: stamp("scenes"),
+    prototype: stamp("prototype"),
+  };
+  const idea = stamp("idea");
+  if (idea && step === "pain" && !clocks.pain) clocks.pain = idea;
+  if (idea && step === "brief" && !clocks.brief) clocks.brief = idea;
+  return clocks;
+}
+
 function withClock(clocks: PhaseClocks | undefined, step: StepId): PhaseClocks {
   const next = { ...emptyClocks(), ...(clocks ?? {}) };
   const now = Date.now();
-  if ((step === "pain" || step === "brief") && !next.idea) next.idea = now;
+  if (step === "pain" && !next.pain) next.pain = now;
+  if (step === "brief" && !next.brief) next.brief = now;
   if (step === "scenes" && !next.scenes) next.scenes = now;
   if (step === "prototype" && !next.prototype) next.prototype = now;
   return next;
@@ -268,7 +285,7 @@ export const useSession = create<SessionState>()(
           step: "overview",
           resumeAt: saved,
           brief: { ...EMPTY_BRIEF, ...(state?.brief ?? {}) },
-          clocks: { ...emptyClocks(), ...(state?.clocks ?? {}) },
+          clocks: readClocks(state?.clocks, saved),
         });
         if (state?.prototypeHtml) void savePrototype(state.prototypeHtml).catch(() => undefined);
       },
@@ -304,7 +321,7 @@ function applySaved(state: Record<string, unknown>) {
     scenes: [scenes[0] ?? "", scenes[1] ?? "", scenes[2] ?? ""] as [string, string, string],
     activeScene: state.activeScene === 1 || state.activeScene === 2 ? state.activeScene : 0,
     prototypeBasis: typeof state.prototypeBasis === "string" ? state.prototypeBasis : null,
-    clocks: { ...emptyClocks(), ...(state.clocks && typeof state.clocks === "object" ? (state.clocks as PhaseClocks) : {}) },
+    clocks: readClocks(state.clocks, saved),
     ...(html ? { prototypeHtml: html } : {}),
   });
   if (html) void savePrototype(html).catch(() => undefined);

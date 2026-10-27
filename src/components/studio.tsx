@@ -96,12 +96,10 @@ function Working({ label, seconds }: { label: string; seconds: number }) {
   );
 }
 
-const PHASE_LIMIT = { idea: 5 * 60, scenes: 10 * 60, prototype: 15 * 60 } as const;
+const PHASE_LIMIT = { pain: 5 * 60, brief: 5 * 60, scenes: 8 * 60, prototype: 12 * 60 } as const;
 
 function clockKey(step: StepId) {
-  if (step === "pain" || step === "brief") return "idea" as const;
-  if (step === "scenes") return "scenes" as const;
-  if (step === "prototype") return "prototype" as const;
+  if (step === "pain" || step === "brief" || step === "scenes" || step === "prototype") return step;
   return null;
 }
 
