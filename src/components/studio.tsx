@@ -192,10 +192,7 @@ function isolateStep(html: string, step: number, present = false) {
   const ownStyles = [...section.matchAll(/<style\b[^>]*>[\s\S]*?<\/style>/gi)].map((item) => item[0]).join("");
   const screenBg = section.match(/background(?:-color)?\s*:\s*([^;}"]+)/i)?.[1]?.trim() || "#16121f";
   const show = `<style>
-html,body{height:100%;margin:0;overflow:hidden;background:${screenBg};color:#161616;cursor:none}
-[hidden]{display:none!important}
-#cya-fit,#cya-fit *{cursor:none}
-#cya-laser{position:fixed;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#db0011;box-shadow:0 0 0 6px rgba(219,0,17,.28),0 0 18px #db0011;pointer-events:none;z-index:2147483647;display:none}
+html,body{height:100%;margin:0;overflow:hidden;background:${screenBg};color:#161616}
 [hidden]{display:none!important}
 #cya-fit{height:100%;width:100%;overflow:auto}
 html body section[data-step]{width:100%!important;height:100%!important;max-width:none!important;margin:0!important;min-height:100%!important;box-sizing:border-box!important}
@@ -304,15 +301,6 @@ function magnify(){
 magnify();
 setTimeout(function(){pin();faces();magnify();},40);
 window.addEventListener("resize",magnify);
-var laser=document.createElement("div");
-laser.id="cya-laser";
-document.body.appendChild(laser);
-document.addEventListener("mousemove",function(e){
-  laser.style.display="block";
-  laser.style.left=e.clientX+"px";
-  laser.style.top=e.clientY+"px";
-});
-document.addEventListener("mouseleave",function(){laser.style.display="none";});
 })();</script>`;
   return `<!DOCTYPE html><html><head><meta charset="utf-8">${ownStyles}${show}</head><body><div id="cya-fit">${cutOtherSteps(section, step)}</div></body></html>`;
 }
@@ -444,7 +432,7 @@ export function Studio() {
       >
         <header className="flex h-12 shrink-0 items-center gap-2 border-b border-line px-3">
           <p className="font-head shrink-0 text-xl text-ink" onDoubleClick={() => setDebugOpen(true)}>
-            AI Powered, Human Led
+            Wealth Symposium
           </p>
           <p className="shrink-0 text-xl text-muted">{kicker}</p>
           {left !== null ? (
@@ -1300,25 +1288,27 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
 
   const screenBar = (
     <div className="flex min-w-0 flex-1">
-      <button
-        type="button"
-        aria-label="Previous screen"
-        disabled={view === 1}
-        className="inline-flex w-10 shrink-0 items-center justify-center border-r border-line disabled:opacity-30"
-        onClick={() => shift(-1)}
-      >
-        <ChevronLeft className="size-5" aria-hidden />
-      </button>
       {stepTabs}
-      <button
-        type="button"
-        aria-label="Next screen"
-        disabled={view === 3 || (!readySteps.includes((view + 1) as 1 | 2 | 3) && !(busy && writing === view + 1))}
-        className="inline-flex w-10 shrink-0 items-center justify-center border-l border-line disabled:opacity-30"
-        onClick={() => shift(1)}
-      >
-        <ChevronRight className="size-5" aria-hidden />
-      </button>
+      <div className="flex shrink-0 border-l border-line">
+        <button
+          type="button"
+          aria-label="Previous screen"
+          disabled={view === 1}
+          className="inline-flex w-10 items-center justify-center border-r border-line disabled:opacity-30"
+          onClick={() => shift(-1)}
+        >
+          <ChevronLeft className="size-5" aria-hidden />
+        </button>
+        <button
+          type="button"
+          aria-label="Next screen"
+          disabled={view === 3 || (!readySteps.includes((view + 1) as 1 | 2 | 3) && !(busy && writing === view + 1))}
+          className="inline-flex w-10 items-center justify-center disabled:opacity-30"
+          onClick={() => shift(1)}
+        >
+          <ChevronRight className="size-5" aria-hidden />
+        </button>
+      </div>
     </div>
   );
 

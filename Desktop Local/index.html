@@ -81,7 +81,7 @@
     --color-ink: #000;
     --color-muted: #5a5a5a;
     --color-line: #000;
-    --color-soft: #db0011;
+    --color-soft: #f8d0d4;
     --color-rule: #000;
     --font-head: "Archivo Black", "Space Grotesk", sans-serif;
   }
@@ -396,10 +396,8 @@
   }
 
   .border-rule {
-    color: #fff;
     box-shadow: none;
-    background: #db0011;
-    border-color: #000;
+    border-color: #db0011;
   }
 }
 
@@ -1332,21 +1330,8 @@ button.border:not(.type-seen):not(.scenario-card) {
 }
 
 button.border.scenario-card.is-picked {
-  color: #fff;
-  background: #db0011;
-}
-
-.bg-soft, .bg-soft .text-rule, .bg-soft .text-muted, .bg-soft .text-ink, .is-picked, .is-picked .text-rule, .is-picked .text-muted {
-  color: #fff;
-}
-
-.bg-soft textarea, .bg-soft input, .is-picked textarea, .is-picked input {
-  color: #fff;
-  background: none;
-}
-
-.bg-soft textarea::placeholder, .bg-soft input::placeholder, .is-picked textarea::placeholder, .is-picked input::placeholder {
-  color: #ffffffc7;
+  color: #000;
+  background: #f8d0d4;
 }
 
 button.border:not(.type-seen):not(.scenario-card):active:not(:disabled) {
@@ -15678,10 +15663,7 @@ button.text-rule {
 			})}>`;
 		});
 		return `<!DOCTYPE html><html><head><meta charset="utf-8">${[...section.matchAll(/<style\b[^>]*>[\s\S]*?<\/style>/gi)].map((item) => item[0]).join("")}${`<style>
-html,body{height:100%;margin:0;overflow:hidden;background:${section.match(/background(?:-color)?\s*:\s*([^;}"]+)/i)?.[1]?.trim() || "#16121f"};color:#161616;cursor:none}
-[hidden]{display:none!important}
-#cya-fit,#cya-fit *{cursor:none}
-#cya-laser{position:fixed;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#db0011;box-shadow:0 0 0 6px rgba(219,0,17,.28),0 0 18px #db0011;pointer-events:none;z-index:2147483647;display:none}
+html,body{height:100%;margin:0;overflow:hidden;background:${section.match(/background(?:-color)?\s*:\s*([^;}"]+)/i)?.[1]?.trim() || "#16121f"};color:#161616}
 [hidden]{display:none!important}
 #cya-fit{height:100%;width:100%;overflow:auto}
 html body section[data-step]{width:100%!important;height:100%!important;max-width:none!important;margin:0!important;min-height:100%!important;box-sizing:border-box!important}
@@ -15790,15 +15772,6 @@ function magnify(){
 magnify();
 setTimeout(function(){pin();faces();magnify();},40);
 window.addEventListener("resize",magnify);
-var laser=document.createElement("div");
-laser.id="cya-laser";
-document.body.appendChild(laser);
-document.addEventListener("mousemove",function(e){
-  laser.style.display="block";
-  laser.style.left=e.clientX+"px";
-  laser.style.top=e.clientY+"px";
-});
-document.addEventListener("mouseleave",function(){laser.style.display="none";});
 })();<\/script>`}</head><body><div id="cya-fit">${cutOtherSteps(section, step)}</div></body></html>`;
 	}
 	function shrinkImage(dataUrl) {
@@ -15932,7 +15905,7 @@ document.addEventListener("mouseleave",function(){laser.style.display="none";});
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "font-head shrink-0 text-xl text-ink",
 									onDoubleClick: () => setDebugOpen(true),
-									children: "AI Powered, Human Led"
+									children: "Wealth Symposium"
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "shrink-0 text-xl text-muted",
@@ -16863,31 +16836,30 @@ document.addEventListener("mouseleave",function(){laser.style.display="none";});
 		}) });
 		const screenBar = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "flex min-w-0 flex-1",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+			children: [stepTabs, /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex shrink-0 border-l border-line",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					type: "button",
 					"aria-label": "Previous screen",
 					disabled: view === 1,
-					className: "inline-flex w-10 shrink-0 items-center justify-center border-r border-line disabled:opacity-30",
+					className: "inline-flex w-10 items-center justify-center border-r border-line disabled:opacity-30",
 					onClick: () => shift(-1),
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, {
 						className: "size-5",
 						"aria-hidden": true
 					})
-				}),
-				stepTabs,
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					type: "button",
 					"aria-label": "Next screen",
 					disabled: view === 3 || !readySteps.includes(view + 1) && !(busy && writing === view + 1),
-					className: "inline-flex w-10 shrink-0 items-center justify-center border-l border-line disabled:opacity-30",
+					className: "inline-flex w-10 items-center justify-center disabled:opacity-30",
 					onClick: () => shift(1),
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, {
 						className: "size-5",
 						"aria-hidden": true
 					})
-				})
-			]
+				})]
+			})]
 		});
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "flex h-full min-h-0 flex-1 flex-col",

@@ -7,7 +7,7 @@
   --color-ink: #000000;
   --color-muted: #5a5a5a;
   --color-line: #000000;
-  --color-soft: #db0011;
+  --color-soft: #f8d0d4;
   --color-rule: #000000;
   --font-sans: "Space Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-head: "Archivo Black", "Space Grotesk", sans-serif;
@@ -150,9 +150,7 @@
   }
 
   .border-rule {
-    border-color: #000;
-    background: #db0011;
-    color: #fff;
+    border-color: #db0011;
     box-shadow: none;
   }
 }
@@ -195,33 +193,8 @@ button.border:not(.type-seen):not(.scenario-card) {
 }
 
 button.border.scenario-card.is-picked {
-  background: #db0011;
-  color: #fff;
-}
-
-.bg-soft,
-.bg-soft .text-rule,
-.bg-soft .text-muted,
-.bg-soft .text-ink,
-.is-picked,
-.is-picked .text-rule,
-.is-picked .text-muted {
-  color: #fff;
-}
-
-.bg-soft textarea,
-.bg-soft input,
-.is-picked textarea,
-.is-picked input {
-  color: #fff;
-  background: transparent;
-}
-
-.bg-soft textarea::placeholder,
-.bg-soft input::placeholder,
-.is-picked textarea::placeholder,
-.is-picked input::placeholder {
-  color: rgba(255, 255, 255, 0.78);
+  background: #f8d0d4;
+  color: #000;
 }
 
 button.border:not(.type-seen):not(.scenario-card):active:not(:disabled) {

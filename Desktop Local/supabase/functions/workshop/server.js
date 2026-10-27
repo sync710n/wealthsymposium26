@@ -164,7 +164,7 @@ var prompts = {
 				"The section fills the frame: width 100%, height 100%, no max-width, no auto margin, and no centered card floating in empty space. In a wide frame the columns grow. The work area and the agent panel both stretch to the full height.",
 				"One row: the work area, then a chat about 16rem wide. Inside the work area, at most two columns. Put any further cards on a second row. Width 100%. No overlap. No position:absolute.",
 				"Font sizes are rem only: body 0.85rem, labels 0.75rem, titles 1rem.",
-				"One light palette for the whole screen, taken from the picture: a white or pale page, soft accents, and dark text. Cards are light. Do not use a dark page.",
+				"Copy the gradient from the attached picture onto the page background and the main panels. Keep that gradient visible. Do not flatten it to a plain white or plain gray page. Text stays dark enough to read.",
 				"Inline CSS only. No external scripts or fonts. A click can do something small.",
 				"When the picture shows a person, do not use an empty box or an external image. Use an inline SVG avatar with their initials, for example <svg viewBox=\"0 0 64 64\" width=\"64\" height=\"64\"><rect width=\"64\" height=\"64\" rx=\"12\" fill=\"#6d4aff\"/><text x=\"32\" y=\"40\" text-anchor=\"middle\" font-size=\"22\" font-family=\"sans-serif\" fill=\"#fff\">EV</text></svg>.",
 				"Every part of the screen goes inside the section. Do not close the section before the screen is finished.",
