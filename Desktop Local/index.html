@@ -81,7 +81,7 @@
     --color-ink: #000;
     --color-muted: #5a5a5a;
     --color-line: #000;
-    --color-soft: #fae583;
+    --color-soft: #db0011;
     --color-rule: #000;
     --font-head: "Archivo Black", "Space Grotesk", sans-serif;
   }
@@ -387,7 +387,7 @@
 
 @layer components {
   .btn-glow:hover:not(:disabled) {
-    background: #fc0;
+    background: #b00010;
   }
 
   .btn-glow:active:not(:disabled) {
@@ -396,8 +396,9 @@
   }
 
   .border-rule {
+    color: #fff;
     box-shadow: none;
-    background: #ffdb33;
+    background: #db0011;
     border-color: #000;
   }
 }
@@ -487,10 +488,6 @@
     z-index: 50;
   }
 
-  .col-span-3 {
-    grid-column: span 3 / span 3;
-  }
-
   .mx-2 {
     margin-inline: calc(var(--spacing) * 2);
   }
@@ -501,10 +498,6 @@
 
   .my-1\.5 {
     margin-block: calc(var(--spacing) * 1.5);
-  }
-
-  .mt-0\.5 {
-    margin-top: calc(var(--spacing) * .5);
   }
 
   .mt-1 {
@@ -588,6 +581,10 @@
     height: calc(var(--spacing) * 12);
   }
 
+  .h-14 {
+    height: calc(var(--spacing) * 14);
+  }
+
   .h-16 {
     height: calc(var(--spacing) * 16);
   }
@@ -636,6 +633,22 @@
     width: calc(var(--spacing) * 8);
   }
 
+  .w-9 {
+    width: calc(var(--spacing) * 9);
+  }
+
+  .w-10 {
+    width: calc(var(--spacing) * 10);
+  }
+
+  .w-12 {
+    width: calc(var(--spacing) * 12);
+  }
+
+  .w-72 {
+    width: calc(var(--spacing) * 72);
+  }
+
   .w-\[28rem\] {
     width: 28rem;
   }
@@ -676,16 +689,16 @@
     cursor: pointer;
   }
 
+  .resize {
+    resize: both;
+  }
+
   .resize-none {
     resize: none;
   }
 
   .list-decimal {
     list-style-type: decimal;
-  }
-
-  .grid-cols-1 {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 
   .grid-cols-2 {
@@ -698,10 +711,6 @@
 
   .grid-rows-3 {
     grid-template-rows: repeat(3, minmax(0, 1fr));
-  }
-
-  .grid-rows-4 {
-    grid-template-rows: repeat(4, minmax(0, 1fr));
   }
 
   .flex-col {
@@ -792,8 +801,8 @@
   }
 
   .btn-glow {
-    color: #000;
-    background: #ffdb33;
+    color: #fff;
+    background: #db0011;
     border: 2px solid #000;
     border-radius: 0;
     font-weight: 700;
@@ -967,10 +976,6 @@
     padding-inline: calc(var(--spacing) * 6);
   }
 
-  .px-10 {
-    padding-inline: calc(var(--spacing) * 10);
-  }
-
   .py-1 {
     padding-block: var(--spacing);
   }
@@ -1048,11 +1053,6 @@
     line-height: var(--tw-leading, var(--text-xs--line-height));
   }
 
-  .type-seen {
-    font-size: 1.0625rem;
-    line-height: 1.15;
-  }
-
   .leading-none {
     --tw-leading: 1;
     line-height: 1;
@@ -1069,9 +1069,9 @@
   }
 
   .ios-seg-on {
-    color: #000;
+    color: #fff;
     box-shadow: none;
-    background: #ffdb33;
+    background: #db0011;
     font-weight: 700;
   }
 
@@ -1185,6 +1185,10 @@
     text-decoration-line: none;
   }
 
+  .disabled\:opacity-30:disabled {
+    opacity: .3;
+  }
+
   .disabled\:opacity-35:disabled {
     opacity: .35;
   }
@@ -1220,10 +1224,6 @@
 
     .lg\:w-80 {
       width: calc(var(--spacing) * 80);
-    }
-
-    .lg\:grid-cols-2 {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .lg\:flex-row {
@@ -1326,12 +1326,30 @@
   border-right-color: #000;
 }
 
-button.border:not(.type-seen) {
+button.border:not(.type-seen):not(.scenario-card) {
   background: #fff;
   box-shadow: 3px 3px #000;
 }
 
-button.border:not(.type-seen):active:not(:disabled) {
+button.border.scenario-card.is-picked {
+  color: #fff;
+  background: #db0011;
+}
+
+.bg-soft, .bg-soft .text-rule, .bg-soft .text-muted, .bg-soft .text-ink, .is-picked, .is-picked .text-rule, .is-picked .text-muted {
+  color: #fff;
+}
+
+.bg-soft textarea, .bg-soft input, .is-picked textarea, .is-picked input {
+  color: #fff;
+  background: none;
+}
+
+.bg-soft textarea::placeholder, .bg-soft input::placeholder, .is-picked textarea::placeholder, .is-picked input::placeholder {
+  color: #ffffffc7;
+}
+
+button.border:not(.type-seen):not(.scenario-card):active:not(:disabled) {
   box-shadow: none;
   transform: translate(3px, 3px);
 }
@@ -1374,10 +1392,57 @@ button.text-rule {
   height: 100%;
 }
 
+.bot-track {
+  width: 100%;
+  height: 6.4rem;
+  position: relative;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+.bot-track .bot-fit {
+  animation: 3.4s linear infinite bot-cross;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.bot-jog .bot-fit {
+  animation-duration: 2.1s;
+}
+
+.bot-run .bot-fit {
+  animation-duration: 1.15s;
+}
+
+.bot-walk .bot-legs span, .bot-walk .bot-arm {
+  animation-duration: .55s;
+}
+
+.bot-jog .bot-legs span, .bot-jog .bot-arm {
+  animation-duration: .32s;
+}
+
+.bot-run .bot-legs span, .bot-run .bot-arm {
+  animation-duration: .18s;
+}
+
+@keyframes bot-cross {
+  from {
+    transform: translateX(-5rem);
+  }
+
+  to {
+    transform: translateX(100cqi);
+  }
+}
+
 .bot-fit {
+  will-change: transform, opacity;
   justify-content: center;
   width: 5.5rem;
   height: 6.2rem;
+  animation: .25s cubic-bezier(.25, .46, .45, .94) both bot-in;
   display: flex;
   overflow: visible;
 }
@@ -1391,9 +1456,10 @@ button.text-rule {
 }
 
 .bot {
+  will-change: transform;
   width: 9rem;
   height: 11rem;
-  animation: .7s ease-in-out infinite bot-bob;
+  animation: 1.2s cubic-bezier(.455, .03, .515, .955) infinite bot-bob;
   position: relative;
 }
 
@@ -1415,7 +1481,7 @@ button.text-rule {
   border-radius: 9999px;
   width: .8rem;
   height: .8rem;
-  animation: .9s steps(2, end) infinite bot-blink;
+  animation: 1.2s cubic-bezier(.455, .03, .515, .955) infinite bot-blink;
 }
 
 .bot-stem {
@@ -1445,7 +1511,7 @@ button.text-rule {
   border-radius: 9999px;
   width: .85rem;
   height: .85rem;
-  animation: 1.6s ease-in-out infinite bot-look;
+  animation: 1.2s cubic-bezier(.455, .03, .515, .955) infinite bot-look;
 }
 
 .bot-body {
@@ -1475,7 +1541,7 @@ button.text-rule {
   background: #111;
   width: 100%;
   height: 3px;
-  animation: 1.1s linear infinite bot-scan;
+  animation: 1.2s linear infinite bot-scan;
   position: absolute;
   left: 0;
 }
@@ -1491,13 +1557,13 @@ button.text-rule {
 
 .bot-arm-left {
   transform-origin: top;
-  animation: .7s ease-in-out infinite bot-wave-left;
+  animation: 1.2s cubic-bezier(.455, .03, .515, .955) infinite bot-wave-left;
   left: -.95rem;
 }
 
 .bot-arm-right {
   transform-origin: top;
-  animation: .7s ease-in-out infinite bot-wave-right;
+  animation: 1.2s cubic-bezier(.455, .03, .515, .955) infinite bot-wave-right;
   right: -.95rem;
 }
 
@@ -1518,11 +1584,23 @@ button.text-rule {
 }
 
 .bot-legs span:first-child {
-  animation: .7s ease-in-out infinite bot-step;
+  animation: 1.2s cubic-bezier(.455, .03, .515, .955) infinite bot-step;
 }
 
 .bot-legs span:last-child {
-  animation: .7s ease-in-out infinite reverse bot-step;
+  animation: 1.2s cubic-bezier(.455, .03, .515, .955) infinite reverse bot-step;
+}
+
+@keyframes bot-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes bot-bob {
@@ -1536,8 +1614,12 @@ button.text-rule {
 }
 
 @keyframes bot-blink {
-  50% {
-    background: #111;
+  0%, 42% {
+    opacity: 1;
+  }
+
+  50%, 100% {
+    opacity: .35;
   }
 }
 
@@ -1552,12 +1634,12 @@ button.text-rule {
 }
 
 @keyframes bot-scan {
-  0% {
-    top: 0;
+  from {
+    transform: translateY(0);
   }
 
-  100% {
-    top: 100%;
+  to {
+    transform: translateY(1.15rem);
   }
 }
 
@@ -1588,6 +1670,12 @@ button.text-rule {
 
   50% {
     transform: rotate(-8deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bot, .bot-fit, .bot-bulb, .bot-eye, .bot-screen:after, .bot-arm, .bot-legs span, .bot-prop, .bot-note {
+    animation: none !important;
   }
 }
 
@@ -13966,6 +14054,26 @@ button.text-rule {
 	* This source code is licensed under the ISC license.
 	* See the LICENSE file in the root directory of this source tree.
 	*/
+	var ChevronLeft = createLucideIcon("chevron-left", [["path", {
+		d: "m15 18-6-6 6-6",
+		key: "1wnfg3"
+	}]]);
+	/**
+	* @license lucide-react v0.510.0 - ISC
+	*
+	* This source code is licensed under the ISC license.
+	* See the LICENSE file in the root directory of this source tree.
+	*/
+	var ChevronRight = createLucideIcon("chevron-right", [["path", {
+		d: "m9 18 6-6-6-6",
+		key: "mthhwq"
+	}]]);
+	/**
+	* @license lucide-react v0.510.0 - ISC
+	*
+	* This source code is licensed under the ISC license.
+	* See the LICENSE file in the root directory of this source tree.
+	*/
 	var Clapperboard = createLucideIcon("clapperboard", [
 		["path", {
 			d: "M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z",
@@ -14076,6 +14184,21 @@ button.text-rule {
 			key: "v551iv"
 		}]
 	]);
+	/**
+	* @license lucide-react v0.510.0 - ISC
+	*
+	* This source code is licensed under the ISC license.
+	* See the LICENSE file in the root directory of this source tree.
+	*/
+	var Eye = createLucideIcon("eye", [["path", {
+		d: "M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0",
+		key: "1nclc0"
+	}], ["circle", {
+		cx: "12",
+		cy: "12",
+		r: "3",
+		key: "1v7zrd"
+	}]]);
 	/**
 	* @license lucide-react v0.510.0 - ISC
 	*
@@ -14340,6 +14463,54 @@ button.text-rule {
 	* This source code is licensed under the ISC license.
 	* See the LICENSE file in the root directory of this source tree.
 	*/
+	var Tag = createLucideIcon("tag", [["path", {
+		d: "M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z",
+		key: "vktsd0"
+	}], ["circle", {
+		cx: "7.5",
+		cy: "7.5",
+		r: ".5",
+		fill: "currentColor",
+		key: "kqv944"
+	}]]);
+	/**
+	* @license lucide-react v0.510.0 - ISC
+	*
+	* This source code is licensed under the ISC license.
+	* See the LICENSE file in the root directory of this source tree.
+	*/
+	var Trophy = createLucideIcon("trophy", [
+		["path", {
+			d: "M6 9H4.5a2.5 2.5 0 0 1 0-5H6",
+			key: "17hqa7"
+		}],
+		["path", {
+			d: "M18 9h1.5a2.5 2.5 0 0 0 0-5H18",
+			key: "lmptdp"
+		}],
+		["path", {
+			d: "M4 22h16",
+			key: "57wxv0"
+		}],
+		["path", {
+			d: "M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22",
+			key: "1nw9bq"
+		}],
+		["path", {
+			d: "M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22",
+			key: "1np0yb"
+		}],
+		["path", {
+			d: "M18 2H6v7a6 6 0 0 0 12 0V2Z",
+			key: "u46fv3"
+		}]
+	]);
+	/**
+	* @license lucide-react v0.510.0 - ISC
+	*
+	* This source code is licensed under the ISC license.
+	* See the LICENSE file in the root directory of this source tree.
+	*/
 	var Users = createLucideIcon("users", [
 		["path", {
 			d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2",
@@ -14429,7 +14600,7 @@ button.text-rule {
 			id: "09",
 			icon: "news",
 			title: "Scattered market insights and information overload",
-			text: "There is too much market commentary and house-view material spread across different sources. I struggle to absorb it all and work out what matters for each client's holdings, goals, and concerns, so I can have a timely, personalised conversation."
+			text: "There is too much market commentary across different sources. I struggle to see what matters for each client's holdings and goals."
 		}
 	];
 	var ASK = {
@@ -14488,33 +14659,31 @@ button.text-rule {
 			benefits: "What does the client hear that is about them, and what reading do you stop doing?"
 		},
 		own: {
-			name: "What would you call the person who takes this moment off you? Two or three words you would actually say. Not the name of the problem.",
-			does: "In the moment you wrote, what is the assistant doing that you are doing today?",
+			name: "What would you call the person who takes this pinpoint off you? Two or three words you would actually say. Not the name of the problem.",
+			does: "In the pinpoint you wrote, what is the assistant doing that you are doing today?",
 			sees: "What would you need in front of you so you don't go and find it yourself?",
 			benefits: "If this worked in the next meeting, what changes for you, and what changes for the client?"
 		}
 	};
-	function painGuide(painId) {
-		if (painId === "own") return [
-			"Tell it the way you would tell another RM. What are you trying to do with the client, and what stops you?",
-			"Is it a screen, a wait, a thing you copy, or a question you cannot answer in the room? Pick the real one.",
-			"If the sentence could be anyone's job, it is not specific enough yet. No client names and no account numbers."
-		].join("\n\n");
-		if (painId) return ["Read it once, then ask the group: is this the moment that actually gets in the way of a client conversation?", "If someone has a sharper version, write that in the row along the bottom. If the room nods, keep the card. Don't polish the sentence."].join("\n\n");
-		return ["Which of these happens to you with a client in front of you?", "Pick the card the group argues about, not the one that sounds impressive. If none of them is yours, write the real one in the row along the bottom."].join("\n\n");
+	function painGuide(_painId) {
+		return ["Which pinpoint is most painful to you as an RM? It might be something that slows you down, or something that stops you answering the client well enough in the room.", "Pick the card the group finds most painful, not the one that sounds impressive. If none of them is yours, write your group's own pinpoint in the row along the bottom."].join("\n\n");
 	}
 	function briefGuide(key, painId, scenario) {
 		const ask = ASK[painId] ?? ASK.own;
 		const moment = scenario.trim();
-		if (key === "name") return [ask.name, "Say it out loud. If it sounds like a system, or like the problem, it is not the name yet."].join("\n\n");
+		if (key === "name") return [
+			"A short name the group will remember, for example EDD guru.",
+			ask.name,
+			"Say it out loud. If it sounds like a system, or like the problem, it is not the name yet."
+		].join("\n\n");
 		if (key === "agentDoes") return [
-			moment ? `Stay inside this moment: ${moment}` : "Stay inside the moment you picked.",
+			moment ? `Stay inside this pinpoint: ${moment}` : "Stay inside the pinpoint you picked.",
 			ask.does,
 			"Write what the assistant does, not what you do. If the sentence still describes the pain, you have not said the job."
 		].join("\n\n");
 		if (key === "rmSees") return [ask.sees, "Write it as yourself: I see… or I get… If you cannot point at it, it is still an idea."].join("\n\n");
-		if (key === "benefits") return [ask.benefits, "One change for you. One change for the client. If the benefit could fit any agent, it is too vague for this moment."].join("\n\n");
-		return [moment ? `You are designing for this moment only: ${moment}` : "Pick a scenario first. The brief has to answer that moment.", "Click a box. The question on the right is for the group to answer. Don't look for a sample sentence."].join("\n\n");
+		if (key === "benefits") return [ask.benefits, "One change for you. One change for the client. If the benefit could fit any agent, it is too vague for this pinpoint."].join("\n\n");
+		return [moment ? `You are designing for this pinpoint only: ${moment}` : "Pick a pinpoint first. The brief has to answer that pinpoint.", "Click a box. The question on the right is for the group to answer. Don't look for a sample sentence."].join("\n\n");
 	}
 	var SCENE_HINTS = {
 		"01": "Design three screens. What are the three steps your assistant takes when the book is too big: who has changed, who to contact first, and how you open so it is relevant?",
@@ -14526,7 +14695,7 @@ button.text-rule {
 		"07": "Design three screens. What are the three steps your assistant takes on a request that spans teams: where it is stuck, who acts next, and what you can tell the client?",
 		"08": "Design three screens. What are the three steps your assistant takes when the client is cross-border: what it checks, when it flags a specialist, and what you still decide?",
 		"09": "Design three screens. What are the three steps your assistant takes with market noise: what it keeps, what it ties to this client's holdings and goals, and the conversation you have?",
-		own: "Design three screens. What are the three steps your assistant takes in the moment you wrote? For each screen, say what is on it, what the assistant does, and what you do."
+		own: "Design three screens. What are the three steps your assistant takes in the pinpoint you wrote? For each screen, say what is on it, what the assistant does, and what you do."
 	};
 	var EMPTY_BRIEF = {
 		name: "",
@@ -14538,7 +14707,7 @@ button.text-rule {
 		{
 			key: "name",
 			label: "Name your agent",
-			hint: "A short name the group will remember",
+			hint: "A short name the group will remember, e.g. EDD guru",
 			refineAs: "the agent name"
 		},
 		{
@@ -14564,7 +14733,7 @@ button.text-rule {
 		{
 			id: "pain",
 			n: "0",
-			short: "Scenario",
+			short: "Pinpoint",
 			kicker: "Phase 0"
 		},
 		{
@@ -15053,6 +15222,7 @@ button.text-rule {
 		clocks: emptyClocks(),
 		focus: null,
 		assistField: null,
+		prototypeCue: false,
 		resumeAt: null
 	};
 	function painText(state) {
@@ -15187,6 +15357,7 @@ button.text-rule {
 		setPreviewSide: (side) => set({ previewSide: side }),
 		setFocus: (focus) => set({ focus }),
 		setAssistField: (key) => set({ assistField: key }),
+		setPrototypeCue: (on) => set({ prototypeCue: on }),
 		reset: async () => {
 			await clearImages().catch(() => void 0);
 			set({
@@ -15360,74 +15531,54 @@ button.text-rule {
 		}, [active]);
 		return active ? seconds : 0;
 	}
-	var BOT_MOODS = [
-		"soccer",
-		"basketball",
-		"tennis",
-		"golf",
-		"swim",
-		"run",
-		"cycle",
-		"ski",
-		"skate",
-		"yoga",
-		"box",
-		"guitar",
-		"drums",
-		"piano",
-		"sing",
-		"dance",
-		"paint",
-		"read",
-		"cook",
-		"photo",
-		"chess",
-		"hike"
+	var BOT_GAITS = [
+		"walk",
+		"jog",
+		"run"
 	];
-	function AgentBot({ mini = false }) {
-		const [mood] = (0, import_react.useState)(() => BOT_MOODS[Math.floor(Math.random() * BOT_MOODS.length)]);
-		const bot = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: `bot bot-${mood}`,
-			"aria-hidden": true,
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "bot-antenna",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-bulb" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-stem" })]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "bot-head",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-eye" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-eye" })]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "bot-body",
-					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-arm bot-arm-left" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-screen" }),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-arm bot-arm-right" })
-					]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "bot-legs",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {})]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-prop" }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-note" })
-			]
-		});
-		if (!mini) return bot;
+	function AgentBot() {
+		const [gait] = (0, import_react.useState)(() => BOT_GAITS[Math.floor(Math.random() * BOT_GAITS.length)]);
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			className: "bot-fit",
+			className: `bot-track bot-${gait}`,
+			"aria-hidden": true,
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "bot-scale",
-				children: bot
+				className: "bot-fit",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "bot-scale",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "bot",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "bot-antenna",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-bulb" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-stem" })]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "bot-head",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-eye" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-eye" })]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "bot-body",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-arm bot-arm-left" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-screen" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "bot-arm bot-arm-right" })
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "bot-legs",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {})]
+							})
+						]
+					})
+				})
 			})
 		});
 	}
 	function Working({ label, seconds }) {
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "flex flex-col items-center gap-1 text-center",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AgentBot, { mini: true }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-				className: "text-xl",
+			className: "flex h-full w-full flex-col justify-center",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AgentBot, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "text-center text-xl",
 				children: [
 					label,
 					" · ",
@@ -15497,7 +15648,7 @@ button.text-rule {
 		}
 		return out;
 	}
-	function isolateStep(html, step) {
+	function isolateStep(html, step, present = false) {
 		const open = new RegExp(`<section\\b[^>]*\\bdata-step\\s*=\\s*["']${step}["'][^>]*>`, "i");
 		const start = html.search(open);
 		const lock = `<style>[data-step]:not([data-step="${step}"]){display:none!important}[hidden]{display:none!important}html,body{height:100%;margin:0;overflow:auto}</style>`;
@@ -15527,7 +15678,10 @@ button.text-rule {
 			})}>`;
 		});
 		return `<!DOCTYPE html><html><head><meta charset="utf-8">${[...section.matchAll(/<style\b[^>]*>[\s\S]*?<\/style>/gi)].map((item) => item[0]).join("")}${`<style>
-html,body{height:100%;margin:0;overflow:hidden;background:${section.match(/background(?:-color)?\s*:\s*([^;}"]+)/i)?.[1]?.trim() || "#16121f"};color:#161616}
+html,body{height:100%;margin:0;overflow:hidden;background:${section.match(/background(?:-color)?\s*:\s*([^;}"]+)/i)?.[1]?.trim() || "#16121f"};color:#161616;cursor:none}
+[hidden]{display:none!important}
+#cya-fit,#cya-fit *{cursor:none}
+#cya-laser{position:fixed;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#db0011;box-shadow:0 0 0 6px rgba(219,0,17,.28),0 0 18px #db0011;pointer-events:none;z-index:2147483647;display:none}
 [hidden]{display:none!important}
 #cya-fit{height:100%;width:100%;overflow:auto}
 html body section[data-step]{width:100%!important;height:100%!important;max-width:none!important;margin:0!important;min-height:100%!important;box-sizing:border-box!important}
@@ -15614,7 +15768,37 @@ function faces(){
 }
 pin();
 faces();
-setTimeout(function(){pin();faces();},40);
+function magnify(){
+  if(!${present ? "true" : "false"})return;
+  var fit=document.getElementById("cya-fit");
+  var section=document.querySelector("section[data-step]");
+  if(!fit||!section)return;
+  section.style.zoom="1";
+  var top=fit.getBoundingClientRect().top;
+  var room=fit.clientHeight;
+  var used=0;
+  [].forEach.call(section.querySelectorAll("h1,h2,h3,p,button,table,li,article,div"),function(el){
+    if(el===section||el.classList.contains("cya-main")||el.classList.contains("cya-agent"))return;
+    var r=el.getBoundingClientRect();
+    if(r.height<16||r.width<16||r.height>room*0.82)return;
+    used=Math.max(used,r.bottom-top);
+  });
+  if(used<80||room<80)return;
+  var scale=Math.max(1,Math.min(room/used,1.6));
+  section.style.zoom=String(Math.round(scale*100)/100);
+}
+magnify();
+setTimeout(function(){pin();faces();magnify();},40);
+window.addEventListener("resize",magnify);
+var laser=document.createElement("div");
+laser.id="cya-laser";
+document.body.appendChild(laser);
+document.addEventListener("mousemove",function(e){
+  laser.style.display="block";
+  laser.style.left=e.clientX+"px";
+  laser.style.top=e.clientY+"px";
+});
+document.addEventListener("mouseleave",function(){laser.style.display="none";});
 })();<\/script>`}</head><body><div id="cya-fit">${cutOtherSteps(section, step)}</div></body></html>`;
 	}
 	function shrinkImage(dataUrl) {
@@ -15651,6 +15835,13 @@ setTimeout(function(){pin();faces();},40);
 		const [present, setPresent] = (0, import_react.useState)(false);
 		const [armReset, setArmReset] = (0, import_react.useState)(false);
 		const [debugOpen, setDebugOpen] = (0, import_react.useState)(false);
+		const [zoom, setZoom] = (0, import_react.useState)(readZoom);
+		(0, import_react.useEffect)(() => {
+			document.documentElement.style.fontSize = `${Math.round(zoom * 100)}%`;
+			try {
+				window.localStorage.setItem("cya-zoom", String(zoom));
+			} catch {}
+		}, [zoom]);
 		(0, import_react.useEffect)(() => {
 			const onError = (event) => debugPush({
 				name: "window",
@@ -15725,7 +15916,7 @@ setTimeout(function(){pin();faces();},40);
 			window.addEventListener("keydown", onKey);
 			return () => window.removeEventListener("keydown", onKey);
 		}, [present]);
-		const kicker = step === "overview" ? "Create Your Agent" : FLOW.find((item) => item.id === step)?.kicker ?? "";
+		const kicker = step === "overview" ? "" : FLOW.find((item) => item.id === step)?.kicker ?? "";
 		const started = key && clocks ? clocks[key] : null;
 		const left = started && key ? Math.max(0, PHASE_LIMIT[key] - Math.floor((now - started) / 1e3)) : null;
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -15741,7 +15932,7 @@ setTimeout(function(){pin();faces();},40);
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "font-head shrink-0 text-xl text-ink",
 									onDoubleClick: () => setDebugOpen(true),
-									children: "Wealth Symposium"
+									children: "AI Powered, Human Led"
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "shrink-0 text-xl text-muted",
@@ -15753,9 +15944,34 @@ setTimeout(function(){pin();faces();},40);
 									children: left === 0 ? "Time is up" : `${formatLeft(left)} left`
 								}) : null,
 								step !== "overview" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Stepper, { placement: "header" }) : null,
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "ml-auto flex shrink-0 items-center gap-2",
-									children: step !== "overview" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex h-9 items-center border border-line bg-sheet",
+										"aria-label": "Zoom",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												className: "h-9 w-9 text-xl font-medium disabled:opacity-40",
+												"aria-label": "Zoom out",
+												disabled: zoom <= .85,
+												onClick: () => setZoom((current) => Math.round(Math.max(.85, current - .1) * 10) / 10),
+												children: "−"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "w-12 text-center text-base font-medium",
+												children: [Math.round(zoom * 100), "%"]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												type: "button",
+												className: "h-9 w-9 text-xl font-medium disabled:opacity-40",
+												"aria-label": "Zoom in",
+												disabled: zoom >= 1.4,
+												onClick: () => setZoom((current) => Math.round(Math.min(1.4, current + .1) * 10) / 10),
+												children: "+"
+											})
+										]
+									}), step !== "overview" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 										type: "button",
 										className: "h-12 shrink-0 rounded-full px-2 text-xl font-medium text-rule",
 										onClick: () => {
@@ -15768,7 +15984,7 @@ setTimeout(function(){pin();faces();},40);
 											setPresent(false);
 										},
 										children: armReset ? "Confirm clear" : "Start again"
-									}) : null
+									}) : null]
 								})
 							]
 						}),
@@ -15809,7 +16025,7 @@ setTimeout(function(){pin();faces();},40);
 					role: "status",
 					"aria-live": "polite",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex flex-col items-center gap-4 border border-line bg-sheet px-10 py-6 shadow-[6px_6px_0_0_#111]",
+						className: "flex w-72 flex-col items-center gap-4 border border-line bg-sheet px-6 py-6 shadow-[6px_6px_0_0_#111]",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AgentBot, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 							className: "text-xl font-medium",
 							children: "The agent is getting the room ready"
@@ -15820,7 +16036,7 @@ setTimeout(function(){pin();faces();},40);
 					type: "button",
 					className: "fixed right-4 bottom-4 z-20 h-12 rounded-full btn-glow px-4 text-xl font-medium lg:hidden",
 					onClick: () => setCoachOpen(true),
-					children: "Assistant"
+					children: "AI assistant"
 				}) : null
 			]
 		});
@@ -15857,27 +16073,31 @@ setTimeout(function(){pin();faces();},40);
 		const phases = [
 			{
 				n: "0",
-				title: "Scenario",
-				body: "Choose the moment your group feels most. If it is not listed, write your own.",
-				icon: ListChecks
+				title: "Pinpoint",
+				body: "Choose the pinpoint your group feels most. If it is not listed, write your own.",
+				icon: ListChecks,
+				tone: "#F8D0D4"
 			},
 			{
 				n: "1",
 				title: "Idea brief",
 				body: "Name the agent. Say what it does, what you receive, and who it helps.",
-				icon: Bot
+				icon: Bot,
+				tone: "#D6E4F0"
 			},
 			{
 				n: "2",
 				title: "Design 3 screens",
 				body: "Design three screens in order, then generate a picture for each.",
-				icon: Clapperboard
+				icon: Clapperboard,
+				tone: "#D4EDE4"
 			},
 			{
 				n: "3",
 				title: "Prototype",
 				body: "Generate the clickable prototype, make one or two edits, then present it.",
-				icon: MonitorSmartphone
+				icon: MonitorSmartphone,
+				tone: "#F3E6C8"
 			}
 		];
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -15885,20 +16105,21 @@ setTimeout(function(){pin();faces();},40);
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 					className: "text-4xl leading-tight",
-					children: "Create your agent"
+					children: "AI Powered, Human Led"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 max-w-4xl text-xl leading-snug text-muted",
-					children: "About 30 minutes on one laptop. No real client names or account numbers."
+					children: "Ideate your agent"
 				}),
 				typeof window !== "undefined" && window.localStorage?.getItem("cya-desktop") === "1" && !window.localStorage.getItem("cya-supabase-fn") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 max-w-4xl text-xl leading-snug",
-					children: "This copy calls Supabase. Double-click Wealth Symposium and paste the function URL before you start."
+					children: "This copy calls Supabase. Paste the function URL before you start."
 				}) : null,
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "mt-3 grid min-h-0 flex-1 grid-cols-2 gap-3",
 					children: phases.map((phase) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
-						className: "flex min-h-0 flex-col rounded-2xl border border-line bg-soft p-4",
+						className: "flex min-h-0 flex-col rounded-2xl border border-line p-4",
+						style: { background: phase.tone },
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(phase.icon, {
 								className: "size-10 text-rule",
@@ -15936,6 +16157,13 @@ setTimeout(function(){pin();faces();},40);
 				})
 			]
 		});
+	}
+	function readZoom() {
+		try {
+			const saved = Number(window.localStorage.getItem("cya-zoom"));
+			if (saved >= .85 && saved <= 1.4) return saved;
+		} catch {}
+		return 1;
 	}
 	function chosenEngine() {
 		try {
@@ -15975,7 +16203,7 @@ setTimeout(function(){pin();faces();},40);
 				className: "flex shrink-0 items-end justify-between gap-3",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 					className: "text-3xl leading-tight",
-					children: "Phase 0: Which moment hurts?"
+					children: "Phase 0: Which one is your biggest pinpoint as an RM?"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex gap-2",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
@@ -15988,51 +16216,54 @@ setTimeout(function(){pin();faces();},40);
 						disabled: !ready,
 						className: "h-12 rounded-full btn-glow px-4 text-xl font-medium disabled:opacity-40",
 						onClick: () => advance("brief"),
-						children: "Move on"
+						children: "Next"
 					})]
 				})]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "mt-2 grid min-h-0 flex-1 grid-cols-3 grid-rows-4 gap-2",
-				children: [PAINPOINTS.map((item) => {
-					const selected = painId === item.id;
-					const Icon = icons[item.icon] ?? Search;
-					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-						type: "button",
-						onClick: () => {
-							selectPain(item.id);
-							if (useSession.getState().focus?.kind === "pain") useSession.getState().setFocus(null);
-						},
-						className: `flex h-full min-h-0 flex-col overflow-hidden rounded-xl border px-3 py-2 text-left type-seen ${selected ? "border-rule bg-soft" : "border-line bg-sheet"}`,
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-							className: "flex items-center gap-2",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
-									className: "size-5 shrink-0 text-rule",
-									"aria-hidden": true
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "font-medium text-rule",
-									children: item.id
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "font-medium leading-tight",
-									children: item.title
-								})
-							]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "mt-1 text-base leading-snug",
-							children: item.text
-						})]
-					}, item.id);
+				className: "mt-2 flex min-h-0 flex-1 flex-col gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "grid min-h-0 flex-1 grid-cols-3 grid-rows-3 gap-2",
+					children: PAINPOINTS.map((item) => {
+						const selected = painId === item.id;
+						const Icon = icons[item.icon] ?? Search;
+						return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							type: "button",
+							onClick: () => {
+								selectPain(item.id);
+								if (useSession.getState().focus?.kind === "pain") useSession.getState().setFocus(null);
+							},
+							className: `scenario-card flex h-full min-h-0 flex-col overflow-hidden rounded-xl border px-3 py-2 text-left text-lg leading-snug ${selected ? "is-picked border-rule bg-soft" : "border-line bg-sheet"}`,
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "flex items-center gap-2",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
+										className: "size-5 shrink-0 text-rule",
+										"aria-hidden": true
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "font-medium text-rule",
+										children: item.id
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "font-bold leading-tight",
+										children: item.title
+									})
+								]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "mt-1 leading-snug",
+								children: item.text
+							})]
+						}, item.id);
+					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-					className: `col-span-3 flex h-full min-h-0 flex-row items-start gap-3 rounded-xl border-2 px-3 py-2 ${ownOn ? "border-rule bg-soft" : "border-line bg-sheet"}`,
+					className: `flex h-14 shrink-0 flex-row items-center gap-3 rounded-xl border-2 px-3 ${ownOn ? "border-rule bg-soft" : "border-line bg-sheet"}`,
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pencil, {
-							className: "mt-1 size-5 shrink-0 text-rule",
+							className: "size-5 shrink-0 text-rule",
 							"aria-hidden": true
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "mt-0.5 shrink-0 font-medium text-rule",
+							className: "shrink-0 font-medium text-rule",
 							children: "Your own"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
@@ -16042,7 +16273,7 @@ setTimeout(function(){pin();faces();},40);
 								useSession.getState().setFocus({ kind: "pain" });
 							},
 							onChange: (event) => setPainOwn(event.target.value),
-							placeholder: "Or write a scenario that hurts more.",
+							placeholder: "Or write a pinpoint that hurts more.",
 							"aria-label": "Or add your own",
 							className: "min-h-0 w-full flex-1 resize-none bg-transparent text-lg leading-snug"
 						})
@@ -16053,80 +16284,83 @@ setTimeout(function(){pin();faces();},40);
 	}
 	function BriefStep() {
 		const brief = useSession((state) => state.brief);
-		const pain = useSession((state) => painText(state));
+		const painId = useSession((state) => state.painId);
+		const painOwn = useSession((state) => state.painOwn);
 		const focus = useSession((state) => state.focus);
 		const setBriefField = useSession((state) => state.setBriefField);
 		const setFocus = useSession((state) => state.setFocus);
 		const go = useSession((state) => state.go);
 		const ready = briefReady(brief);
-		const name = BRIEF_FIELDS[0];
-		const rest = BRIEF_FIELDS.slice(1);
 		const selected = (key) => focus?.kind === "field" && focus.key === key;
 		const box = (key) => selected(key) ? "border-2 border-rule bg-soft" : "border border-line bg-sheet";
+		const icons = {
+			name: Tag,
+			agentDoes: Bot,
+			rmSees: Eye,
+			benefits: Trophy
+		};
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "flex h-full min-h-0 flex-col",
-			children: [
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-end justify-between gap-3",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-						className: "text-3xl leading-tight",
-						children: "Phase 1: Idea brief"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						className: "mt-1 text-xl text-muted",
-						children: "Click a box. The assistant tells you what to write. The group fills it in."
-					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex gap-2",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							className: "h-12 rounded-full px-3 text-xl font-medium text-rule",
-							onClick: () => go("pain"),
-							children: "Back"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							disabled: !ready,
-							className: "h-12 rounded-full btn-glow px-4 text-xl font-medium disabled:opacity-40",
-							onClick: () => advance("scenes"),
-							children: "Move on"
-						})]
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "flex items-end justify-between gap-3",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "text-3xl leading-tight",
+					children: "Phase 1: Idea brief"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-1 text-xl text-muted",
+					children: "Click a box. The assistant tells you what to write. The group fills it in."
+				})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "flex gap-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						className: "h-12 rounded-full px-3 text-xl font-medium text-rule",
+						onClick: () => go("pain"),
+						children: "Back"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						type: "button",
+						disabled: !ready,
+						className: "h-12 rounded-full btn-glow px-4 text-xl font-medium disabled:opacity-40",
+						onClick: () => advance("scenes"),
+						children: "Next"
 					})]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "mt-2 grid shrink-0 grid-cols-1 gap-2 lg:grid-cols-2",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "border border-dashed border-line bg-sheet px-3 py-2",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-base font-medium text-muted",
-								children: "Painpoint scenario"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-base text-muted",
-								children: "From the last step. Not one of the boxes."
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-xl leading-snug",
-								children: pain || "Pick one in the previous step."
-							})
-						]
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-						className: "flex flex-col text-xl font-medium leading-tight",
-						children: [name.label, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+				})]
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "mt-2 flex min-h-0 flex-1 flex-col gap-2",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "shrink-0 border border-dashed border-line bg-sheet px-3 py-2",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						className: "flex items-center gap-2 text-base font-medium text-muted",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ClipboardList, {
+							className: "size-5 shrink-0",
+							"aria-hidden": true
+						}), "Pinpoint"]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1 text-lg leading-snug",
+						children: painId === "own" ? painOwn.trim() || "Write your own pinpoint in the previous step." : painId ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "font-bold",
+							children: [PAINPOINTS.find((item) => item.id === painId)?.title, ". "]
+						}), PAINPOINTS.find((item) => item.id === painId)?.text] }) : "Pick one in the previous step."
+					})]
+				}), BRIEF_FIELDS.map((field) => {
+					const Icon = icons[field.key];
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+						className: `flex min-h-0 flex-col text-xl font-medium leading-tight ${field.key === "name" ? "shrink-0" : "flex-1"}`,
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "flex items-center gap-2",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
+								className: "size-5 shrink-0 text-rule",
+								"aria-hidden": true
+							}), field.label]
+						}), field.key === "name" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 							value: brief.name,
 							onFocus: () => setFocus({
 								kind: "field",
 								key: "name"
 							}),
 							onChange: (event) => setBriefField("name", event.target.value),
-							placeholder: name.hint,
+							placeholder: field.hint,
 							className: `mt-1 h-12 w-full px-3 text-xl font-normal ${box("name")}`
-						})]
-					})]
-				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "mt-2 flex min-h-0 flex-1 flex-col gap-2",
-					children: rest.map((field) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-						className: "flex min-h-0 flex-1 flex-col text-xl font-medium leading-tight",
-						children: [field.label, /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
 							value: brief[field.key],
 							onFocus: () => setFocus({
 								kind: "field",
@@ -16136,9 +16370,9 @@ setTimeout(function(){pin();faces();},40);
 							placeholder: field.hint,
 							className: `mt-1 min-h-12 w-full flex-1 resize-none px-3 py-2 text-xl font-normal leading-snug ${box(field.key)}`
 						})]
-					}, field.key))
-				})
-			]
+					}, field.key);
+				})]
+			})]
 		});
 	}
 	function ScenesStep() {
@@ -16232,7 +16466,7 @@ setTimeout(function(){pin();faces();},40);
 						children: "Phase 2: Design 3 screens"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "mt-1 text-xl text-muted",
-						children: anyStale ? "A picture is out of date. Generate it again before you move on." : "Write one or two sentences, then generate the image. Click a box if you want help with that screen."
+						children: anyStale ? "A picture is out of date. Generate it again before you press Next." : "Write one or two sentences, then generate the image. Click a box if you want help with that screen."
 					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex shrink-0 justify-end gap-2",
 						children: [
@@ -16260,7 +16494,7 @@ setTimeout(function(){pin();faces();},40);
 								disabled: !allFrames || anyStale,
 								className: `h-12 rounded-full px-4 text-xl font-medium disabled:opacity-40 ${allFrames && !anyStale ? "btn-glow" : "border border-line"}`,
 								onClick: () => advance("prototype"),
-								children: "Move on"
+								children: "Next"
 							})
 						]
 					})]
@@ -16279,10 +16513,7 @@ setTimeout(function(){pin();faces();},40);
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
 										className: `shrink-0 border-b border-line px-3 py-1 text-xl font-medium leading-tight ${picked ? "bg-soft" : ""}`,
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											className: "text-rule",
-											children: ["0", index + 1]
-										}), " Screen"]
+										children: ["Screen ", index + 1]
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
 										value: scene,
@@ -16335,7 +16566,7 @@ setTimeout(function(){pin();faces();},40);
 									className: "absolute inset-0 flex items-center justify-center px-3 text-center text-lg text-muted",
 									children: "The screen lands here"
 								}), busy[index] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "absolute inset-0 flex items-center justify-center bg-sheet/85",
+									className: "absolute inset-0 flex flex-col bg-sheet/85",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Working, {
 										label: "Generating this image",
 										seconds
@@ -16463,7 +16694,7 @@ setTimeout(function(){pin();faces();},40);
 		const stale = Boolean(mediaReady && prototypeHtml && prototypeBasis && prototypeBasis !== basis);
 		const sourceHtml = prototypePreview && compare === "after" ? prototypePreview : prototypeHtml;
 		const liveHtml = sourceHtml ? embedScenes(sourceHtml, images.map((slot) => slot?.dataUrl ?? null)) : "";
-		const isolated = (liveHtml ? hasStep(liveHtml, view) : false) ? isolateStep(liveHtml, view) : "";
+		const isolated = (liveHtml ? hasStep(liveHtml, view) : false) ? isolateStep(liveHtml, view, present) : "";
 		const frameWords = isolated.replace(/<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
 		if (!prototypePreview && frameWords.length > 40) keptFrame.current[view] = isolated;
 		const frameHtml = frameWords.length > 40 ? isolated : prototypePreview ? isolated : keptFrame.current[view] || isolated;
@@ -16489,6 +16720,7 @@ setTimeout(function(){pin();faces();},40);
 			setError("");
 			setStreamText("");
 			useSession.getState().setPrototypePreview(null);
+			useSession.getState().setPrototypeCue(false);
 			let html = "";
 			const push = (delta) => setStreamText((current) => current + delta);
 			const shots = await Promise.all(images.map(async (slot) => {
@@ -16502,7 +16734,11 @@ setTimeout(function(){pin();faces();},40);
 					3
 				]) {
 					setWriting(stepNo);
-					if (stepNo === 1) setView(1);
+					setView(stepNo);
+					useSession.getState().setFocus({
+						kind: "prototype",
+						step: stepNo
+					});
 					setStreamText("");
 					const payload = {
 						pain,
@@ -16526,6 +16762,54 @@ setTimeout(function(){pin();faces();},40);
 					setStreamText("");
 				}
 				setPrototype(html, currentBasis(useSession.getState()));
+				setView(1);
+				useSession.getState().setFocus({
+					kind: "prototype",
+					step: 1
+				});
+				useSession.getState().setPrototypeCue(true);
+			} catch {
+				setError("The prototype did not come back. Try again.");
+			} finally {
+				setBusy(false);
+				setStreamText("");
+			}
+		}
+		async function buildStep(stepNo) {
+			if (!framesReady) return;
+			setBusy(true);
+			setError("");
+			setStreamText("");
+			setWriting(stepNo);
+			setView(stepNo);
+			useSession.getState().setPrototypeCue(false);
+			useSession.getState().setPrototypePreview(null);
+			const previousHtml = useSession.getState().prototypeHtml ?? "";
+			const push = (delta) => setStreamText((current) => current + delta);
+			const shots = await Promise.all(images.map(async (slot) => {
+				const shot = slot?.dataUrl ?? "";
+				return shot ? shrinkImage(shot) : "";
+			}));
+			try {
+				const payload = {
+					pain,
+					brief,
+					scenes: [...scenes],
+					step: stepNo,
+					previousHtml,
+					image: shots[stepNo - 1] ?? "",
+					images: shots,
+					engine: chosenEngine(),
+					htmlModel: debugModels().html,
+					openRouterKey: savedOpenRouterKey()
+				};
+				const streamed = await traced(`prototype-step-${stepNo}`, payload, () => readPrototypeStream(payload, push, () => setStreamText(""), (body) => protoFn({ data: body })));
+				if (!streamed.ok) {
+					setError(streamed.error);
+					return;
+				}
+				setPrototype(streamed.html, currentBasis(useSession.getState()));
+				setStreamText("");
 			} catch {
 				setError("The prototype did not come back. Try again.");
 			} finally {
@@ -16538,6 +16822,16 @@ setTimeout(function(){pin();faces();},40);
 			2,
 			3
 		].filter((stepNo) => hasStep(prototypeHtml ?? "", stepNo) || hasStep(prototypePreview ?? "", stepNo));
+		const shift = (dir) => {
+			const next = view + dir;
+			if (next < 1 || next > 3) return;
+			if (!readySteps.includes(next) && !(busy && writing === next)) return;
+			setView(next);
+			useSession.getState().setFocus({
+				kind: "prototype",
+				step: next
+			});
+		};
 		const stepTabs = /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, { children: [
 			1,
 			2,
@@ -16545,8 +16839,8 @@ setTimeout(function(){pin();faces();},40);
 		].map((stepNo) => {
 			const focused = view === stepNo;
 			const narrative = (scenes[stepNo - 1] ?? "").replace(/\s+/g, " ").trim();
-			const writingNow = busy && writing === stepNo && !readySteps.includes(stepNo);
-			const label = writingNow ? `Step ${stepNo} · generating` : present && focused ? `Presenting step ${stepNo}` : `Step ${stepNo}`;
+			const writingNow = busy && writing === stepNo;
+			const label = writingNow ? `Screen ${stepNo} · generating` : present && focused ? `Presenting screen ${stepNo}` : `Screen ${stepNo}`;
 			return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 				type: "button",
 				disabled: !readySteps.includes(stepNo) && !writingNow,
@@ -16567,36 +16861,61 @@ setTimeout(function(){pin();faces();},40);
 				}) : null]
 			}, stepNo);
 		}) });
+		const screenBar = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex min-w-0 flex-1",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					type: "button",
+					"aria-label": "Previous screen",
+					disabled: view === 1,
+					className: "inline-flex w-10 shrink-0 items-center justify-center border-r border-line disabled:opacity-30",
+					onClick: () => shift(-1),
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, {
+						className: "size-5",
+						"aria-hidden": true
+					})
+				}),
+				stepTabs,
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					type: "button",
+					"aria-label": "Next screen",
+					disabled: view === 3 || !readySteps.includes(view + 1) && !(busy && writing === view + 1),
+					className: "inline-flex w-10 shrink-0 items-center justify-center border-l border-line disabled:opacity-30",
+					onClick: () => shift(1),
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronRight, {
+						className: "size-5",
+						"aria-hidden": true
+					})
+				})
+			]
+		});
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "flex h-full min-h-0 flex-1 flex-col",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-					className: "flex items-end justify-between gap-3",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+					className: "flex shrink-0 items-center justify-between gap-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 						className: "text-3xl leading-tight",
 						children: "Phase 3: Rapid prototype"
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-						className: "mt-1 text-xl text-muted",
-						children: "Three clickable steps. One or two edits, then you're ready to share."
-					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex gap-2",
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex shrink-0 gap-2",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								type: "button",
-								className: "h-12 rounded-full px-3 text-xl font-medium text-rule",
+								className: "h-12 shrink-0 whitespace-nowrap rounded-full px-3 text-xl font-medium text-rule",
 								onClick: () => go("scenes"),
 								children: "Back"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								type: "button",
 								disabled: !framesReady || busy,
-								onClick: () => void build(),
-								className: "h-12 rounded-full btn-glow px-4 text-xl font-medium disabled:opacity-40",
-								children: busy ? `Generating step ${writing} · ${seconds}s` : prototypeHtml ? "Generate again" : "Generate the prototype"
+								onClick: () => void (readySteps.length === 3 ? buildStep(view) : build()),
+								className: "h-12 shrink-0 whitespace-nowrap rounded-full btn-glow px-4 text-xl font-medium disabled:opacity-40",
+								children: busy ? `Generating screen ${writing} · ${seconds}s` : readySteps.length === 3 ? `Generate screen ${view} again` : "Generate the prototype"
 							}),
 							liveHtml && !busy && readySteps.length === 3 && !present ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								type: "button",
-								className: "inline-flex h-12 items-center gap-2 border border-line px-3 text-xl",
+								className: "inline-flex h-12 shrink-0 items-center gap-2 whitespace-nowrap border border-line px-3 text-xl",
 								onClick: () => {
 									onPresent();
 									const node = stageRef.current;
@@ -16609,6 +16928,10 @@ setTimeout(function(){pin();faces();},40);
 							}) : null
 						]
 					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-1 shrink-0 text-xl text-muted",
+					children: "Three clickable screens. One or two edits, then you're ready to share."
 				}),
 				stale ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-xl text-muted",
@@ -16629,7 +16952,7 @@ setTimeout(function(){pin();faces();},40);
 						present ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "flex shrink-0 border-b border-line",
 							"aria-label": "Screens",
-							children: stepTabs
+							children: screenBar
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "relative flex min-h-0 flex-1 flex-col",
@@ -16654,7 +16977,7 @@ setTimeout(function(){pin();faces();},40);
 						present ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "sticky bottom-0 z-10 flex shrink-0 border-t border-line bg-sheet",
 							"aria-label": "Screens",
-							children: [stepTabs, /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							children: [screenBar, /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								type: "button",
 								className: "inline-flex shrink-0 items-center gap-2 border-l border-line px-3 text-lg",
 								onClick: () => {
@@ -16683,6 +17006,7 @@ setTimeout(function(){pin();faces();},40);
 		const brief = useSession((state) => state.brief);
 		const scenes = useSession((state) => state.scenes);
 		const previewSide = useSession((state) => state.previewSide);
+		const prototypeCue = useSession((state) => state.prototypeCue);
 		const [direction, setDirection] = (0, import_react.useState)("");
 		const [draft, setDraft] = (0, import_react.useState)(null);
 		const [prototypeUndo, setPrototypeUndo] = (0, import_react.useState)(null);
@@ -16709,9 +17033,9 @@ setTimeout(function(){pin();faces();},40);
 		const protoStep = focus?.kind === "prototype" ? focus.step : null;
 		const needsBox = step === "brief" && !field || step === "pain" && focus?.kind !== "pain" || step === "prototype" && !protoStep;
 		const blank = step === "pain" ? painId === "own" || !painId ? !painOwn.trim() : false : step === "brief" ? !String(field ? brief[field.key] : "").trim() : step === "scenes" ? allScenes ? scenes.every((scene) => !scene.trim()) : !scenes[sceneIndex]?.trim() : false;
-		const subject = step === "brief" ? field?.refineAs ?? "" : step === "scenes" ? allScenes ? "the three screens" : `screen ${sceneIndex + 1}` : step === "pain" ? "your scenario" : protoStep ? `step ${protoStep}` : "";
+		const subject = step === "brief" ? field?.refineAs ?? "" : step === "scenes" ? allScenes ? "the three screens" : `screen ${sceneIndex + 1}` : step === "pain" ? "your pinpoint" : protoStep ? `screen ${protoStep}` : "";
 		const moment = scenario.replace(/[.?!]\s*$/, "");
-		const hint = step === "overview" ? "Nominate one person as group leader. They drive the laptop. At the end, your group presents the prototype to the other groups." : step === "pain" ? painGuide(painId ?? "") : step === "brief" ? briefGuide(field?.key ?? "", painId ?? "", scenario) : step === "scenes" ? painId && SCENE_HINTS[painId] || (scenario ? SCENE_HINTS.own : "Design three screens. What are the three steps your assistant takes? Describe each screen.") : protoStep ? scenario ? `One change for this step, still about this scenario: ${moment}. The other two steps stay as they are.` : "Tell me the one change for this step. The other two stay as they are." : "Pick a step above the prototype. I'll only change that one.";
+		const hint = step === "overview" ? "Nominate one person as group leader. They drive the laptop. At the end, your group presents the prototype to the other groups." : step === "pain" ? painGuide(painId ?? "") : step === "brief" ? briefGuide(field?.key ?? "", painId ?? "", scenario) : step === "scenes" ? painId && SCENE_HINTS[painId] || (scenario ? SCENE_HINTS.own : "Design three screens. What are the three steps your assistant takes? Describe each screen.") : protoStep ? scenario ? `One change for this screen, still about this pinpoint: ${moment}. The other two screens stay as they are.` : "Tell me the one change for this screen. The other two stay as they are." : "Pick a screen above the prototype. I'll only change that one.";
 		async function suggest() {
 			const state = useSession.getState();
 			setBusy(true);
@@ -16831,7 +17155,7 @@ setTimeout(function(){pin();faces();},40);
 				className: "flex shrink-0 items-center justify-between border-b border-line px-4 py-2",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 					className: "text-xl font-medium",
-					children: "Workshop assistant"
+					children: "AI assistant"
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					type: "button",
 					className: "h-12 rounded-full px-2 text-xl text-muted lg:hidden",
@@ -16841,44 +17165,48 @@ setTimeout(function(){pin();faces();},40);
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 py-3",
 				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "grid gap-3",
-						children: hint.split(/\n\n+/).map((line) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						children: [step === "prototype" && prototypeCue ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "text-xl leading-snug",
+							children: "All three screens are ready. Start from Screen 1. One or two refinements is enough, then present."
+						}) : null, hint.split(/\n\n+/).map((line) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 							className: "text-xl leading-snug text-muted",
 							children: line
-						}, line))
+						}, line))]
 					}),
-					canSuggest ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [step === "scenes" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "ios-segment flex",
-						"aria-label": "How many screens to draft",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							className: `h-9 flex-1 rounded-full px-2 text-lg ${allScenes ? "ios-seg-on" : "text-ink"}`,
-							onClick: () => setAllScenes(true),
-							children: "All 3 screens"
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							type: "button",
-							className: `h-9 flex-1 rounded-full px-2 text-lg ${allScenes ? "text-ink" : "ios-seg-on"}`,
-							onClick: () => setAllScenes(false),
-							children: "This screen"
-						})]
-					}) : null, needsBox ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+					canSuggest ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+						step === "scenes" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "ios-segment flex",
+							"aria-label": "How many screens to draft",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								className: `h-9 flex-1 rounded-full px-2 text-lg ${allScenes ? "ios-seg-on" : "text-ink"}`,
+								onClick: () => setAllScenes(true),
+								children: "All 3 screens"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								className: `h-9 flex-1 rounded-full px-2 text-lg ${allScenes ? "text-ink" : "ios-seg-on"}`,
+								onClick: () => setAllScenes(false),
+								children: "This screen"
+							})]
+						}) : null,
+						needsBox || step === "scenes" && blank ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
 							className: "block text-xl font-medium",
 							children: [blank ? "Want a starting point? Add a steer if you like." : subject ? `How do you want ${subject} to be further refined?` : "How do you want this to be further refined?", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
 								value: direction,
 								onChange: (event) => setDirection(event.target.value.slice(0, 400)),
 								rows: 2,
-								placeholder: step === "prototype" ? "E.g., add a section for recent trades" : blank ? "E.g., keep it practical" : "E.g., shorten it or correct typos",
+								placeholder: step === "prototype" ? "E.g., add a section for recent trades" : "E.g., shorten it or correct typos",
 								className: "mt-1 w-full resize-none border border-line bg-sheet px-3 py-2 text-xl font-normal leading-snug"
 							})]
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						step === "prototype" && needsBox ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							type: "button",
 							disabled: busy || step === "prototype" && (direction.trim().length < 3 || !useSession.getState().prototypeHtml),
 							onClick: () => void suggest(),
 							className: "h-12 btn-glow text-xl font-medium disabled:opacity-40",
-							children: busy ? `Thinking · ${seconds}s` : blank ? "Get some inspiration" : "Enrich"
+							children: busy ? `Thinking · ${seconds}s` : step === "prototype" ? "Refine screen" : step === "scenes" && !blank ? "Refine prompt" : blank ? "Get some inspiration" : "Enrich"
 						}),
 						step === "prototype" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "border border-line p-3",
@@ -16888,7 +17216,7 @@ setTimeout(function(){pin();faces();},40);
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ol", {
 								className: "mt-2 list-decimal space-y-1 pl-5 text-lg leading-snug",
 								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Your group painpoint" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Your group pinpoint" }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Your agent idea" }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Walk us through the prototype" }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "The key benefit as closing" })
@@ -16896,13 +17224,13 @@ setTimeout(function(){pin();faces();},40);
 							})]
 						}) : null,
 						busy ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex flex-col items-center gap-1",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AgentBot, { mini: true }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "flex w-full flex-col items-center gap-1",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AgentBot, {}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "text-center text-base leading-snug text-muted",
 								children: `Thinking · ${seconds}s`
 							})]
 						}) : null
-					] })] }) : null,
+					] }) : null,
 					error ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "text-xl text-rule",
 						children: error

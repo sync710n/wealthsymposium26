@@ -133,7 +133,7 @@ var prompts = {
 		bitmap: [
 			"A crisp 16:9 desktop screenshot of a futuristic wealth relationship-manager workbench. Not an illustration, not a painting, not a photo of a person or a desk, not a device mockup.",
 			"No bezel, no browser chrome, no hands, no perspective, no watermark, no caption, and do not write a screen number.",
-			"Futuristic visual style: gradient color fields across the background and panels, luminous accents, soft glass surfaces, and a cool-to-warm gradient such as violet, blue, and amber. Not a flat gray admin theme.",
+			"Light visual style: a white or pale page, soft gradient accents, light cards, and dark text. Not a dark theme and not a flat gray admin screen.",
 			"If an agent name is given, that is the only product name on the screen. Do not invent a brand, a company, or a title of your own.",
 			"Show a different moment each step: what the agent is doing, and what the RM is looking at. Do not repeat the same screen.",
 			"Sharp sans-serif type, aligned controls, real buttons, and short readable English labels. Fictional sample data only."
@@ -164,7 +164,7 @@ var prompts = {
 				"The section fills the frame: width 100%, height 100%, no max-width, no auto margin, and no centered card floating in empty space. In a wide frame the columns grow. The work area and the agent panel both stretch to the full height.",
 				"One row: the work area, then a chat about 16rem wide. Inside the work area, at most two columns. Put any further cards on a second row. Width 100%. No overlap. No position:absolute.",
 				"Font sizes are rem only: body 0.85rem, labels 0.75rem, titles 1rem.",
-				"One palette for the whole screen, taken from the picture: a dark violet, blue, and amber gradient. Cards are dark glass. Text is light. Do not put a pale page on the left and a dark chat on the right.",
+				"One light palette for the whole screen, taken from the picture: a white or pale page, soft accents, and dark text. Cards are light. Do not use a dark page.",
 				"Inline CSS only. No external scripts or fonts. A click can do something small.",
 				"When the picture shows a person, do not use an empty box or an external image. Use an inline SVG avatar with their initials, for example <svg viewBox=\"0 0 64 64\" width=\"64\" height=\"64\"><rect width=\"64\" height=\"64\" rx=\"12\" fill=\"#6d4aff\"/><text x=\"32\" y=\"40\" text-anchor=\"middle\" font-size=\"22\" font-family=\"sans-serif\" fill=\"#fff\">EV</text></svg>.",
 				"Every part of the screen goes inside the section. Do not close the section before the screen is finished.",
@@ -173,7 +173,7 @@ var prompts = {
 					"Header: same product name, same height, same alignment, same small status. Do not add a new title bar.",
 					"Agent panel: copy the markup below. Same colors, border, radius, title, avatar, and reply box. Change only the words inside the two messages.",
 					input.agent ? `Agent panel to copy:\n${input.agent}` : "",
-					"Work area: follow the attached picture. Different cards, list, or chart. Do not repeat the earlier table.",
+					"Work area: follow the attached picture. Different cards, list, or chart. Do not repeat the earlier layout. Keep the same people and the same holdings, each with their own figure.",
 					input.prior ? `Header to copy:\n${input.prior}` : ""
 				]),
 				input.style,
@@ -183,8 +183,9 @@ var prompts = {
 				`What the agent does: ${input.brief.agentDoes}`,
 				`What the RM expects to see and receive: ${input.brief.rmSees}`,
 				`This step's screen: ${input.scene}`,
-				`The other steps, which you must not repeat:\n${input.others}`,
-				input.already ? `Do not repeat this content:\n${input.already}` : ""
+				"One scenario, one story. Invent a small cast that fits this scenario: one client the RM is with, plus other clients only if a list or ranking needs them. Every person has a different full name. Every row has a different figure. Never print the same name twice in one list, and never give two clients the same percentage, amount, or count. Across the three screens, reuse that cast and those figures. Do not rename anyone, and do not add a new client on a later screen. Move the story forward: what the agent does next, and what the RM then sees.",
+				`The other beats. Do not redraw the same screen, but keep the same facts:\n${input.others}`,
+				input.already ? `Facts already on the other screens. Copy these names and numbers. Do not replace them:\n${input.already}` : ""
 			]);
 		}
 	},
@@ -197,7 +198,7 @@ var prompts = {
 				"Keep visual continuity with the other steps: same navigation, gradient colors, type, spacing, and the right-hand agent chat. Do not invent a new shell.",
 				"Nothing may overlap. Work area plus chat, and at most two columns inside the work area. Extra cards go on the next row. Readable at 900px wide, not only full screen. No position:absolute or position:fixed.",
 				"The right-hand agent panel stays the same card: same colors, border, radius, title, and reply box. Change only the message text. Do not restyle it.",
-				"Do not add a second copy of the old screen.",
+				"Keep the client names and fund names already in this section. Each person keeps their own figure. Do not duplicate a name in a list, and do not give two rows the same number.",
 				"The screen fills the frame, width 100% and height 100%. No max-width and no centered card.",
 				"No position:fixed. No external images. Fictional sample data only. A person is an inline SVG avatar with their initials.",
 				"",
@@ -950,7 +951,7 @@ function prototypeRequest(data) {
 		2,
 		3
 	].filter((item) => item !== step).map((item) => {
-		const text = plainText(findSection(previous, item)).slice(0, 280);
+		const text = plainText(findSection(previous, item)).slice(0, 700);
 		return text ? `Step ${item} already shows: ${text}` : "";
 	}).filter(Boolean).join("\n");
 	const prior = step > 1 ? shellOf(previous) : "";
@@ -1184,11 +1185,14 @@ function cleanFragment(section) {
 }
 function rebuildPrototype(previous, section, step) {
 	const parts = [];
-	for (let earlier = 1; earlier < step; earlier++) {
-		const prior = findSection(previous, earlier);
+	for (let item = 1; item <= 3; item += 1) {
+		if (item === step) {
+			parts.push(section);
+			continue;
+		}
+		const prior = findSection(previous, item);
 		if (plainText(prior).length >= 40) parts.push(prior);
 	}
-	parts.push(section);
 	return `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>${parts.join("")}</body></html>`;
 }
 function upsertSection(doc, step, section) {

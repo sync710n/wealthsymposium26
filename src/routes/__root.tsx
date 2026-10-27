@@ -3,7 +3,7 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "Create Your Agent";
+const APP_NAME = "AI Powered, Human Led";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -11,11 +11,11 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: APP_NAME },
-      { name: "theme-color", content: "#f5ece7" },
+      { name: "theme-color", content: "#db0011" },
       {
         name: "description",
         content:
-          "A 30-minute Wealth Symposium activity. Groups co-create an AI agent: a scenario, an idea brief, three screens, and a clickable prototype.",
+          "A 30-minute workshop. Groups ideate an AI agent: a pinpoint, an idea brief, three screens, and a clickable prototype.",
       },
     ],
     links: [

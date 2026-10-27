@@ -659,7 +659,7 @@ function prototypeRequest(data: PrototypeInput) {
   const already = [1, 2, 3]
     .filter((item) => item !== step)
     .map((item) => {
-      const text = plainText(findSection(previous, item)).slice(0, 280);
+      const text = plainText(findSection(previous, item)).slice(0, 700);
       return text ? `Step ${item} already shows: ${text}` : "";
     })
     .filter(Boolean)
@@ -912,11 +912,14 @@ function cleanFragment(section: string) {
 
 function rebuildPrototype(previous: string, section: string, step: number) {
   const parts: string[] = [];
-  for (let earlier = 1; earlier < step; earlier++) {
-    const prior = findSection(previous, earlier);
+  for (let item = 1; item <= 3; item += 1) {
+    if (item === step) {
+      parts.push(section);
+      continue;
+    }
+    const prior = findSection(previous, item);
     if (plainText(prior).length >= 40) parts.push(prior);
   }
-  parts.push(section);
   return `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>${parts.join("")}</body></html>`;
 }
 

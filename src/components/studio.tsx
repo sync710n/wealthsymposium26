@@ -2,10 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import {
   Bot,
   Check,
+  ChevronLeft,
+  ChevronRight,
   Clapperboard,
   ClipboardList,
   Clock,
   Expand,
+  Eye,
   Globe,
   Goal,
   Layers,
@@ -17,6 +20,8 @@ import {
   Scale,
   Search,
   Shrink,
+  Tag,
+  Trophy,
   Users,
   X,
 } from "lucide-react";
@@ -47,69 +52,44 @@ function useSeconds(active: boolean) {
   return active ? seconds : 0;
 }
 
-const BOT_MOODS = [
-  "soccer",
-  "basketball",
-  "tennis",
-  "golf",
-  "swim",
-  "run",
-  "cycle",
-  "ski",
-  "skate",
-  "yoga",
-  "box",
-  "guitar",
-  "drums",
-  "piano",
-  "sing",
-  "dance",
-  "paint",
-  "read",
-  "cook",
-  "photo",
-  "chess",
-  "hike",
-] as const;
+const BOT_GAITS = ["walk", "jog", "run"] as const;
 
-function AgentBot({ mini = false }: { mini?: boolean }) {
-  const [mood] = useState(() => BOT_MOODS[Math.floor(Math.random() * BOT_MOODS.length)]);
-  const bot = (
-    <div className={`bot bot-${mood}`} aria-hidden>
-      <div className="bot-antenna">
-        <span className="bot-bulb" />
-        <span className="bot-stem" />
-      </div>
-      <div className="bot-head">
-        <span className="bot-eye" />
-        <span className="bot-eye" />
-      </div>
-      <div className="bot-body">
-        <span className="bot-arm bot-arm-left" />
-        <span className="bot-screen" />
-        <span className="bot-arm bot-arm-right" />
-      </div>
-      <div className="bot-legs">
-        <span />
-        <span />
-      </div>
-      <span className="bot-prop" />
-      <span className="bot-note" />
-    </div>
-  );
-  if (!mini) return bot;
+function AgentBot() {
+  const [gait] = useState(() => BOT_GAITS[Math.floor(Math.random() * BOT_GAITS.length)]);
   return (
-    <div className="bot-fit">
-      <div className="bot-scale">{bot}</div>
+    <div className={`bot-track bot-${gait}`} aria-hidden>
+      <div className="bot-fit">
+        <div className="bot-scale">
+          <div className="bot">
+            <div className="bot-antenna">
+              <span className="bot-bulb" />
+              <span className="bot-stem" />
+            </div>
+            <div className="bot-head">
+              <span className="bot-eye" />
+              <span className="bot-eye" />
+            </div>
+            <div className="bot-body">
+              <span className="bot-arm bot-arm-left" />
+              <span className="bot-screen" />
+              <span className="bot-arm bot-arm-right" />
+            </div>
+            <div className="bot-legs">
+              <span />
+              <span />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 function Working({ label, seconds }: { label: string; seconds: number }) {
   return (
-    <div className="flex flex-col items-center gap-1 text-center">
-      <AgentBot mini />
-      <p className="text-xl">
+    <div className="flex h-full w-full flex-col justify-center">
+      <AgentBot />
+      <p className="text-center text-xl">
         {label} · {seconds}s
       </p>
     </div>
@@ -176,7 +156,7 @@ function cutOtherSteps(section: string, step: number) {
   return out;
 }
 
-function isolateStep(html: string, step: number) {
+function isolateStep(html: string, step: number, present = false) {
   const open = new RegExp(`<section\\b[^>]*\\bdata-step\\s*=\\s*["']${step}["'][^>]*>`, "i");
   const start = html.search(open);
   const lock = `<style>[data-step]:not([data-step="${step}"]){display:none!important}[hidden]{display:none!important}html,body{height:100%;margin:0;overflow:auto}</style>`;
@@ -212,7 +192,10 @@ function isolateStep(html: string, step: number) {
   const ownStyles = [...section.matchAll(/<style\b[^>]*>[\s\S]*?<\/style>/gi)].map((item) => item[0]).join("");
   const screenBg = section.match(/background(?:-color)?\s*:\s*([^;}"]+)/i)?.[1]?.trim() || "#16121f";
   const show = `<style>
-html,body{height:100%;margin:0;overflow:hidden;background:${screenBg};color:#161616}
+html,body{height:100%;margin:0;overflow:hidden;background:${screenBg};color:#161616;cursor:none}
+[hidden]{display:none!important}
+#cya-fit,#cya-fit *{cursor:none}
+#cya-laser{position:fixed;left:0;top:0;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#db0011;box-shadow:0 0 0 6px rgba(219,0,17,.28),0 0 18px #db0011;pointer-events:none;z-index:2147483647;display:none}
 [hidden]{display:none!important}
 #cya-fit{height:100%;width:100%;overflow:auto}
 html body section[data-step]{width:100%!important;height:100%!important;max-width:none!important;margin:0!important;min-height:100%!important;box-sizing:border-box!important}
@@ -299,7 +282,37 @@ function faces(){
 }
 pin();
 faces();
-setTimeout(function(){pin();faces();},40);
+function magnify(){
+  if(!${present ? "true" : "false"})return;
+  var fit=document.getElementById("cya-fit");
+  var section=document.querySelector("section[data-step]");
+  if(!fit||!section)return;
+  section.style.zoom="1";
+  var top=fit.getBoundingClientRect().top;
+  var room=fit.clientHeight;
+  var used=0;
+  [].forEach.call(section.querySelectorAll("h1,h2,h3,p,button,table,li,article,div"),function(el){
+    if(el===section||el.classList.contains("cya-main")||el.classList.contains("cya-agent"))return;
+    var r=el.getBoundingClientRect();
+    if(r.height<16||r.width<16||r.height>room*0.82)return;
+    used=Math.max(used,r.bottom-top);
+  });
+  if(used<80||room<80)return;
+  var scale=Math.max(1,Math.min(room/used,1.6));
+  section.style.zoom=String(Math.round(scale*100)/100);
+}
+magnify();
+setTimeout(function(){pin();faces();magnify();},40);
+window.addEventListener("resize",magnify);
+var laser=document.createElement("div");
+laser.id="cya-laser";
+document.body.appendChild(laser);
+document.addEventListener("mousemove",function(e){
+  laser.style.display="block";
+  laser.style.left=e.clientX+"px";
+  laser.style.top=e.clientY+"px";
+});
+document.addEventListener("mouseleave",function(){laser.style.display="none";});
 })();</script>`;
   return `<!DOCTYPE html><html><head><meta charset="utf-8">${ownStyles}${show}</head><body><div id="cya-fit">${cutOtherSteps(section, step)}</div></body></html>`;
 }
@@ -339,6 +352,15 @@ export function Studio() {
   const [present, setPresent] = useState(false);
   const [armReset, setArmReset] = useState(false);
   const [debugOpen, setDebugOpen] = useState(false);
+  const [zoom, setZoom] = useState(readZoom);
+  useEffect(() => {
+    document.documentElement.style.fontSize = `${Math.round(zoom * 100)}%`;
+    try {
+      window.localStorage.setItem("cya-zoom", String(zoom));
+    } catch {
+      /* The size still applies for this visit. */
+    }
+  }, [zoom]);
   useEffect(() => {
     const onError = (event: ErrorEvent) => debugPush({ name: "window", ok: false, detail: event.message });
     const onReject = (event: PromiseRejectionEvent) =>
@@ -410,7 +432,7 @@ export function Studio() {
     return () => window.removeEventListener("keydown", onKey);
   }, [present]);
 
-  const kicker = step === "overview" ? "Create Your Agent" : (FLOW.find((item) => item.id === step)?.kicker ?? "");
+  const kicker = step === "overview" ? "" : (FLOW.find((item) => item.id === step)?.kicker ?? "");
   const started = key && clocks ? clocks[key] : null;
   const left = started && key ? Math.max(0, PHASE_LIMIT[key] - Math.floor((now - started) / 1000)) : null;
 
@@ -422,7 +444,7 @@ export function Studio() {
       >
         <header className="flex h-12 shrink-0 items-center gap-2 border-b border-line px-3">
           <p className="font-head shrink-0 text-xl text-ink" onDoubleClick={() => setDebugOpen(true)}>
-            Wealth Symposium
+            AI Powered, Human Led
           </p>
           <p className="shrink-0 text-xl text-muted">{kicker}</p>
           {left !== null ? (
@@ -435,6 +457,27 @@ export function Studio() {
           ) : null}
           {step !== "overview" ? <Stepper placement="header" /> : null}
           <div className="ml-auto flex shrink-0 items-center gap-2">
+            <div className="flex h-9 items-center border border-line bg-sheet" aria-label="Zoom">
+              <button
+                type="button"
+                className="h-9 w-9 text-xl font-medium disabled:opacity-40"
+                aria-label="Zoom out"
+                disabled={zoom <= 0.85}
+                onClick={() => setZoom((current) => Math.round(Math.max(0.85, current - 0.1) * 10) / 10)}
+              >
+                −
+              </button>
+              <span className="w-12 text-center text-base font-medium">{Math.round(zoom * 100)}%</span>
+              <button
+                type="button"
+                className="h-9 w-9 text-xl font-medium disabled:opacity-40"
+                aria-label="Zoom in"
+                disabled={zoom >= 1.4}
+                onClick={() => setZoom((current) => Math.round(Math.min(1.4, current + 0.1) * 10) / 10)}
+              >
+                +
+              </button>
+            </div>
             {step !== "overview" ? (
               <button
                 type="button"
@@ -480,7 +523,7 @@ export function Studio() {
       </div>
       {loadingCover ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center" role="status" aria-live="polite">
-          <div className="flex flex-col items-center gap-4 border border-line bg-sheet px-10 py-6 shadow-[6px_6px_0_0_#111]">
+          <div className="flex w-72 flex-col items-center gap-4 border border-line bg-sheet px-6 py-6 shadow-[6px_6px_0_0_#111]">
             <AgentBot />
             <p className="text-xl font-medium">The agent is getting the room ready</p>
           </div>
@@ -492,7 +535,7 @@ export function Studio() {
           className="fixed right-4 bottom-4 z-20 h-12 rounded-full btn-glow px-4 text-xl font-medium lg:hidden"
           onClick={() => setCoachOpen(true)}
         >
-          Assistant
+          AI assistant
         </button>
       ) : null}
     </div>
@@ -539,25 +582,23 @@ function Overview({ onFresh, onResume }: { onFresh: () => void; onResume: () => 
   const resumeAt = useSession((state) => state.resumeAt);
   const canResume = hydrated && Boolean(resumeAt && resumeAt !== "overview");
   const phases = [
-    { n: "0", title: "Scenario", body: "Choose the moment your group feels most. If it is not listed, write your own.", icon: ListChecks },
-    { n: "1", title: "Idea brief", body: "Name the agent. Say what it does, what you receive, and who it helps.", icon: Bot },
-    { n: "2", title: "Design 3 screens", body: "Design three screens in order, then generate a picture for each.", icon: Clapperboard },
-    { n: "3", title: "Prototype", body: "Generate the clickable prototype, make one or two edits, then present it.", icon: MonitorSmartphone },
+    { n: "0", title: "Pinpoint", body: "Choose the pinpoint your group feels most. If it is not listed, write your own.", icon: ListChecks, tone: "#F8D0D4" },
+    { n: "1", title: "Idea brief", body: "Name the agent. Say what it does, what you receive, and who it helps.", icon: Bot, tone: "#D6E4F0" },
+    { n: "2", title: "Design 3 screens", body: "Design three screens in order, then generate a picture for each.", icon: Clapperboard, tone: "#D4EDE4" },
+    { n: "3", title: "Prototype", body: "Generate the clickable prototype, make one or two edits, then present it.", icon: MonitorSmartphone, tone: "#F3E6C8" },
   ];
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <h1 className="text-4xl leading-tight">Create your agent</h1>
-        <p className="mt-2 max-w-4xl text-xl leading-snug text-muted">
-          About 30 minutes on one laptop. No real client names or account numbers.
-        </p>
+      <h1 className="text-4xl leading-tight">AI Powered, Human Led</h1>
+        <p className="mt-2 max-w-4xl text-xl leading-snug text-muted">Ideate your agent</p>
         {typeof window !== "undefined" && window.localStorage?.getItem("cya-desktop") === "1" && !window.localStorage.getItem("cya-supabase-fn") ? (
           <p className="mt-2 max-w-4xl text-xl leading-snug">
-            This copy calls Supabase. Double-click Wealth Symposium and paste the function URL before you start.
+            This copy calls Supabase. Paste the function URL before you start.
           </p>
         ) : null}
       <div className="mt-3 grid min-h-0 flex-1 grid-cols-2 gap-3">
         {phases.map((phase) => (
-          <article key={phase.n} className="flex min-h-0 flex-col rounded-2xl border border-line bg-soft p-4">
+          <article key={phase.n} className="flex min-h-0 flex-col rounded-2xl border border-line p-4" style={{ background: phase.tone }}>
             <phase.icon className="size-10 text-rule" aria-hidden />
             <p className="mt-3 text-base font-semibold text-rule">Phase {phase.n}</p>
             <h2 className="mt-1 text-2xl font-semibold">{phase.title}</h2>
@@ -584,6 +625,15 @@ function Overview({ onFresh, onResume }: { onFresh: () => void; onResume: () => 
   );
 }
 
+function readZoom() {
+  try {
+    const saved = Number(window.localStorage.getItem("cya-zoom"));
+    if (saved >= 0.85 && saved <= 1.4) return saved;
+  } catch {
+    /* Keep the default size. */
+  }
+  return 1;
+}
 function chosenEngine(): PrototypeEngine {
   try {
     return window.localStorage.getItem("cya-engine") === "grok" ? "grok" : "deepseek";
@@ -621,7 +671,7 @@ function PainStep() {
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex shrink-0 items-end justify-between gap-3">
-        <h1 className="text-3xl leading-tight">Phase 0: Which moment hurts?</h1>
+        <h1 className="text-3xl leading-tight">Phase 0: Which one is your biggest pinpoint as an RM?</h1>
         <div className="flex gap-2">
           <button type="button" className="h-12 rounded-full px-3 text-xl font-medium text-rule" onClick={() => go("overview")}>
             Back
@@ -632,11 +682,12 @@ function PainStep() {
             className="h-12 rounded-full btn-glow px-4 text-xl font-medium disabled:opacity-40"
             onClick={() => advance("brief")}
           >
-            Move on
+            Next
           </button>
         </div>
       </div>
-      <div className="mt-2 grid min-h-0 flex-1 grid-cols-3 grid-rows-4 gap-2">
+      <div className="mt-2 flex min-h-0 flex-1 flex-col gap-2">
+        <div className="grid min-h-0 flex-1 grid-cols-3 grid-rows-3 gap-2">
         {PAINPOINTS.map((item) => {
           const selected = painId === item.id;
           const Icon = icons[item.icon as keyof typeof icons] ?? Search;
@@ -648,24 +699,25 @@ function PainStep() {
                 selectPain(item.id);
                 if (useSession.getState().focus?.kind === "pain") useSession.getState().setFocus(null);
               }}
-              className={`flex h-full min-h-0 flex-col overflow-hidden rounded-xl border px-3 py-2 text-left type-seen ${
-                selected ? "border-rule bg-soft" : "border-line bg-sheet"
+              className={`scenario-card flex h-full min-h-0 flex-col overflow-hidden rounded-xl border px-3 py-2 text-left text-lg leading-snug ${
+                selected ? "is-picked border-rule bg-soft" : "border-line bg-sheet"
               }`}
             >
               <span className="flex items-center gap-2">
                 <Icon className="size-5 shrink-0 text-rule" aria-hidden />
                 <span className="font-medium text-rule">{item.id}</span>
-                <span className="font-medium leading-tight">{item.title}</span>
+                <span className="font-bold leading-tight">{item.title}</span>
               </span>
-              <span className="mt-1 text-base leading-snug">{item.text}</span>
+              <span className="mt-1 leading-snug">{item.text}</span>
             </button>
           );
         })}
+        </div>
         <label
-          className={`col-span-3 flex h-full min-h-0 flex-row items-start gap-3 rounded-xl border-2 px-3 py-2 ${ownOn ? "border-rule bg-soft" : "border-line bg-sheet"}`}
+          className={`flex h-14 shrink-0 flex-row items-center gap-3 rounded-xl border-2 px-3 ${ownOn ? "border-rule bg-soft" : "border-line bg-sheet"}`}
         >
-          <Pencil className="mt-1 size-5 shrink-0 text-rule" aria-hidden />
-          <span className="mt-0.5 shrink-0 font-medium text-rule">Your own</span>
+          <Pencil className="size-5 shrink-0 text-rule" aria-hidden />
+          <span className="shrink-0 font-medium text-rule">Your own</span>
           <textarea
             value={painOwn}
             onFocus={() => {
@@ -673,7 +725,7 @@ function PainStep() {
               useSession.getState().setFocus({ kind: "pain" });
             }}
             onChange={(event) => setPainOwn(event.target.value)}
-            placeholder="Or write a scenario that hurts more."
+            placeholder="Or write a pinpoint that hurts more."
             aria-label="Or add your own"
             className="min-h-0 w-full flex-1 resize-none bg-transparent text-lg leading-snug"
           />
@@ -685,17 +737,22 @@ function PainStep() {
 
 function BriefStep() {
   const brief = useSession((state) => state.brief);
-  const pain = useSession((state) => painText(state));
+  const painId = useSession((state) => state.painId);
+  const painOwn = useSession((state) => state.painOwn);
   const focus = useSession((state) => state.focus);
   const setBriefField = useSession((state) => state.setBriefField);
   const setFocus = useSession((state) => state.setFocus);
   const go = useSession((state) => state.go);
   const ready = briefReady(brief);
-  const name = BRIEF_FIELDS[0];
-  const rest = BRIEF_FIELDS.slice(1);
   const selected = (key: BriefKey) => focus?.kind === "field" && focus.key === key;
   const box = (key: BriefKey) =>
     selected(key) ? "border-2 border-rule bg-soft" : "border border-line bg-sheet";
+  const icons: Record<BriefKey, typeof Tag> = {
+    name: Tag,
+    agentDoes: Bot,
+    rmSees: Eye,
+    benefits: Trophy,
+  };
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex items-end justify-between gap-3">
@@ -713,40 +770,57 @@ function BriefStep() {
             className="h-12 rounded-full btn-glow px-4 text-xl font-medium disabled:opacity-40"
             onClick={() => advance("scenes")}
           >
-            Move on
+            Next
           </button>
         </div>
       </div>
-      <div className="mt-2 grid shrink-0 grid-cols-1 gap-2 lg:grid-cols-2">
-        <div className="border border-dashed border-line bg-sheet px-3 py-2">
-          <p className="text-base font-medium text-muted">Painpoint scenario</p>
-          <p className="text-base text-muted">From the last step. Not one of the boxes.</p>
-          <p className="text-xl leading-snug">{pain || "Pick one in the previous step."}</p>
-        </div>
-        <label className="flex flex-col text-xl font-medium leading-tight">
-          {name.label}
-          <input
-            value={brief.name}
-            onFocus={() => setFocus({ kind: "field", key: "name" })}
-            onChange={(event) => setBriefField("name", event.target.value)}
-            placeholder={name.hint}
-            className={`mt-1 h-12 w-full px-3 text-xl font-normal ${box("name")}`}
-          />
-        </label>
-      </div>
       <div className="mt-2 flex min-h-0 flex-1 flex-col gap-2">
-        {rest.map((field) => (
-          <label key={field.key} className="flex min-h-0 flex-1 flex-col text-xl font-medium leading-tight">
-            {field.label}
-            <textarea
-              value={brief[field.key]}
-              onFocus={() => setFocus({ kind: "field", key: field.key })}
-              onChange={(event) => setBriefField(field.key, event.target.value)}
-              placeholder={field.hint}
-              className={`mt-1 min-h-12 w-full flex-1 resize-none px-3 py-2 text-xl font-normal leading-snug ${box(field.key)}`}
-            />
-          </label>
-        ))}
+        <div className="shrink-0 border border-dashed border-line bg-sheet px-3 py-2">
+          <p className="flex items-center gap-2 text-base font-medium text-muted">
+            <ClipboardList className="size-5 shrink-0" aria-hidden />
+            Pinpoint
+          </p>
+          <p className="mt-1 text-lg leading-snug">
+            {painId === "own" ? (
+              painOwn.trim() || "Write your own pinpoint in the previous step."
+            ) : painId ? (
+              <>
+                <span className="font-bold">{PAINPOINTS.find((item) => item.id === painId)?.title}. </span>
+                {PAINPOINTS.find((item) => item.id === painId)?.text}
+              </>
+            ) : (
+              "Pick one in the previous step."
+            )}
+          </p>
+        </div>
+        {BRIEF_FIELDS.map((field) => {
+          const Icon = icons[field.key];
+          return (
+            <label key={field.key} className={`flex min-h-0 flex-col text-xl font-medium leading-tight ${field.key === "name" ? "shrink-0" : "flex-1"}`}>
+              <span className="flex items-center gap-2">
+                <Icon className="size-5 shrink-0 text-rule" aria-hidden />
+                {field.label}
+              </span>
+              {field.key === "name" ? (
+                <input
+                  value={brief.name}
+                  onFocus={() => setFocus({ kind: "field", key: "name" })}
+                  onChange={(event) => setBriefField("name", event.target.value)}
+                  placeholder={field.hint}
+                  className={`mt-1 h-12 w-full px-3 text-xl font-normal ${box("name")}`}
+                />
+              ) : (
+                <textarea
+                  value={brief[field.key]}
+                  onFocus={() => setFocus({ kind: "field", key: field.key })}
+                  onChange={(event) => setBriefField(field.key, event.target.value)}
+                  placeholder={field.hint}
+                  className={`mt-1 min-h-12 w-full flex-1 resize-none px-3 py-2 text-xl font-normal leading-snug ${box(field.key)}`}
+                />
+              )}
+            </label>
+          );
+        })}
       </div>
     </div>
   );
@@ -822,7 +896,7 @@ function ScenesStep() {
           <h1 className="text-3xl leading-tight">Phase 2: Design 3 screens</h1>
           <p className="mt-1 text-xl text-muted">
             {anyStale
-              ? "A picture is out of date. Generate it again before you move on."
+              ? "A picture is out of date. Generate it again before you press Next."
               : "Write one or two sentences, then generate the image. Click a box if you want help with that screen."}
           </p>
         </div>
@@ -846,7 +920,7 @@ function ScenesStep() {
             className={`h-12 rounded-full px-4 text-xl font-medium disabled:opacity-40 ${allFrames && !anyStale ? "btn-glow" : "border border-line"}`}
             onClick={() => advance("prototype")}
           >
-            Move on
+            Next
           </button>
         </div>
       </div>
@@ -863,7 +937,7 @@ function ScenesStep() {
             >
               <div className="flex min-w-0 flex-1 flex-col">
                 <header className={`shrink-0 border-b border-line px-3 py-1 text-xl font-medium leading-tight ${picked ? "bg-soft" : ""}`}>
-                  <span className="text-rule">0{index + 1}</span> Screen
+                  Screen {index + 1}
                 </header>
                 <textarea
                   value={scene}
@@ -915,7 +989,7 @@ function ScenesStep() {
                   </p>
                 )}
                 {busy[index] ? (
-                  <div className="absolute inset-0 flex items-center justify-center bg-sheet/85">
+                  <div className="absolute inset-0 flex flex-col bg-sheet/85">
                     <Working label="Generating this image" seconds={seconds} />
                   </div>
                 ) : null}
@@ -1061,7 +1135,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
       )
     : "";
   const found = liveHtml ? hasStep(liveHtml, view) : false;
-  const isolated = found ? isolateStep(liveHtml, view) : "";
+  const isolated = found ? isolateStep(liveHtml, view, present) : "";
   const frameWords = isolated.replace(/<style[\s\S]*?<\/style>/gi, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
   if (!prototypePreview && frameWords.length > 40) keptFrame.current[view] = isolated;
   const frameHtml = frameWords.length > 40 ? isolated : prototypePreview ? isolated : keptFrame.current[view] || isolated;
@@ -1087,6 +1161,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
     setError("");
     setStreamText("");
     useSession.getState().setPrototypePreview(null);
+    useSession.getState().setPrototypeCue(false);
     let html = "";
     const push = (delta: string) => setStreamText((current) => current + delta);
     const shots = await Promise.all(
@@ -1098,7 +1173,8 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
     try {
       for (const stepNo of [1, 2, 3] as const) {
         setWriting(stepNo);
-        if (stepNo === 1) setView(1);
+        setView(stepNo);
+        useSession.getState().setFocus({ kind: "prototype", step: stepNo });
         setStreamText("");
         const payload = {
           pain,
@@ -1124,6 +1200,56 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
         setStreamText("");
       }
       setPrototype(html, currentBasis(useSession.getState()));
+      setView(1);
+      useSession.getState().setFocus({ kind: "prototype", step: 1 });
+      useSession.getState().setPrototypeCue(true);
+    } catch {
+      setError("The prototype did not come back. Try again.");
+    } finally {
+      setBusy(false);
+      setStreamText("");
+    }
+  }
+
+  async function buildStep(stepNo: 1 | 2 | 3) {
+    if (!framesReady) return;
+    setBusy(true);
+    setError("");
+    setStreamText("");
+    setWriting(stepNo);
+    setView(stepNo);
+    useSession.getState().setPrototypeCue(false);
+    useSession.getState().setPrototypePreview(null);
+    const previousHtml = useSession.getState().prototypeHtml ?? "";
+    const push = (delta: string) => setStreamText((current) => current + delta);
+    const shots = await Promise.all(
+      images.map(async (slot) => {
+        const shot = slot?.dataUrl ?? "";
+        return shot ? shrinkImage(shot) : "";
+      }),
+    );
+    try {
+      const payload = {
+        pain,
+        brief,
+        scenes: [...scenes],
+        step: stepNo,
+        previousHtml,
+        image: shots[stepNo - 1] ?? "",
+        images: shots,
+        engine: chosenEngine(),
+        htmlModel: debugModels().html,
+        openRouterKey: savedOpenRouterKey(),
+      };
+      const streamed = await traced(`prototype-step-${stepNo}`, payload, () =>
+        readPrototypeStream(payload, push, () => setStreamText(""), (body) => protoFn({ data: body })),
+      );
+      if (!streamed.ok) {
+        setError(streamed.error);
+        return;
+      }
+      setPrototype(streamed.html, currentBasis(useSession.getState()));
+      setStreamText("");
     } catch {
       setError("The prototype did not come back. Try again.");
     } finally {
@@ -1136,13 +1262,21 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
     (stepNo) => hasStep(prototypeHtml ?? "", stepNo) || hasStep(prototypePreview ?? "", stepNo),
   );
 
+  const shift = (dir: -1 | 1) => {
+    const next = (view + dir) as 1 | 2 | 3;
+    if (next < 1 || next > 3) return;
+    if (!readySteps.includes(next) && !(busy && writing === next)) return;
+    setView(next);
+    useSession.getState().setFocus({ kind: "prototype", step: next });
+  };
+
   const stepTabs = (
     <>
       {([1, 2, 3] as const).map((stepNo) => {
         const focused = view === stepNo;
         const narrative = (scenes[stepNo - 1] ?? "").replace(/\s+/g, " ").trim();
-        const writingNow = busy && writing === stepNo && !readySteps.includes(stepNo);
-        const label = writingNow ? `Step ${stepNo} · generating` : present && focused ? `Presenting step ${stepNo}` : `Step ${stepNo}`;
+        const writingNow = busy && writing === stepNo;
+        const label = writingNow ? `Screen ${stepNo} · generating` : present && focused ? `Presenting screen ${stepNo}` : `Screen ${stepNo}`;
         return (
           <button
             key={stepNo}
@@ -1164,29 +1298,54 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
     </>
   );
 
+  const screenBar = (
+    <div className="flex min-w-0 flex-1">
+      <button
+        type="button"
+        aria-label="Previous screen"
+        disabled={view === 1}
+        className="inline-flex w-10 shrink-0 items-center justify-center border-r border-line disabled:opacity-30"
+        onClick={() => shift(-1)}
+      >
+        <ChevronLeft className="size-5" aria-hidden />
+      </button>
+      {stepTabs}
+      <button
+        type="button"
+        aria-label="Next screen"
+        disabled={view === 3 || (!readySteps.includes((view + 1) as 1 | 2 | 3) && !(busy && writing === view + 1))}
+        className="inline-flex w-10 shrink-0 items-center justify-center border-l border-line disabled:opacity-30"
+        onClick={() => shift(1)}
+      >
+        <ChevronRight className="size-5" aria-hidden />
+      </button>
+    </div>
+  );
+
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col">
-      <div className="flex items-end justify-between gap-3">
-        <div>
-          <h1 className="text-3xl leading-tight">Phase 3: Rapid prototype</h1>
-          <p className="mt-1 text-xl text-muted">Three clickable steps. One or two edits, then you're ready to share.</p>
-        </div>
-        <div className="flex gap-2">
-          <button type="button" className="h-12 rounded-full px-3 text-xl font-medium text-rule" onClick={() => go("scenes")}>
+      <div className="flex shrink-0 items-center justify-between gap-3">
+        <h1 className="text-3xl leading-tight">Phase 3: Rapid prototype</h1>
+        <div className="flex shrink-0 gap-2">
+          <button type="button" className="h-12 shrink-0 whitespace-nowrap rounded-full px-3 text-xl font-medium text-rule" onClick={() => go("scenes")}>
             Back
           </button>
           <button
             type="button"
             disabled={!framesReady || busy}
-            onClick={() => void build()}
-            className="h-12 rounded-full btn-glow px-4 text-xl font-medium disabled:opacity-40"
+            onClick={() => void (readySteps.length === 3 ? buildStep(view) : build())}
+            className="h-12 shrink-0 whitespace-nowrap rounded-full btn-glow px-4 text-xl font-medium disabled:opacity-40"
           >
-            {busy ? `Generating step ${writing} · ${seconds}s` : prototypeHtml ? "Generate again" : "Generate the prototype"}
+            {busy
+              ? `Generating screen ${writing} · ${seconds}s`
+              : readySteps.length === 3
+                ? `Generate screen ${view} again`
+                : "Generate the prototype"}
           </button>
           {liveHtml && !busy && readySteps.length === 3 && !present ? (
             <button
               type="button"
-              className="inline-flex h-12 items-center gap-2 border border-line px-3 text-xl"
+              className="inline-flex h-12 shrink-0 items-center gap-2 whitespace-nowrap border border-line px-3 text-xl"
               onClick={() => {
                 onPresent();
                 const node = stageRef.current;
@@ -1199,6 +1358,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
           ) : null}
         </div>
       </div>
+      <p className="mt-1 shrink-0 text-xl text-muted">Three clickable screens. One or two edits, then you're ready to share.</p>
       {stale ? <p className="mt-2 text-xl text-muted">The brief or screens changed. This prototype is still here.</p> : null}
       {!framesReady ? <p className="mt-2 text-xl">Generate all three images first, then we can build the prototype.</p> : null}
       {error ? <p className="mt-2 text-xl text-rule">{error}</p> : null}
@@ -1212,7 +1372,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
       >
         {present ? null : (
           <div className="flex shrink-0 border-b border-line" aria-label="Screens">
-            {stepTabs}
+            {screenBar}
           </div>
         )}
         <div className="relative flex min-h-0 flex-1 flex-col">
@@ -1241,7 +1401,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
         </div>
         {present ? (
           <div className="sticky bottom-0 z-10 flex shrink-0 border-t border-line bg-sheet" aria-label="Screens">
-            {stepTabs}
+            {screenBar}
             <button
               type="button"
               className="inline-flex shrink-0 items-center gap-2 border-l border-line px-3 text-lg"
@@ -1295,6 +1455,7 @@ function CoachPanel({
   const brief = useSession((state) => state.brief);
   const scenes = useSession((state) => state.scenes);
   const previewSide = useSession((state) => state.previewSide);
+  const prototypeCue = useSession((state) => state.prototypeCue);
   const [direction, setDirection] = useState("");
   const [draft, setDraft] = useState<Draft | null>(null);
   const [prototypeUndo, setPrototypeUndo] = useState<string | null>(null);
@@ -1355,9 +1516,9 @@ function CoachPanel({
           ? "the three screens"
           : `screen ${sceneIndex + 1}`
         : step === "pain"
-          ? "your scenario"
+          ? "your pinpoint"
           : protoStep
-            ? `step ${protoStep}`
+            ? `screen ${protoStep}`
             : "";
   const moment = scenario.replace(/[.?!]\s*$/, "");
   const hint =
@@ -1374,9 +1535,9 @@ function CoachPanel({
                 : "Design three screens. What are the three steps your assistant takes? Describe each screen.")
             : protoStep
               ? scenario
-                ? `One change for this step, still about this scenario: ${moment}. The other two steps stay as they are.`
-                : "Tell me the one change for this step. The other two stay as they are."
-              : "Pick a step above the prototype. I'll only change that one.";
+                ? `One change for this screen, still about this pinpoint: ${moment}. The other two screens stay as they are.`
+                : "Tell me the one change for this screen. The other two stay as they are."
+              : "Pick a screen above the prototype. I'll only change that one.";
 
   async function suggest() {
     const state = useSession.getState();
@@ -1483,13 +1644,16 @@ function CoachPanel({
       } w-full shrink-0 flex-col overflow-hidden border-t border-line bg-sheet lg:static lg:z-0 lg:flex lg:h-full lg:max-h-none lg:w-80 lg:border-t-0 lg:border-l`}
     >
       <div className="flex shrink-0 items-center justify-between border-b border-line px-4 py-2">
-        <h2 className="text-xl font-medium">Workshop assistant</h2>
+        <h2 className="text-xl font-medium">AI assistant</h2>
         <button type="button" className="h-12 rounded-full px-2 text-xl text-muted lg:hidden" onClick={onClose}>
           Close
         </button>
       </div>
       <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 py-3">
         <div className="grid gap-3">
+          {step === "prototype" && prototypeCue ? (
+            <p className="text-xl leading-snug">All three screens are ready. Start from Screen 1. One or two refinements is enough, then present.</p>
+          ) : null}
           {hint.split(/\n\n+/).map((line) => (
             <p key={line} className="text-xl leading-snug text-muted">
               {line}
@@ -1516,9 +1680,8 @@ function CoachPanel({
                 </button>
               </div>
             ) : null}
-            {needsBox ? null : (
-              <>
-                <label className="block text-xl font-medium">
+            {needsBox || (step === "scenes" && blank) ? null : (
+              <label className="block text-xl font-medium">
                   {blank
                     ? "Want a starting point? Add a steer if you like."
                     : subject
@@ -1531,26 +1694,35 @@ function CoachPanel({
                     placeholder={
                       step === "prototype"
                         ? "E.g., add a section for recent trades"
-                        : blank
-                          ? "E.g., keep it practical"
-                          : "E.g., shorten it or correct typos"
+                        : "E.g., shorten it or correct typos"
                     }
                     className="mt-1 w-full resize-none border border-line bg-sheet px-3 py-2 text-xl font-normal leading-snug"
                   />
                 </label>
+            )}
+            {step === "prototype" && needsBox ? null : (
                 <button
                   type="button"
                   disabled={busy || (step === "prototype" && (direction.trim().length < 3 || !useSession.getState().prototypeHtml))}
                   onClick={() => void suggest()}
                   className="h-12 btn-glow text-xl font-medium disabled:opacity-40"
                 >
-                  {busy ? `Thinking · ${seconds}s` : blank ? "Get some inspiration" : "Enrich"}
+                  {busy
+                    ? `Thinking · ${seconds}s`
+                    : step === "prototype"
+                      ? "Refine screen"
+                      : step === "scenes" && !blank
+                        ? "Refine prompt"
+                        : blank
+                          ? "Get some inspiration"
+                          : "Enrich"}
                 </button>
+            )}
                 {step === "prototype" ? (
                   <div className="border border-line p-3">
                     <p className="text-lg font-medium leading-snug">If you are done, be prepared to present to other groups in 90s.</p>
                     <ol className="mt-2 list-decimal space-y-1 pl-5 text-lg leading-snug">
-                      <li>Your group painpoint</li>
+                      <li>Your group pinpoint</li>
                       <li>Your agent idea</li>
                       <li>Walk us through the prototype</li>
                       <li>The key benefit as closing</li>
@@ -1558,15 +1730,13 @@ function CoachPanel({
                   </div>
                 ) : null}
                 {busy ? (
-                  <div className="flex flex-col items-center gap-1">
-                    <AgentBot mini />
+                  <div className="flex w-full flex-col items-center gap-1">
+                    <AgentBot />
                     <p className="text-center text-base leading-snug text-muted">
                       {`Thinking · ${seconds}s`}
                     </p>
                   </div>
                 ) : null}
-              </>
-            )}
           </>
         ) : null}
         {error ? <p className="text-xl text-rule">{error}</p> : null}

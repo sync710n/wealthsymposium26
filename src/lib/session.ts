@@ -38,6 +38,7 @@ export type SessionState = {
   clocks: PhaseClocks;
   focus: FocusTarget;
   assistField: BriefKey | null;
+  prototypeCue: boolean;
   resumeAt: StepId | null;
   setHydrated: (value: boolean) => void;
   setMedia: (images: [ImageSlot, ImageSlot, ImageSlot]) => void;
@@ -57,6 +58,7 @@ export type SessionState = {
   setPreviewSide: (side: "before" | "after") => void;
   setFocus: (focus: FocusTarget) => void;
   setAssistField: (key: BriefKey | null) => void;
+  setPrototypeCue: (on: boolean) => void;
   reset: () => Promise<void>;
 };
 
@@ -88,6 +90,7 @@ const initial = {
   clocks: emptyClocks(),
   focus: null as FocusTarget,
   assistField: null as BriefKey | null,
+  prototypeCue: false,
   resumeAt: null as StepId | null,
 };
 
@@ -204,6 +207,7 @@ export const useSession = create<SessionState>()(
       setPreviewSide: (side) => set({ previewSide: side }),
       setFocus: (focus) => set({ focus }),
       setAssistField: (key) => set({ assistField: key }),
+      setPrototypeCue: (on) => set({ prototypeCue: on }),
       reset: async () => {
         await clearImages().catch(() => undefined);
         set({

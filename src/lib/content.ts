@@ -51,7 +51,7 @@ export const PAINPOINTS: { id: string; title: string; text: string; icon: string
     id: "09",
     icon: "news",
     title: "Scattered market insights and information overload",
-    text: "There is too much market commentary and house-view material spread across different sources. I struggle to absorb it all and work out what matters for each client's holdings, goals, and concerns, so I can have a timely, personalised conversation.",
+    text: "There is too much market commentary across different sources. I struggle to see what matters for each client's holdings and goals.",
   },
 ];
 
@@ -111,30 +111,17 @@ const ASK: Record<string, { name: string; does: string; sees: string; benefits: 
     benefits: "What does the client hear that is about them, and what reading do you stop doing?",
   },
   own: {
-    name: "What would you call the person who takes this moment off you? Two or three words you would actually say. Not the name of the problem.",
-    does: "In the moment you wrote, what is the assistant doing that you are doing today?",
+    name: "What would you call the person who takes this pinpoint off you? Two or three words you would actually say. Not the name of the problem.",
+    does: "In the pinpoint you wrote, what is the assistant doing that you are doing today?",
     sees: "What would you need in front of you so you don't go and find it yourself?",
     benefits: "If this worked in the next meeting, what changes for you, and what changes for the client?",
   },
 };
 
-export function painGuide(painId: string): string {
-  if (painId === "own") {
-    return [
-      "Tell it the way you would tell another RM. What are you trying to do with the client, and what stops you?",
-      "Is it a screen, a wait, a thing you copy, or a question you cannot answer in the room? Pick the real one.",
-      "If the sentence could be anyone's job, it is not specific enough yet. No client names and no account numbers.",
-    ].join("\n\n");
-  }
-  if (painId) {
-    return [
-      "Read it once, then ask the group: is this the moment that actually gets in the way of a client conversation?",
-      "If someone has a sharper version, write that in the row along the bottom. If the room nods, keep the card. Don't polish the sentence.",
-    ].join("\n\n");
-  }
+export function painGuide(_painId: string): string {
   return [
-    "Which of these happens to you with a client in front of you?",
-    "Pick the card the group argues about, not the one that sounds impressive. If none of them is yours, write the real one in the row along the bottom.",
+    "Which pinpoint is most painful to you as an RM? It might be something that slows you down, or something that stops you answering the client well enough in the room.",
+    "Pick the card the group finds most painful, not the one that sounds impressive. If none of them is yours, write your group's own pinpoint in the row along the bottom.",
   ].join("\n\n");
 }
 
@@ -142,11 +129,11 @@ export function briefGuide(key: BriefKey | "", painId: string, scenario: string)
   const ask = ASK[painId] ?? ASK.own;
   const moment = scenario.trim();
   if (key === "name") {
-    return [ask.name, "Say it out loud. If it sounds like a system, or like the problem, it is not the name yet."].join("\n\n");
+    return ["A short name the group will remember, for example EDD guru.", ask.name, "Say it out loud. If it sounds like a system, or like the problem, it is not the name yet."].join("\n\n");
   }
   if (key === "agentDoes") {
     return [
-      moment ? `Stay inside this moment: ${moment}` : "Stay inside the moment you picked.",
+      moment ? `Stay inside this pinpoint: ${moment}` : "Stay inside the pinpoint you picked.",
       ask.does,
       "Write what the assistant does, not what you do. If the sentence still describes the pain, you have not said the job.",
     ].join("\n\n");
@@ -160,11 +147,11 @@ export function briefGuide(key: BriefKey | "", painId: string, scenario: string)
   if (key === "benefits") {
     return [
       ask.benefits,
-      "One change for you. One change for the client. If the benefit could fit any agent, it is too vague for this moment.",
+      "One change for you. One change for the client. If the benefit could fit any agent, it is too vague for this pinpoint.",
     ].join("\n\n");
   }
   return [
-    moment ? `You are designing for this moment only: ${moment}` : "Pick a scenario first. The brief has to answer that moment.",
+    moment ? `You are designing for this pinpoint only: ${moment}` : "Pick a pinpoint first. The brief has to answer that pinpoint.",
     "Click a box. The question on the right is for the group to answer. Don't look for a sample sentence.",
   ].join("\n\n");
 }
@@ -179,7 +166,7 @@ export const SCENE_HINTS: Record<string, string> = {
   "07": "Design three screens. What are the three steps your assistant takes on a request that spans teams: where it is stuck, who acts next, and what you can tell the client?",
   "08": "Design three screens. What are the three steps your assistant takes when the client is cross-border: what it checks, when it flags a specialist, and what you still decide?",
   "09": "Design three screens. What are the three steps your assistant takes with market noise: what it keeps, what it ties to this client's holdings and goals, and the conversation you have?",
-  own: "Design three screens. What are the three steps your assistant takes in the moment you wrote? For each screen, say what is on it, what the assistant does, and what you do.",
+  own: "Design three screens. What are the three steps your assistant takes in the pinpoint you wrote? For each screen, say what is on it, what the assistant does, and what you do.",
 };
 
 export type BriefKey = "name" | "agentDoes" | "rmSees" | "benefits";
@@ -197,7 +184,7 @@ export const BRIEF_FIELDS: { key: BriefKey; label: string; hint: string; refineA
   {
     key: "name",
     label: "Name your agent",
-    hint: "A short name the group will remember",
+    hint: "A short name the group will remember, e.g. EDD guru",
     refineAs: "the agent name",
   },
   {
@@ -223,7 +210,7 @@ export const BRIEF_FIELDS: { key: BriefKey; label: string; hint: string; refineA
 export type StepId = "overview" | "pain" | "brief" | "scenes" | "prototype";
 
 export const FLOW: { id: Exclude<StepId, "overview">; n: string; short: string; kicker: string }[] = [
-  { id: "pain", n: "0", short: "Scenario", kicker: "Phase 0" },
+  { id: "pain", n: "0", short: "Pinpoint", kicker: "Phase 0" },
   { id: "brief", n: "1", short: "Brief", kicker: "Phase 1" },
   { id: "scenes", n: "2", short: "Screens", kicker: "Phase 2" },
   { id: "prototype", n: "3", short: "Prototype", kicker: "Phase 3" },
