@@ -17052,9 +17052,13 @@ window.addEventListener("resize",magnify);
 			useSession.getState().setPrototypePreview(null);
 		}, [step]);
 		const focusKey = focus?.kind === "field" ? focus.key : focus?.kind === "scene" ? `scene-${focus.index}` : focus?.kind === "prototype" ? `step-${focus.step}` : focus?.kind === "pain" ? "pain" : "";
+		const boxText = focus?.kind === "field" ? String(brief[focus.key] ?? "") : "";
 		(0, import_react.useEffect)(() => {
 			setDirection("");
 		}, [focusKey]);
+		(0, import_react.useEffect)(() => {
+			setDraft((current) => current?.kind === "field" && current.hold ? null : current);
+		}, [focusKey, boxText]);
 		if (forceHidden) return null;
 		const field = focus?.kind === "field" ? BRIEF_FIELDS.find((item) => item.key === focus.key) : void 0;
 		const briefWords = field ? String(brief[field.key] ?? "").trim().split(/\s+/).filter(Boolean).length : 0;
@@ -17313,7 +17317,8 @@ window.addEventListener("resize",magnify);
 								className: "mt-3 grid grid-cols-2 gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 									type: "button",
-									className: `inline-flex h-12 items-center justify-center gap-1 btn-glow px-2 text-xl ${draft.kind === "field" && draft.hold ? "hidden" : ""}`,
+									className: "inline-flex h-12 items-center justify-center gap-1 btn-glow px-2 text-xl",
+									style: draft.kind === "field" && draft.hold ? { display: "none" } : void 0,
 									onClick: accept,
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, {
 										className: "size-5 shrink-0",
@@ -17321,7 +17326,8 @@ window.addEventListener("resize",magnify);
 									}), " Accept"]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 									type: "button",
-									className: `inline-flex h-12 items-center justify-center gap-1 border border-line bg-sheet px-2 text-xl ${draft.kind === "field" && draft.hold ? "col-span-2" : ""}`,
+									className: "inline-flex h-12 items-center justify-center gap-1 border border-line bg-sheet px-2 text-xl",
+									style: draft.kind === "field" && draft.hold ? { gridColumn: "1 / -1" } : void 0,
 									onClick: () => {
 										if (draft?.kind === "prototype") useSession.getState().setPrototypePreview(null);
 										setDraft(null);

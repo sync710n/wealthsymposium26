@@ -1475,9 +1475,15 @@ function CoachPanel({
             ? "pain"
             : "";
 
+  const boxText = focus?.kind === "field" ? String(brief[focus.key] ?? "") : "";
+
   useEffect(() => {
     setDirection("");
   }, [focusKey]);
+
+  useEffect(() => {
+    setDraft((current) => (current?.kind === "field" && current.hold ? null : current));
+  }, [focusKey, boxText]);
 
   if (forceHidden) return null;
 
