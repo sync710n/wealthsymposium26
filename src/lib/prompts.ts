@@ -58,8 +58,13 @@ export const prompts = {
         `Already in the box: ${current || "(empty)"}`,
         `Enrich direction: ${direction || "(none)"}`,
         voice,
-        "Write it the way a relationship manager would say it to a colleague. Plain and concrete. No slogans, and do not say you. Two sentences, about 40 words, unless the enrich direction asks for a different length. Do not answer in one short clause. Follow the enrich direction. Do not copy these labels. Do not switch to a different problem.",
-        'JSON: {"text":"..."}',
+        "First judge what is already in the box. Do this before you rewrite, and do not let the enrich direction override it.",
+        "Return {\"hold\":true,\"text\":\"...\"} and do not write their answer when either is true:",
+        "The box is gibberish, keyboard mash, repeated letters, or not real words.",
+        "The box is too generic to refine. It could fit any job, and it does not say what happens in this painpoint.",
+        "When you hold, text is two short sentences to the group. Say what is missing. Ask them to write that in their own words, then press Refine again. Do not invent the missing detail. Do not produce a polished brief.",
+        "Otherwise rewrite the box. Write it the way a relationship manager would say it to a colleague. Plain and concrete. No slogans, and do not say you. Two sentences, about 40 words, unless the enrich direction asks for a different length. Do not answer in one short clause. Follow the enrich direction. Do not copy these labels. Do not switch to a different problem.",
+        "Return {\"hold\":false,\"text\":\"...\"}.",
       ]);
     },
     scenes(currents: string[], direction: string, scenario: string, brief: Brief) {

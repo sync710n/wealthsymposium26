@@ -157,6 +157,24 @@ function asAgentName(value: unknown) {
   return words.join(" ").slice(0, 40);
 }
 
+function needsMoreThought(text: string) {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return false;
+  const stubs = words.filter((word) => word.length <= 2).length;
+  if (stubs / words.length > 0.45) return true;
+  const long = words.filter((word) => word.replace(/[^a-z]/gi, "").length >= 5);
+  const mashed = long.filter((word) => {
+    const chars = word.toLowerCase().replace(/[^a-z]/g, "");
+    const unique = new Set(chars).size;
+    return unique <= 3 || /(.)\1{3,}/.test(chars) || /asd|asdf|qwer|zxcv|hjkl|dfgh/.test(chars);
+  });
+  return long.length > 0 && mashed.length / long.length >= 0.5;
+}
+
+function holdNote(question: string) {
+  return `Give this more thought before I refine “${question}”. Write a real sentence about this painpoint. A mash of letters, or a line that could fit any job, is not enough yet.`;
+}
+
 function field(source: Record<string, unknown>, names: string[]) {
   for (const name of names) {
     const value = asText(source[name], 800);
@@ -453,6 +471,7 @@ export const coachDraft = createServerFn({ method: "POST" })
       const current = key === "name" ? data.brief.name : (data.brief[key] ?? "");
       const written = current.trim().split(/\s+/).filter(Boolean).length;
       if (written < 10) return { ok: false, error: "Write at least 10 words in this box before I refine it." };
+      if (needsMoreThought(current)) return { ok: true, text: holdNote(question), hold: true };
       const voice =
         key === "rmSees" || key === "benefits"
           ? "Voice: first person, as the relationship manager. Use I and my. Do not start with The agent."
@@ -513,6 +532,12 @@ export const coachDraft = createServerFn({ method: "POST" })
       return { ok: true, paragraph };
     }
     if (data.target === "field") {
+      const question = BRIEF_FIELDS.find((item) => item.key === (data.field ?? "agentDoes"))?.label ?? "this box";
+      const holding = parsed.hold === true || parsed.hold === "true";
+      if (holding) {
+        const note = readable(parsed.text ?? parsed.note, 320) || holdNote(question);
+        return { ok: true, text: note, hold: true };
+      }
       const pick = () =>
         data.field === "name"
           ? asAgentName(readable(parsed.text ?? parsed.value ?? parsed.name, 80))

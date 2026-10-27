@@ -1415,7 +1415,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
 
 type Draft =
   | { kind: "pain"; text: string }
-  | { kind: "field"; key: BriefKey; text: string }
+  | { kind: "field"; key: BriefKey; text: string; hold?: boolean }
   | { kind: "brief"; brief: Brief }
   | { kind: "scene"; index: 0 | 1 | 2; text: string }
   | { kind: "scenes"; texts: [string, string, string] }
@@ -1456,7 +1456,7 @@ function CoachPanel({
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const seconds = useSeconds(busy);
-  const coach = workshopAction<{ ok: true; text?: string; paragraph?: string; paragraphs?: string[]; brief?: Brief; pain?: string } | { ok: false; error: string }>("coach");
+  const coach = workshopAction<{ ok: true; text?: string; hold?: boolean; paragraph?: string; paragraphs?: string[]; brief?: Brief; pain?: string } | { ok: false; error: string }>("coach");
   const refine = workshopAction<{ ok: true; html: string } | { ok: false; error: string }>("refine");
 
   useEffect(() => {
@@ -1602,7 +1602,7 @@ function CoachPanel({
         return;
       }
       if (result.pain) setDraft({ kind: "pain", text: result.pain });
-      else if (result.text && fieldKey) setDraft({ kind: "field", key: fieldKey, text: result.text });
+      else if (result.text && fieldKey) setDraft({ kind: "field", key: fieldKey, text: result.text, hold: result.hold });
       else if (result.brief) setDraft({ kind: "brief", brief: result.brief });
       else if (result.paragraphs && result.paragraphs.length === 3) {
         setDraft({ kind: "scenes", texts: [result.paragraphs[0], result.paragraphs[1], result.paragraphs[2]] });
@@ -1616,7 +1616,7 @@ function CoachPanel({
   }
 
   function accept() {
-    if (!draft) return;
+    if (!draft || (draft.kind === "field" && draft.hold)) return;
     const state = useSession.getState();
     if (draft.kind === "pain") state.setPainOwn(draft.text);
     else if (draft.kind === "field") state.setBriefField(draft.key, draft.text);
@@ -1719,7 +1719,11 @@ function CoachPanel({
         {error ? <p className="text-xl text-rule">{error}</p> : null}
         {draft ? (
           <div className="rounded-2xl border border-line bg-soft p-3">
-            <p className="text-base font-medium text-muted">A suggestion. It stays here until you accept it.</p>
+            <p className="text-base font-medium text-muted">
+              {draft.kind === "field" && draft.hold
+                ? "Give this more thought first. I have not changed the box."
+                : "A suggestion. It stays here until you accept it."}
+            </p>
             {draft.kind === "pain" ? <p className="mt-2 text-xl">{draft.text}</p> : null}
             {draft.kind === "field" ? <p className="mt-2 text-xl">{draft.text}</p> : null}
             {draft.kind === "scene" ? (
@@ -1770,6 +1774,7 @@ function CoachPanel({
               </dl>
             ) : null}
             <div className="mt-3 grid grid-cols-2 gap-2">
+              {draft.kind === "field" && draft.hold ? null : (
               <button
                 type="button"
                 className="inline-flex h-12 items-center justify-center gap-1 btn-glow px-2 text-xl"
@@ -1777,9 +1782,10 @@ function CoachPanel({
               >
                 <Check className="size-5 shrink-0" aria-hidden /> Accept
               </button>
+              )}
               <button
                 type="button"
-                className="inline-flex h-12 items-center justify-center gap-1 border border-line bg-sheet px-2 text-xl"
+                className={`inline-flex h-12 items-center justify-center gap-1 border border-line bg-sheet px-2 text-xl ${draft.kind === "field" && draft.hold ? "col-span-2" : ""}`}
                 onClick={() => {
                   if (draft?.kind === "prototype") useSession.getState().setPrototypePreview(null);
                   setDraft(null);

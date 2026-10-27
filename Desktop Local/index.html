@@ -17130,7 +17130,8 @@ window.addEventListener("resize",magnify);
 				else if (result.text && fieldKey) setDraft({
 					kind: "field",
 					key: fieldKey,
-					text: result.text
+					text: result.text,
+					hold: result.hold
 				});
 				else if (result.brief) setDraft({
 					kind: "brief",
@@ -17157,7 +17158,7 @@ window.addEventListener("resize",magnify);
 			}
 		}
 		function accept() {
-			if (!draft) return;
+			if (!draft || draft.kind === "field" && draft.hold) return;
 			const state = useSession.getState();
 			if (draft.kind === "pain") state.setPainOwn(draft.text);
 			else if (draft.kind === "field") state.setBriefField(draft.key, draft.text);
@@ -17246,7 +17247,7 @@ window.addEventListener("resize",magnify);
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "text-base font-medium text-muted",
-								children: "A suggestion. It stays here until you accept it."
+								children: draft.kind === "field" && draft.hold ? "Give this more thought first. I have not changed the box." : "A suggestion. It stays here until you accept it."
 							}),
 							draft.kind === "pain" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "mt-2 text-xl",
@@ -17303,7 +17304,7 @@ window.addEventListener("resize",magnify);
 								className: "mt-3 grid grid-cols-2 gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 									type: "button",
-									className: "inline-flex h-12 items-center justify-center gap-1 btn-glow px-2 text-xl",
+									className: `inline-flex h-12 items-center justify-center gap-1 btn-glow px-2 text-xl ${draft.kind === "field" && draft.hold ? "hidden" : ""}`,
 									onClick: accept,
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Check, {
 										className: "size-5 shrink-0",
@@ -17311,7 +17312,7 @@ window.addEventListener("resize",magnify);
 									}), " Accept"]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 									type: "button",
-									className: "inline-flex h-12 items-center justify-center gap-1 border border-line bg-sheet px-2 text-xl",
+									className: `inline-flex h-12 items-center justify-center gap-1 border border-line bg-sheet px-2 text-xl ${draft.kind === "field" && draft.hold ? "col-span-2" : ""}`,
 									onClick: () => {
 										if (draft?.kind === "prototype") useSession.getState().setPrototypePreview(null);
 										setDraft(null);
