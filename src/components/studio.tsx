@@ -14,6 +14,7 @@ import {
   Layers,
   ListChecks,
   ListTodo,
+  MessageSquare,
   MonitorSmartphone,
   Newspaper,
   Pencil,
@@ -652,6 +653,7 @@ function PainStep() {
     scale: Scale,
     clipboard: ClipboardList,
     list: ListTodo,
+    messages: MessageSquare,
     globe: Globe,
     news: Newspaper,
   };
