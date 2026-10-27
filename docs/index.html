@@ -15256,9 +15256,6 @@ button.text-rule {
 			"benefits"
 		].every((key) => brief[key].trim().length > 0);
 	}
-	function sceneReady(text) {
-		return text.trim().split(/\s+/).filter(Boolean).length >= 8;
-	}
 	function imageStale(slot, scene) {
 		if (!slot) return false;
 		return slot.sceneText.trim() !== scene.trim();
@@ -16470,7 +16467,7 @@ window.addEventListener("resize",magnify);
 						children: "Phase 2: Design 3 screens"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 						className: "mt-1 text-xl text-muted",
-						children: anyStale ? "A picture is out of date. Generate it again before you press Next." : "Write one or two sentences, then generate the image. Click a box if you want help with that screen."
+						children: anyStale ? "A screen is out of date. Generate it again before you press Next." : "Write one or two sentences, then generate the screen. Click a box if you want help with that screen."
 					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex shrink-0 justify-end gap-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
@@ -16518,7 +16515,7 @@ window.addEventListener("resize",magnify);
 									}),
 									errors[index] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "max-h-10 shrink-0 overflow-hidden px-3 text-base leading-tight text-rule",
-										children: "The picture did not come back. Try again."
+										children: "The screen did not come back. Try again."
 									}) : null
 								]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -16543,17 +16540,17 @@ window.addEventListener("resize",magnify);
 									busy[index] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "absolute inset-0 z-10 flex flex-col bg-sheet/85",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Working, {
-											label: "Generating this image",
+											label: "Generating this screen",
 											seconds
 										})
 									}) : slot ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "pointer-events-none absolute inset-0 z-10 flex items-center justify-center gap-2 bg-ink/45 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											type: "button",
-											disabled: !sceneReady(scene),
+											disabled: !scene.trim(),
 											onClick: () => void draw(sceneIndex),
 											className: "h-11 btn-glow px-3 text-lg font-medium disabled:opacity-40",
-											children: "Generate again"
+											children: "Generate screen again"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											type: "button",
 											className: "inline-flex size-11 items-center justify-center border border-line bg-sheet",
@@ -16566,14 +16563,14 @@ window.addEventListener("resize",magnify);
 										})]
 									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "absolute inset-0 flex flex-col items-center justify-center gap-2 px-3",
-										children: sceneReady(scene) ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										children: scene.trim() ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											type: "button",
 											onClick: () => void draw(sceneIndex),
 											className: "h-11 btn-glow px-4 text-lg font-medium",
-											children: "Generate image"
+											children: "Generate screen"
 										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 											className: "text-center text-lg text-muted",
-											children: "Write a full sentence"
+											children: "Write a sentence first"
 										})
 									})
 								]
@@ -16943,7 +16940,7 @@ window.addEventListener("resize",magnify);
 				}) : null,
 				!framesReady ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-xl",
-					children: "Generate all three images first, then we can build the prototype."
+					children: "Generate all three screens first, then we can build the prototype."
 				}) : null,
 				error ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-xl text-rule",
@@ -17043,7 +17040,7 @@ window.addEventListener("resize",magnify);
 			const state = useSession.getState();
 			setBusy(true);
 			setError("");
-			const target = state.step === "brief" ? "field" : state.step === "scenes" ? "scene" : "pain";
+			const target = state.step === "brief" ? "field" : state.step === "scenes" ? state.scenes.every((item) => !item.trim()) ? "scenes" : "scene" : "pain";
 			const scenePick = state.focus?.kind === "scene" ? state.focus.index : state.activeScene;
 			const fieldKey = state.focus?.kind === "field" ? state.focus.key : void 0;
 			const pickedStep = state.focus?.kind === "prototype" ? state.focus.step : null;

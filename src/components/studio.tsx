@@ -35,7 +35,6 @@ import {
   currentBasis,
   imageStale,
   painText,
-  sceneReady,
   stepIndex,
   useSession,
   loadSavedSession,
@@ -883,8 +882,8 @@ function ScenesStep() {
           <h1 className="text-3xl leading-tight">Phase 2: Design 3 screens</h1>
           <p className="mt-1 text-xl text-muted">
             {anyStale
-              ? "A picture is out of date. Generate it again before you press Next."
-              : "Write one or two sentences, then generate the image. Click a box if you want help with that screen."}
+              ? "A screen is out of date. Generate it again before you press Next."
+              : "Write one or two sentences, then generate the screen. Click a box if you want help with that screen."}
           </p>
         </div>
         <div className="flex shrink-0 justify-end gap-2">
@@ -927,7 +926,7 @@ function ScenesStep() {
                   className={`min-h-0 w-full flex-1 resize-none border-0 px-3 py-2 text-xl leading-snug ${picked ? "bg-soft" : "bg-sheet"}`}
                 />
                 {errors[index] ? (
-                  <p className="max-h-10 shrink-0 overflow-hidden px-3 text-base leading-tight text-rule">The picture did not come back. Try again.</p>
+                  <p className="max-h-10 shrink-0 overflow-hidden px-3 text-base leading-tight text-rule">The screen did not come back. Try again.</p>
                 ) : null}
               </div>
               <div
@@ -943,17 +942,17 @@ function ScenesStep() {
                 ) : null}
                 {busy[index] ? (
                   <div className="absolute inset-0 z-10 flex flex-col bg-sheet/85">
-                    <Working label="Generating this image" seconds={seconds} />
+                    <Working label="Generating this screen" seconds={seconds} />
                   </div>
                 ) : slot ? (
                   <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center gap-2 bg-ink/45 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
                     <button
                       type="button"
-                      disabled={!sceneReady(scene)}
+                      disabled={!scene.trim()}
                       onClick={() => void draw(sceneIndex)}
                       className="h-11 btn-glow px-3 text-lg font-medium disabled:opacity-40"
                     >
-                      Generate again
+                      Generate screen again
                     </button>
                     <button
                       type="button"
@@ -966,12 +965,12 @@ function ScenesStep() {
                   </div>
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-3">
-                    {sceneReady(scene) ? (
+                    {scene.trim() ? (
                       <button type="button" onClick={() => void draw(sceneIndex)} className="h-11 btn-glow px-4 text-lg font-medium">
-                        Generate image
+                        Generate screen
                       </button>
                     ) : (
-                      <p className="text-center text-lg text-muted">Write a full sentence</p>
+                      <p className="text-center text-lg text-muted">Write a sentence first</p>
                     )}
                   </div>
                 )}
@@ -1344,7 +1343,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
       </div>
       <p className="mt-1 shrink-0 text-xl text-muted">Three clickable screens. One or two edits, then you're ready to share.</p>
       {stale ? <p className="mt-2 text-xl text-muted">The brief or screens changed. This prototype is still here.</p> : null}
-      {!framesReady ? <p className="mt-2 text-xl">Generate all three images first, then we can build the prototype.</p> : null}
+      {!framesReady ? <p className="mt-2 text-xl">Generate all three screens first, then we can build the prototype.</p> : null}
       {error ? <p className="mt-2 text-xl text-rule">{error}</p> : null}
       <div
         ref={stageRef}
@@ -1526,7 +1525,9 @@ function CoachPanel({
       state.step === "brief"
         ? "field"
         : state.step === "scenes"
-          ? "scene"
+          ? state.scenes.every((item) => !item.trim())
+            ? "scenes"
+            : "scene"
           : "pain";
     const scenePick = state.focus?.kind === "scene" ? state.focus.index : state.activeScene;
     const fieldKey = state.focus?.kind === "field" ? state.focus.key : undefined;
