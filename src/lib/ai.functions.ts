@@ -779,7 +779,7 @@ export function openPrototypeStream(data: PrototypeInput) {
         }
         send({ html });
       } catch {
-        send({ error: "The prototype did not come back. Try again." });
+        send({ error: "The demo did not come back. Try again." });
       } finally {
         controller.close();
       }
@@ -979,7 +979,7 @@ export const refinePrototype = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }): Promise<Ok<{ html: string }> | Err> => {
     const current = (data.html ?? "").slice(0, 80_000);
-    if (!current.includes("<")) return { ok: false, error: "Generate a prototype before asking for an edit." };
+    if (!current.includes("<")) return { ok: false, error: "Generate a demo before asking for an edit." };
     const direction = (data.direction ?? "").trim().slice(0, 400);
     if (direction.length < 3) return { ok: false, error: "Say what to change." };
     const step = data.step === 2 || data.step === 3 ? data.step : 1;

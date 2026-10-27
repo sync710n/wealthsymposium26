@@ -1084,7 +1084,7 @@ function openPrototypeStream(data) {
 			}
 			send({ html });
 		} catch {
-			send({ error: "The prototype did not come back. Try again." });
+			send({ error: "The demo did not come back. Try again." });
 		} finally {
 			controller.close();
 		}
@@ -1247,7 +1247,7 @@ var refinePrototype = createServerFn({ method: "POST" }).validator((input) => in
 	const current = (data.html ?? "").slice(0, 8e4);
 	if (!current.includes("<")) return {
 		ok: false,
-		error: "Generate a prototype before asking for an edit."
+		error: "Generate a demo before asking for an edit."
 	};
 	const direction = (data.direction ?? "").trim().slice(0, 400);
 	if (direction.length < 3) return {

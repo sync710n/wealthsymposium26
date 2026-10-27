@@ -14778,7 +14778,7 @@ button.text-rule {
 		{
 			id: "prototype",
 			n: "3",
-			short: "Prototype",
+			short: "Demo",
 			kicker: "Phase 3"
 		}
 	];
@@ -16106,8 +16106,8 @@ window.addEventListener("resize",magnify);
 			},
 			{
 				n: "3",
-				title: "Prototype",
-				body: "Generate the clickable prototype, make one or two edits, then present it.",
+				title: "Demo",
+				body: "Generate the clickable demo, make one or two edits, then present it.",
 				icon: MonitorSmartphone,
 				tone: "#F3E6C8"
 			}
@@ -16664,7 +16664,7 @@ window.addEventListener("resize",magnify);
 			};
 			if (!html) return {
 				ok: false,
-				error: "The prototype did not come back. Try again."
+				error: "The demo did not come back. Try again."
 			};
 			return {
 				ok: true,
@@ -16791,7 +16791,7 @@ window.addEventListener("resize",magnify);
 				});
 				useSession.getState().setPrototypeCue(true);
 			} catch {
-				setError("The prototype did not come back. Try again.");
+				setError("The demo did not come back. Try again.");
 			} finally {
 				setBusy(false);
 				setStreamText("");
@@ -16833,7 +16833,7 @@ window.addEventListener("resize",magnify);
 				setPrototype(streamed.html, currentBasis(useSession.getState()));
 				setStreamText("");
 			} catch {
-				setError("The prototype did not come back. Try again.");
+				setError("The demo did not come back. Try again.");
 			} finally {
 				setBusy(false);
 				setStreamText("");
@@ -16917,7 +16917,7 @@ window.addEventListener("resize",magnify);
 					className: "flex shrink-0 items-center justify-between gap-3",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 						className: "text-3xl leading-tight",
-						children: "Phase 3: Rapid prototype"
+						children: "Phase 3: Demo"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex shrink-0 gap-2",
 						children: [
@@ -16932,7 +16932,7 @@ window.addEventListener("resize",magnify);
 								disabled: !framesReady || busy,
 								onClick: () => void (readySteps.length === 3 ? buildStep(view) : build()),
 								className: "h-12 shrink-0 whitespace-nowrap rounded-full btn-glow px-4 text-xl font-medium disabled:opacity-40",
-								children: busy ? `Generating screen ${writing} · ${seconds}s` : readySteps.length === 3 ? `Generate screen ${view} again` : "Generate the prototype"
+								children: busy ? `Generating screen ${writing} · ${seconds}s` : readySteps.length === 3 ? `Generate screen ${view} again` : "Generate the demo"
 							}),
 							liveHtml && !busy && readySteps.length === 3 && !present ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								type: "button",
@@ -16956,11 +16956,11 @@ window.addEventListener("resize",magnify);
 				}),
 				stale ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-xl text-muted",
-					children: "The brief or screens changed. This prototype is still here."
+					children: "The brief or screens changed. This demo is still here."
 				}) : null,
 				!framesReady ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-xl",
-					children: "Generate all three screens first, then we can build the prototype."
+					children: "Generate all three screens first, then we can build the demo."
 				}) : null,
 				error ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-xl text-rule",
@@ -16981,13 +16981,13 @@ window.addEventListener("resize",magnify);
 								className: "relative min-h-0 min-w-0 flex-1 overflow-hidden",
 								children: [liveHtml && !(busy && view === writing) ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("iframe", {
 									ref: frameRef,
-									title: "Prototype",
+									title: "Demo",
 									sandbox: "allow-scripts",
 									srcDoc: frameHtml,
 									className: "absolute inset-0 h-full w-full bg-sheet"
 								}, `${view}-${compare}-${present ? "full" : "edit"}-${prototypePreview ? "preview" : "live"}`) : !busy ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "px-4 py-6 text-xl text-muted",
-									children: "The prototype appears here, one screen at a time."
+									children: "The demo appears here, one screen at a time."
 								}) : null, busy && view === writing ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("pre", {
 									ref: codeRef,
 									className: "absolute inset-0 overflow-auto whitespace-pre-wrap break-all bg-sheet p-4 font-mono text-sm leading-snug",
@@ -17056,7 +17056,7 @@ window.addEventListener("resize",magnify);
 		const blank = step === "pain" ? painId === "own" || !painId ? !painOwn.trim() : false : step === "brief" ? !String(field ? brief[field.key] : "").trim() : step === "scenes" ? !scenes[sceneIndex]?.trim() : false;
 		const subject = step === "brief" ? field?.refineAs ?? "" : step === "scenes" ? `screen ${sceneIndex + 1}` : step === "pain" ? "your painpoint" : protoStep ? `screen ${protoStep}` : "";
 		const moment = scenario.replace(/[.?!]\s*$/, "");
-		const hint = step === "overview" ? "Nominate one person as group leader. They drive the laptop. At the end, your group presents the prototype to the other groups." : step === "pain" ? painGuide(painId ?? "") : step === "brief" ? briefGuide(field?.key ?? "", painId ?? "", scenario) + (field && field.key !== "name" && briefWords < 10 ? "\n\nOnce this box has at least 10 words, I can refine it with you." : "") : step === "scenes" ? painId && SCENE_HINTS[painId] || (scenario ? SCENE_HINTS.own : "Design three screens. What are the three steps your assistant takes? Describe each screen.") : protoStep ? scenario ? `One change for this screen, still about this painpoint: ${moment}. The other two screens stay as they are.` : "Tell me the one change for this screen. The other two stay as they are." : "Pick a screen above the prototype. I'll only change that one.";
+		const hint = step === "overview" ? "Nominate one person as group leader. They drive the laptop. At the end, your group presents the demo to the other groups." : step === "pain" ? painGuide(painId ?? "") : step === "brief" ? briefGuide(field?.key ?? "", painId ?? "", scenario) + (field && field.key !== "name" && briefWords < 10 ? "\n\nOnce this box has at least 10 words, I can refine it with you." : "") : step === "scenes" ? painId && SCENE_HINTS[painId] || (scenario ? SCENE_HINTS.own : "Design three screens. What are the three steps your assistant takes? Describe each screen.") : protoStep ? scenario ? `One change for this screen, still about this painpoint: ${moment}. The other two screens stay as they are.` : "Tell me the one change for this screen. The other two stay as they are." : "Pick a screen above the demo. I'll only change that one.";
 		async function suggest() {
 			const state = useSession.getState();
 			setBusy(true);
@@ -17225,7 +17225,7 @@ window.addEventListener("resize",magnify);
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Your group painpoint" }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Your agent idea" }),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Walk us through the prototype" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Walk us through the demo" }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "The key benefit as closing" })
 								]
 							})]
@@ -17392,7 +17392,7 @@ window.addEventListener("resize",magnify);
 				children: [
 					[
 						["Text generation", "coach"],
-						["Prototype", "html"],
+						["Demo", "html"],
 						["Image", "image"]
 					].map(([label, key]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
 						className: "text-base",

@@ -577,7 +577,7 @@ function Overview({ onFresh, onResume }: { onFresh: () => void; onResume: () => 
     { n: "0", title: "Painpoint", body: "Choose the painpoint your group feels most strongly. If it is not listed, write your own.", icon: ListChecks, tone: "#F8D0D4" },
     { n: "1", title: "Idea brief", body: "Name the agent. Say what it does, what you receive, and who it helps.", icon: Bot, tone: "#D6E4F0" },
     { n: "2", title: "Design 3 screens", body: "Design three screens in order, then generate a screen for each.", icon: Clapperboard, tone: "#D4EDE4" },
-    { n: "3", title: "Prototype", body: "Generate the clickable prototype, make one or two edits, then present it.", icon: MonitorSmartphone, tone: "#F3E6C8" },
+    { n: "3", title: "Demo", body: "Generate the clickable demo, make one or two edits, then present it.", icon: MonitorSmartphone, tone: "#F3E6C8" },
   ];
   return (
     <div className="flex h-full min-h-0 flex-col">
@@ -1074,7 +1074,7 @@ async function readPrototypeStream(
         }
       }
     if (error) return { ok: false as const, error };
-    if (!html) return { ok: false as const, error: "The prototype did not come back. Try again." };
+    if (!html) return { ok: false as const, error: "The demo did not come back. Try again." };
     return { ok: true as const, html };
   } catch (error) {
     const message = error instanceof Error ? error.message : "";
@@ -1196,7 +1196,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
       useSession.getState().setFocus({ kind: "prototype", step: 1 });
       useSession.getState().setPrototypeCue(true);
     } catch {
-      setError("The prototype did not come back. Try again.");
+      setError("The demo did not come back. Try again.");
     } finally {
       setBusy(false);
       setStreamText("");
@@ -1243,7 +1243,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
       setPrototype(streamed.html, currentBasis(useSession.getState()));
       setStreamText("");
     } catch {
-      setError("The prototype did not come back. Try again.");
+      setError("The demo did not come back. Try again.");
     } finally {
       setBusy(false);
       setStreamText("");
@@ -1319,7 +1319,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
   return (
     <div className="flex h-full min-h-0 flex-1 flex-col">
       <div className="flex shrink-0 items-center justify-between gap-3">
-        <h1 className="text-3xl leading-tight">Phase 3: Rapid prototype</h1>
+        <h1 className="text-3xl leading-tight">Phase 3: Demo</h1>
         <div className="flex shrink-0 gap-2">
           <button type="button" className="h-12 shrink-0 whitespace-nowrap rounded-full px-3 text-xl font-medium text-rule" onClick={() => go("scenes")}>
             Back
@@ -1334,7 +1334,7 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
               ? `Generating screen ${writing} · ${seconds}s`
               : readySteps.length === 3
                 ? `Generate screen ${view} again`
-                : "Generate the prototype"}
+                : "Generate the demo"}
           </button>
           {liveHtml && !busy && readySteps.length === 3 && !present ? (
             <button
@@ -1353,8 +1353,8 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
         </div>
       </div>
       <p className="mt-1 shrink-0 text-xl text-muted">Three clickable screens. One or two edits, then you're ready to share.</p>
-      {stale ? <p className="mt-2 text-xl text-muted">The brief or screens changed. This prototype is still here.</p> : null}
-      {!framesReady ? <p className="mt-2 text-xl">Generate all three screens first, then we can build the prototype.</p> : null}
+      {stale ? <p className="mt-2 text-xl text-muted">The brief or screens changed. This demo is still here.</p> : null}
+      {!framesReady ? <p className="mt-2 text-xl">Generate all three screens first, then we can build the demo.</p> : null}
       {error ? <p className="mt-2 text-xl text-rule">{error}</p> : null}
       <div
         ref={stageRef}
@@ -1375,13 +1375,13 @@ function PrototypeStep({ present, onPresent }: { present: boolean; onPresent: ()
               <iframe
                 key={`${view}-${compare}-${present ? "full" : "edit"}-${prototypePreview ? "preview" : "live"}`}
                 ref={frameRef}
-                title="Prototype"
+                title="Demo"
                 sandbox="allow-scripts"
                 srcDoc={frameHtml}
                 className="absolute inset-0 h-full w-full bg-sheet"
               />
             ) : !busy ? (
-              <p className="px-4 py-6 text-xl text-muted">The prototype appears here, one screen at a time.</p>
+              <p className="px-4 py-6 text-xl text-muted">The demo appears here, one screen at a time.</p>
             ) : null}
             {busy && view === writing ? (
               <pre
@@ -1513,7 +1513,7 @@ function CoachPanel({
   const moment = scenario.replace(/[.?!]\s*$/, "");
   const hint =
     step === "overview"
-      ? "Nominate one person as group leader. They drive the laptop. At the end, your group presents the prototype to the other groups."
+      ? "Nominate one person as group leader. They drive the laptop. At the end, your group presents the demo to the other groups."
       : step === "pain"
         ? painGuide(painId ?? "")
         : step === "brief"
@@ -1530,7 +1530,7 @@ function CoachPanel({
               ? scenario
                 ? `One change for this screen, still about this painpoint: ${moment}. The other two screens stay as they are.`
                 : "Tell me the one change for this screen. The other two stay as they are."
-              : "Pick a screen above the prototype. I'll only change that one.";
+              : "Pick a screen above the demo. I'll only change that one.";
 
   async function suggest() {
     const state = useSession.getState();
@@ -1701,7 +1701,7 @@ function CoachPanel({
                     <ol className="mt-2 list-decimal space-y-1 pl-5 text-lg leading-snug">
                       <li>Your group painpoint</li>
                       <li>Your agent idea</li>
-                      <li>Walk us through the prototype</li>
+                      <li>Walk us through the demo</li>
                       <li>The key benefit as closing</li>
                     </ol>
                   </div>
@@ -1861,7 +1861,7 @@ function DebugMenu({ onClose, onEngine }: { onClose: () => void; onEngine: (engi
         {(
           [
             ["Text generation", "coach"],
-            ["Prototype", "html"],
+            ["Demo", "html"],
             ["Image", "image"],
           ] as const
         ).map(([label, key]) => (

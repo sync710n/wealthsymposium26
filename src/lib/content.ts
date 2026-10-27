@@ -210,5 +210,5 @@ export const FLOW: { id: Exclude<StepId, "overview">; n: string; short: string; 
   { id: "pain", n: "0", short: "Painpoint", kicker: "Phase 0" },
   { id: "brief", n: "1", short: "Brief", kicker: "Phase 1" },
   { id: "scenes", n: "2", short: "Screens", kicker: "Phase 2" },
-  { id: "prototype", n: "3", short: "Prototype", kicker: "Phase 3" },
+  { id: "prototype", n: "3", short: "Demo", kicker: "Phase 3" },
 ];
