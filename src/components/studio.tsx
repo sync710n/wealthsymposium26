@@ -696,12 +696,12 @@ function PainStep() {
                 selected ? "is-picked border-rule bg-soft" : "border-line bg-sheet"
               }`}
             >
-              <span className="flex items-center gap-2">
+              <span className="flex shrink-0 items-center gap-2">
                 <Icon className="size-5 shrink-0 text-rule" aria-hidden />
                 <span className="font-medium text-rule">{item.id}</span>
                 <span className="font-bold leading-tight">{item.title}</span>
               </span>
-              <span className="mt-1 leading-snug">{item.text}</span>
+              <span className="mt-1 min-h-0 flex-1 overflow-y-auto text-base leading-snug">{item.text}</span>
             </button>
           );
         })}

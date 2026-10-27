@@ -125,15 +125,13 @@ export function painGuide(_painId: string): string {
   ].join("\n\n");
 }
 
-export function briefGuide(key: BriefKey | "", painId: string, scenario: string): string {
+export function briefGuide(key: BriefKey | "", painId: string, _scenario: string): string {
   const ask = ASK[painId] ?? ASK.own;
-  const moment = scenario.trim();
   if (key === "name") {
     return ["A short name the group will remember, for example EDD guru.", ask.name, "Say it out loud. If it sounds like a system, or like the problem, it is not the name yet."].join("\n\n");
   }
   if (key === "agentDoes") {
     return [
-      moment ? `Stay inside this painpoint: ${moment}` : "Stay inside the painpoint you picked.",
       ask.does,
       "Write what the assistant does, not what you do. If the sentence still describes the pain, you have not said the job.",
     ].join("\n\n");
@@ -151,7 +149,6 @@ export function briefGuide(key: BriefKey | "", painId: string, scenario: string)
     ].join("\n\n");
   }
   return [
-    moment ? `You are designing for this painpoint only: ${moment}` : "Pick a painpoint first. The brief has to answer that painpoint.",
     "Click a box. The question on the right is for the group to answer. Don't look for a sample sentence.",
   ].join("\n\n");
 }

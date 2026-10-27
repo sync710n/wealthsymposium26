@@ -14705,13 +14705,12 @@ button.text-rule {
 			"Say it out loud. If it sounds like a system, or like the problem, it is not the name yet."
 		].join("\n\n");
 		if (key === "agentDoes") return [
-			moment ? `Stay inside this painpoint: ${moment}` : "Stay inside the painpoint you picked.",
 			ask.does,
 			"Write what the assistant does, not what you do. If the sentence still describes the pain, you have not said the job."
 		].join("\n\n");
 		if (key === "rmSees") return [ask.sees, "Write it as yourself: I see… or I get… If you cannot point at it, it is still an idea."].join("\n\n");
 		if (key === "benefits") return [ask.benefits, "One change for you. One change for the client. If the benefit could fit any agent, it is too vague for this painpoint."].join("\n\n");
-		return [moment ? `You are designing for this painpoint only: ${moment}` : "Pick a painpoint first. The brief has to answer that painpoint.", "Click a box. The question on the right is for the group to answer. Don't look for a sample sentence."].join("\n\n");
+		return ["Click a box. The question on the right is for the group to answer. Don't look for a sample sentence."].join("\n\n");
 	}
 	var SCENE_HINTS = {
 		"01": "Design three screens. What are the three steps your assistant takes when the book is too big: who has changed, who to contact first, and how you open so it is relevant?",
@@ -16248,7 +16247,7 @@ window.addEventListener("resize",magnify);
 							},
 							className: `scenario-card flex h-full min-h-0 flex-col overflow-hidden rounded-xl border px-3 py-2 text-left text-lg leading-snug ${selected ? "is-picked border-rule bg-soft" : "border-line bg-sheet"}`,
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-								className: "flex items-center gap-2",
+								className: "flex shrink-0 items-center gap-2",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, {
 										className: "size-5 shrink-0 text-rule",
@@ -16264,7 +16263,7 @@ window.addEventListener("resize",magnify);
 									})
 								]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "mt-1 leading-snug",
+								className: "mt-1 min-h-0 flex-1 overflow-y-auto text-base leading-snug",
 								children: item.text
 							})]
 						}, item.id);
