@@ -16442,7 +16442,13 @@ window.addEventListener("resize",magnify);
 					sceneText: paragraph
 				};
 				setImage(index, slot);
-				await saveImage(index, slot);
+				setErrors((current) => ({
+					...current,
+					[index]: ""
+				}));
+				try {
+					await saveImage(index, slot);
+				} catch {}
 			} catch {
 				setErrors((current) => ({
 					...current,
@@ -16517,9 +16523,9 @@ window.addEventListener("resize",magnify);
 										onChange: (event) => setScene(sceneIndex, event.target.value),
 										className: `min-h-0 w-full flex-1 resize-none border-0 px-3 py-2 text-xl leading-snug ${picked ? "bg-soft" : "bg-sheet"}`
 									}),
-									errors[index] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									errors[index] && !slot ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "max-h-10 shrink-0 overflow-hidden px-3 text-base leading-tight text-rule",
-										children: "The screen did not come back. Try again."
+										children: errors[index]
 									}) : null
 								]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

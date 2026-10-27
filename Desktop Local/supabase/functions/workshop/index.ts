@@ -20,25 +20,44 @@ function json(body: unknown, status = 200) {
   });
 }
 
-function firstDataUrl(value: unknown): string {
-  if (!value) return "";
-  if (typeof value === "string") return value.startsWith("data:image/") ? value : "";
+function findImage(value: unknown, key = ""): { b64: string; url: string } {
+  const empty = { b64: "", url: "" };
+  if (!value) return empty;
+  if (typeof value === "string") {
+    if (value.startsWith("data:image/")) return { b64: "", url: value };
+    if (key === "b64_json" && value.length > 80) return { b64: value, url: "" };
+    if ((key === "url" || key === "image_url" || key === "image") && value.startsWith("http")) return { b64: "", url: value };
+    return empty;
+  }
   if (Array.isArray(value)) {
     for (const item of value) {
-      const found = firstDataUrl(item);
-      if (found) return found;
+      const found = findImage(item, key);
+      if (found.b64 || found.url) return found;
     }
-    return "";
+    return empty;
   }
   if (typeof value === "object") {
     const record = value as Record<string, unknown>;
-    if (typeof record.url === "string" && record.url.startsWith("data:image/")) return record.url;
-    for (const item of Object.values(record)) {
-      const found = firstDataUrl(item);
-      if (found) return found;
+    if (typeof record.b64_json === "string" && record.b64_json.length > 80) return { b64: record.b64_json, url: "" };
+    for (const [childKey, child] of Object.entries(record)) {
+      const found = findImage(child, childKey);
+      if (found.b64 || found.url) return found;
     }
   }
-  return "";
+  return empty;
+}
+
+async function asDataUrl(found: { b64: string; url: string }) {
+  if (found.b64) return `data:image/png;base64,${found.b64}`;
+  if (found.url.startsWith("data:image/")) return found.url;
+  if (!found.url.startsWith("http")) return "";
+  const fetched = await fetch(found.url);
+  if (!fetched.ok) return found.url;
+  const bytes = new Uint8Array(await fetched.arrayBuffer());
+  let binary = "";
+  for (let i = 0; i < bytes.length; i += 32768) binary += String.fromCharCode(...bytes.subarray(i, i + 32768));
+  const type = fetched.headers.get("content-type") || "image/png";
+  return `data:${type};base64,${btoa(binary)}`;
 }
 
 async function openRouterImage(data: { index?: number; paragraph?: string; context?: string; others?: string }) {
@@ -59,20 +78,23 @@ async function openRouterImage(data: { index?: number; paragraph?: string; conte
     }),
   });
   const raw = await response.text();
+  let body: unknown = null;
+  try {
+    body = JSON.parse(raw);
+  } catch {
+    body = null;
+  }
+  const found = findImage(body);
+  if (found.b64 || found.url) {
+    const dataUrl = await asDataUrl(found);
+    if (dataUrl) return { ok: true, dataUrl };
+  }
   if (!response.ok) {
-    let message = "The picture did not come back. Try again.";
-    try {
-      const parsed = JSON.parse(raw) as { error?: { message?: string } };
-      if (parsed.error?.message) message = parsed.error.message.slice(0, 180);
-    } catch {
-      if (raw) message = raw.slice(0, 180);
-    }
+    const parsed = body as { error?: { message?: string } } | null;
+    const message = parsed?.error?.message?.slice(0, 180) || raw.slice(0, 180) || "The screen did not come back. Try again.";
     return { ok: false, error: message };
   }
-  const body = JSON.parse(raw) as { data?: { b64_json?: string; media_type?: string }[] };
-  const first = body.data?.[0];
-  if (!first?.b64_json) return { ok: false, error: "The picture did not come back. Try again." };
-  return { ok: true, dataUrl: `data:${first.media_type || "image/png"};base64,${first.b64_json}` };
+  return { ok: false, error: "The screen did not come back. Try again." };
 }
 
 Deno.serve(async (request) => {

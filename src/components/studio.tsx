@@ -861,7 +861,12 @@ function ScenesStep() {
       }
       const slot = { dataUrl: result.dataUrl, sceneText: paragraph };
       setImage(index, slot);
-      await saveImage(index, slot);
+      setErrors((current) => ({ ...current, [index]: "" }));
+      try {
+        await saveImage(index, slot);
+      } catch {
+        /* The screen is already visible. Saving it must not look like a failure. */
+      }
     } catch {
       setErrors((current) => ({
         ...current,
@@ -925,8 +930,8 @@ function ScenesStep() {
                   onChange={(event) => setScene(sceneIndex, event.target.value)}
                   className={`min-h-0 w-full flex-1 resize-none border-0 px-3 py-2 text-xl leading-snug ${picked ? "bg-soft" : "bg-sheet"}`}
                 />
-                {errors[index] ? (
-                  <p className="max-h-10 shrink-0 overflow-hidden px-3 text-base leading-tight text-rule">The screen did not come back. Try again.</p>
+                {errors[index] && !slot ? (
+                  <p className="max-h-10 shrink-0 overflow-hidden px-3 text-base leading-tight text-rule">{errors[index]}</p>
                 ) : null}
               </div>
               <div
