@@ -873,7 +873,6 @@ function ScenesStep() {
     }
   }
 
-  const paragraphsReady = scenes.every((scene) => sceneReady(scene));
   const allFrames = images.every(Boolean);
   const anyStale = scenes.some((scene, index) => imageStale(images[index], scene));
 
@@ -891,16 +890,6 @@ function ScenesStep() {
         <div className="flex shrink-0 justify-end gap-2">
           <button type="button" className="h-12 rounded-full px-3 text-xl font-medium text-rule" onClick={() => go("brief")}>
             Back
-          </button>
-          <button
-            type="button"
-            disabled={!paragraphsReady || anyBusy}
-            className={`h-12 rounded-full px-4 text-xl font-medium disabled:opacity-40 ${allFrames && !anyStale ? "border border-line" : "btn-glow"}`}
-            onClick={() => {
-              void Promise.all([0, 1, 2].map((index) => draw(index as 0 | 1 | 2)));
-            }}
-          >
-            {anyBusy ? `Generating · ${seconds}s` : "Generate images"}
           </button>
           <button
             type="button"
@@ -940,47 +929,52 @@ function ScenesStep() {
                 {errors[index] ? (
                   <p className="max-h-10 shrink-0 overflow-hidden px-3 text-base leading-tight text-rule">The picture did not come back. Try again.</p>
                 ) : null}
-                <button
-                  type="button"
-                  disabled={!sceneReady(scene) || busy[index]}
-                  onClick={() => void draw(sceneIndex)}
-                  className="h-11 shrink-0 border-t border-line text-xl font-medium disabled:opacity-40"
-                >
-                  {busy[index]
-                    ? `Generating · ${seconds}s`
-                    : !sceneReady(scene)
-                      ? "Write a full sentence"
-                      : slot
-                        ? "Generate image again"
-                        : "Generate image"}
-                </button>
               </div>
-              <div className="scene-frame relative shrink-0 border-l border-line bg-sheet">
-                {slot ? (
-                  <>
-                    <img src={slot.dataUrl} alt="" className="absolute inset-0 h-full w-full object-contain" />
+              <div
+                className="group scene-frame relative shrink-0 border-l border-line bg-sheet"
+                onClick={() => {
+                  setActiveScene(sceneIndex);
+                  useSession.getState().setFocus({ kind: "scene", index: sceneIndex });
+                }}
+              >
+                {slot ? <img src={slot.dataUrl} alt="" className="absolute inset-0 h-full w-full object-contain" /> : null}
+                {stale ? (
+                  <span className="absolute top-1 left-1 z-10 border border-line bg-soft px-2 py-1 text-base font-medium text-ink">Out of date</span>
+                ) : null}
+                {busy[index] ? (
+                  <div className="absolute inset-0 z-10 flex flex-col bg-sheet/85">
+                    <Working label="Generating this image" seconds={seconds} />
+                  </div>
+                ) : slot ? (
+                  <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center gap-2 bg-ink/45 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
                     <button
                       type="button"
-                      className="absolute top-1 right-1 inline-flex size-10 items-center justify-center border border-line bg-sheet"
+                      disabled={!sceneReady(scene)}
+                      onClick={() => void draw(sceneIndex)}
+                      className="h-11 btn-glow px-3 text-lg font-medium disabled:opacity-40"
+                    >
+                      Generate again
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex size-11 items-center justify-center border border-line bg-sheet"
                       aria-label={`Open screen ${index + 1} full screen`}
                       onClick={() => setFull(slot.dataUrl)}
                     >
                       <Expand className="size-5" aria-hidden />
                     </button>
-                    {stale ? (
-                      <span className="absolute top-1 left-1 border border-line bg-soft px-2 py-1 text-base font-medium">Out of date</span>
-                    ) : null}
-                  </>
-                ) : busy[index] ? null : (
-                  <p className="absolute inset-0 flex items-center justify-center px-3 text-center text-lg text-muted">
-                    The screen lands here
-                  </p>
-                )}
-                {busy[index] ? (
-                  <div className="absolute inset-0 flex flex-col bg-sheet/85">
-                    <Working label="Generating this image" seconds={seconds} />
                   </div>
-                ) : null}
+                ) : (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-3">
+                    {sceneReady(scene) ? (
+                      <button type="button" onClick={() => void draw(sceneIndex)} className="h-11 btn-glow px-4 text-lg font-medium">
+                        Generate image
+                      </button>
+                    ) : (
+                      <p className="text-center text-lg text-muted">Write a full sentence</p>
+                    )}
+                  </div>
+                )}
               </div>
             </article>
           );
@@ -1451,7 +1445,6 @@ function CoachPanel({
   const [prototypeUndo, setPrototypeUndo] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const [allScenes, setAllScenes] = useState(true);
   const seconds = useSeconds(busy);
   const coach = workshopAction<{ ok: true; text?: string; paragraph?: string; paragraphs?: string[]; brief?: Brief; pain?: string } | { ok: false; error: string }>("coach");
   const refine = workshopAction<{ ok: true; html: string } | { ok: false; error: string }>("refine");
@@ -1476,7 +1469,7 @@ function CoachPanel({
 
   useEffect(() => {
     setDirection("");
-  }, [focusKey, allScenes]);
+  }, [focusKey]);
 
   if (forceHidden) return null;
 
@@ -1494,17 +1487,13 @@ function CoachPanel({
       : step === "brief"
         ? !String(field ? brief[field.key] : "").trim()
         : step === "scenes"
-          ? allScenes
-            ? scenes.every((scene) => !scene.trim())
-            : !scenes[sceneIndex]?.trim()
+          ? !scenes[sceneIndex]?.trim()
           : false;
   const subject =
     step === "brief"
       ? (field?.refineAs ?? "")
       : step === "scenes"
-        ? allScenes
-          ? "the three screens"
-          : `screen ${sceneIndex + 1}`
+        ? `screen ${sceneIndex + 1}`
         : step === "pain"
           ? "your pinpoint"
           : protoStep
@@ -1537,9 +1526,7 @@ function CoachPanel({
       state.step === "brief"
         ? "field"
         : state.step === "scenes"
-          ? allScenes
-            ? "scenes"
-            : "scene"
+          ? "scene"
           : "pain";
     const scenePick = state.focus?.kind === "scene" ? state.focus.index : state.activeScene;
     const fieldKey = state.focus?.kind === "field" ? state.focus.key : undefined;
@@ -1652,24 +1639,6 @@ function CoachPanel({
         </div>
         {canSuggest ? (
           <>
-            {step === "scenes" ? (
-              <div className="ios-segment flex" aria-label="How many screens to draft">
-                <button
-                  type="button"
-                  className={`h-9 flex-1 rounded-full px-2 text-lg ${allScenes ? "ios-seg-on" : "text-ink"}`}
-                  onClick={() => setAllScenes(true)}
-                >
-                  All 3 screens
-                </button>
-                <button
-                  type="button"
-                  className={`h-9 flex-1 rounded-full px-2 text-lg ${allScenes ? "text-ink" : "ios-seg-on"}`}
-                  onClick={() => setAllScenes(false)}
-                >
-                  This screen
-                </button>
-              </div>
-            ) : null}
             {needsBox || (step === "scenes" && blank) ? null : (
               <label className="block text-xl font-medium">
                   {blank

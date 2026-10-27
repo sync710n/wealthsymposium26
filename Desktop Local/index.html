@@ -75,6 +75,8 @@
     --radius-md: .375rem;
     --radius-xl: .75rem;
     --radius-2xl: 1rem;
+    --default-transition-duration: .15s;
+    --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
     --color-sheet: #fff;
@@ -446,10 +448,6 @@
     top: calc(var(--spacing) * 14);
   }
 
-  .right-1 {
-    right: var(--spacing);
-  }
-
   .right-3 {
     right: calc(var(--spacing) * 3);
   }
@@ -557,6 +555,11 @@
   .size-10 {
     width: calc(var(--spacing) * 10);
     height: calc(var(--spacing) * 10);
+  }
+
+  .size-11 {
+    width: calc(var(--spacing) * 11);
+    height: calc(var(--spacing) * 11);
   }
 
   .h-8 {
@@ -898,6 +901,16 @@
     }
   }
 
+  .bg-ink\/45 {
+    background-color: #00000073;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-ink\/45 {
+      background-color: color-mix(in oklab, var(--color-ink) 45%, transparent);
+    }
+  }
+
   .bg-ink\/80 {
     background-color: #000c;
   }
@@ -1142,6 +1155,10 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  .opacity-0 {
+    opacity: 0;
+  }
+
   .opacity-50 {
     opacity: .5;
   }
@@ -1158,6 +1175,22 @@
   .shadow-lg {
     --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, #0000001a), 0 4px 6px -4px var(--tw-shadow-color, #0000001a);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .transition-opacity {
+    transition-property: opacity;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+
+  @media (hover: hover) {
+    .group-hover\:pointer-events-auto:is(:where(.group):hover *) {
+      pointer-events: auto;
+    }
+
+    .group-hover\:opacity-100:is(:where(.group):hover *) {
+      opacity: 1;
+    }
   }
 
   .last\:border-r-0:last-child {
@@ -16360,8 +16393,7 @@ window.addEventListener("resize",magnify);
 		const [busy, setBusy] = (0, import_react.useState)({});
 		const [errors, setErrors] = (0, import_react.useState)({});
 		const [full, setFull] = (0, import_react.useState)(null);
-		const anyBusy = Object.values(busy).some(Boolean);
-		const seconds = useSeconds(anyBusy);
+		const seconds = useSeconds(Object.values(busy).some(Boolean));
 		(0, import_react.useEffect)(() => {
 			if (!full) return;
 			const onKey = (event) => {
@@ -16426,7 +16458,6 @@ window.addEventListener("resize",magnify);
 				}));
 			}
 		}
-		const paragraphsReady = scenes.every((scene) => sceneReady(scene));
 		const allFrames = images.every(Boolean);
 		const anyStale = scenes.some((scene, index) => imageStale(images[index], scene));
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -16442,34 +16473,18 @@ window.addEventListener("resize",magnify);
 						children: anyStale ? "A picture is out of date. Generate it again before you press Next." : "Write one or two sentences, then generate the image. Click a box if you want help with that screen."
 					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex shrink-0 justify-end gap-2",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								type: "button",
-								className: "h-12 rounded-full px-3 text-xl font-medium text-rule",
-								onClick: () => go("brief"),
-								children: "Back"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								type: "button",
-								disabled: !paragraphsReady || anyBusy,
-								className: `h-12 rounded-full px-4 text-xl font-medium disabled:opacity-40 ${allFrames && !anyStale ? "border border-line" : "btn-glow"}`,
-								onClick: () => {
-									Promise.all([
-										0,
-										1,
-										2
-									].map((index) => draw(index)));
-								},
-								children: anyBusy ? `Generating · ${seconds}s` : "Generate images"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								type: "button",
-								disabled: !allFrames || anyStale,
-								className: `h-12 rounded-full px-4 text-xl font-medium disabled:opacity-40 ${allFrames && !anyStale ? "btn-glow" : "border border-line"}`,
-								onClick: () => advance("prototype"),
-								children: "Next"
-							})
-						]
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "button",
+							className: "h-12 rounded-full px-3 text-xl font-medium text-rule",
+							onClick: () => go("brief"),
+							children: "Back"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							type: "button",
+							disabled: !allFrames || anyStale,
+							className: `h-12 rounded-full px-4 text-xl font-medium disabled:opacity-40 ${allFrames && !anyStale ? "btn-glow" : "border border-line"}`,
+							onClick: () => advance("prototype"),
+							children: "Next"
+						})]
 					})]
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -16504,47 +16519,64 @@ window.addEventListener("resize",magnify);
 									errors[index] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "max-h-10 shrink-0 overflow-hidden px-3 text-base leading-tight text-rule",
 										children: "The picture did not come back. Try again."
-									}) : null,
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										type: "button",
-										disabled: !sceneReady(scene) || busy[index],
-										onClick: () => void draw(sceneIndex),
-										className: "h-11 shrink-0 border-t border-line text-xl font-medium disabled:opacity-40",
-										children: busy[index] ? `Generating · ${seconds}s` : !sceneReady(scene) ? "Write a full sentence" : slot ? "Generate image again" : "Generate image"
-									})
+									}) : null
 								]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "scene-frame relative shrink-0 border-l border-line bg-sheet",
-								children: [slot ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+								className: "group scene-frame relative shrink-0 border-l border-line bg-sheet",
+								onClick: () => {
+									setActiveScene(sceneIndex);
+									useSession.getState().setFocus({
+										kind: "scene",
+										index: sceneIndex
+									});
+								},
+								children: [
+									slot ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 										src: slot.dataUrl,
 										alt: "",
 										className: "absolute inset-0 h-full w-full object-contain"
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										type: "button",
-										className: "absolute top-1 right-1 inline-flex size-10 items-center justify-center border border-line bg-sheet",
-										"aria-label": `Open screen ${index + 1} full screen`,
-										onClick: () => setFull(slot.dataUrl),
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Expand, {
-											className: "size-5",
-											"aria-hidden": true
-										})
-									}),
+									}) : null,
 									stale ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "absolute top-1 left-1 border border-line bg-soft px-2 py-1 text-base font-medium",
+										className: "absolute top-1 left-1 z-10 border border-line bg-soft px-2 py-1 text-base font-medium text-ink",
 										children: "Out of date"
-									}) : null
-								] }) : busy[index] ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "absolute inset-0 flex items-center justify-center px-3 text-center text-lg text-muted",
-									children: "The screen lands here"
-								}), busy[index] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "absolute inset-0 flex flex-col bg-sheet/85",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Working, {
-										label: "Generating this image",
-										seconds
+									}) : null,
+									busy[index] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "absolute inset-0 z-10 flex flex-col bg-sheet/85",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Working, {
+											label: "Generating this image",
+											seconds
+										})
+									}) : slot ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "pointer-events-none absolute inset-0 z-10 flex items-center justify-center gap-2 bg-ink/45 opacity-0 transition-opacity group-hover:pointer-events-auto group-hover:opacity-100",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											type: "button",
+											disabled: !sceneReady(scene),
+											onClick: () => void draw(sceneIndex),
+											className: "h-11 btn-glow px-3 text-lg font-medium disabled:opacity-40",
+											children: "Generate again"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											type: "button",
+											className: "inline-flex size-11 items-center justify-center border border-line bg-sheet",
+											"aria-label": `Open screen ${index + 1} full screen`,
+											onClick: () => setFull(slot.dataUrl),
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Expand, {
+												className: "size-5",
+												"aria-hidden": true
+											})
+										})]
+									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "absolute inset-0 flex flex-col items-center justify-center gap-2 px-3",
+										children: sceneReady(scene) ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											type: "button",
+											onClick: () => void draw(sceneIndex),
+											className: "h-11 btn-glow px-4 text-lg font-medium",
+											children: "Generate image"
+										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-center text-lg text-muted",
+											children: "Write a full sentence"
+										})
 									})
-								}) : null]
+								]
 							})]
 						}, index);
 					})
@@ -16984,7 +17016,6 @@ window.addEventListener("resize",magnify);
 		const [prototypeUndo, setPrototypeUndo] = (0, import_react.useState)(null);
 		const [error, setError] = (0, import_react.useState)("");
 		const [busy, setBusy] = (0, import_react.useState)(false);
-		const [allScenes, setAllScenes] = (0, import_react.useState)(true);
 		const seconds = useSeconds(busy);
 		const coach = workshopAction("coach");
 		const refine = workshopAction("refine");
@@ -16997,22 +17028,22 @@ window.addEventListener("resize",magnify);
 		const focusKey = focus?.kind === "field" ? focus.key : focus?.kind === "scene" ? `scene-${focus.index}` : focus?.kind === "prototype" ? `step-${focus.step}` : focus?.kind === "pain" ? "pain" : "";
 		(0, import_react.useEffect)(() => {
 			setDirection("");
-		}, [focusKey, allScenes]);
+		}, [focusKey]);
 		if (forceHidden) return null;
 		const canSuggest = step === "scenes" || step === "prototype";
 		const field = focus?.kind === "field" ? BRIEF_FIELDS.find((item) => item.key === focus.key) : void 0;
 		const sceneIndex = focus?.kind === "scene" ? focus.index : activeScene;
 		const protoStep = focus?.kind === "prototype" ? focus.step : null;
 		const needsBox = step === "brief" && !field || step === "pain" && focus?.kind !== "pain" || step === "prototype" && !protoStep;
-		const blank = step === "pain" ? painId === "own" || !painId ? !painOwn.trim() : false : step === "brief" ? !String(field ? brief[field.key] : "").trim() : step === "scenes" ? allScenes ? scenes.every((scene) => !scene.trim()) : !scenes[sceneIndex]?.trim() : false;
-		const subject = step === "brief" ? field?.refineAs ?? "" : step === "scenes" ? allScenes ? "the three screens" : `screen ${sceneIndex + 1}` : step === "pain" ? "your pinpoint" : protoStep ? `screen ${protoStep}` : "";
+		const blank = step === "pain" ? painId === "own" || !painId ? !painOwn.trim() : false : step === "brief" ? !String(field ? brief[field.key] : "").trim() : step === "scenes" ? !scenes[sceneIndex]?.trim() : false;
+		const subject = step === "brief" ? field?.refineAs ?? "" : step === "scenes" ? `screen ${sceneIndex + 1}` : step === "pain" ? "your pinpoint" : protoStep ? `screen ${protoStep}` : "";
 		const moment = scenario.replace(/[.?!]\s*$/, "");
 		const hint = step === "overview" ? "Nominate one person as group leader. They drive the laptop. At the end, your group presents the prototype to the other groups." : step === "pain" ? painGuide(painId ?? "") : step === "brief" ? briefGuide(field?.key ?? "", painId ?? "", scenario) : step === "scenes" ? painId && SCENE_HINTS[painId] || (scenario ? SCENE_HINTS.own : "Design three screens. What are the three steps your assistant takes? Describe each screen.") : protoStep ? scenario ? `One change for this screen, still about this pinpoint: ${moment}. The other two screens stay as they are.` : "Tell me the one change for this screen. The other two stay as they are." : "Pick a screen above the prototype. I'll only change that one.";
 		async function suggest() {
 			const state = useSession.getState();
 			setBusy(true);
 			setError("");
-			const target = state.step === "brief" ? "field" : state.step === "scenes" ? allScenes ? "scenes" : "scene" : "pain";
+			const target = state.step === "brief" ? "field" : state.step === "scenes" ? "scene" : "pain";
 			const scenePick = state.focus?.kind === "scene" ? state.focus.index : state.activeScene;
 			const fieldKey = state.focus?.kind === "field" ? state.focus.key : void 0;
 			const pickedStep = state.focus?.kind === "prototype" ? state.focus.step : null;
@@ -17148,21 +17179,6 @@ window.addEventListener("resize",magnify);
 						}, line))]
 					}),
 					canSuggest ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-						step === "scenes" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "ios-segment flex",
-							"aria-label": "How many screens to draft",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								type: "button",
-								className: `h-9 flex-1 rounded-full px-2 text-lg ${allScenes ? "ios-seg-on" : "text-ink"}`,
-								onClick: () => setAllScenes(true),
-								children: "All 3 screens"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								type: "button",
-								className: `h-9 flex-1 rounded-full px-2 text-lg ${allScenes ? "text-ink" : "ios-seg-on"}`,
-								onClick: () => setAllScenes(false),
-								children: "This screen"
-							})]
-						}) : null,
 						needsBox || step === "scenes" && blank ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
 							className: "block text-xl font-medium",
 							children: [blank ? "Want a starting point? Add a steer if you like." : subject ? `How do you want ${subject} to be further refined?` : "How do you want this to be further refined?", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
