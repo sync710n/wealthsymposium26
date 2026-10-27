@@ -913,7 +913,7 @@ function ScenesStep() {
             >
               <div className="flex min-w-0 flex-1 flex-col">
                 <header className={`shrink-0 border-b border-line px-3 py-1 text-xl font-medium leading-tight ${picked ? "bg-soft" : ""}`}>
-                  Screen {index + 1}
+                  Screen {index + 1} prompt
                 </header>
                 <textarea
                   value={scene}
