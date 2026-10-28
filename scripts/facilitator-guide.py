@@ -484,7 +484,7 @@ def main():
         "06  Lengthy onboarding, KYC and EDD",
         "07  Lengthy discount and bespoke approvals",
         "08  Complex cross-border requirements",
-        "09  Market news and in-house insights overload",
+        "09  Too much market information to absorb",
         "Own  They wrote their own",
     ]
     y = 6.0

@@ -50,8 +50,8 @@ export const PAINPOINTS: { id: string; title: string; text: string; icon: string
   {
     id: "09",
     icon: "news",
-    title: "Market news and in-house insights overload",
-    text: "There is too much market news and too many in-house insights to absorb. I struggle to work out which developments matter to each client's holdings, goals, and concerns, and what I should discuss with them.",
+    title: "Too much market information to absorb",
+    text: "There is a lot of market news and in-house insights to keep up with. I struggle to absorb it all and work out which developments matter to each individual client's holdings, goals and concerns, and what I should discuss with them.",
   },
 ];
 
