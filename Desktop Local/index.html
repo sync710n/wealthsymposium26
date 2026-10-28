@@ -1044,6 +1044,11 @@
     line-height: var(--tw-leading, var(--text-base--line-height));
   }
 
+  .pain-copy {
+    font-size: 0.92rem;
+    line-height: 1.35;
+  }
+
   .text-lg {
     font-size: var(--text-lg);
     line-height: var(--tw-leading, var(--text-lg--line-height));
@@ -15623,8 +15628,8 @@ button.text-rule {
 		});
 	}
 	var PHASE_LIMIT = {
-		pain: 300,
-		brief: 300,
+		pain: 180,
+		brief: 420,
 		scenes: 480,
 		prototype: 720
 	};
@@ -16272,7 +16277,7 @@ window.addEventListener("resize",magnify);
 									})
 								]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "mt-1 min-h-0 flex-1 overflow-y-auto text-base leading-snug",
+								className: "pain-copy mt-1 min-h-0 flex-1 overflow-y-auto",
 								children: item.text
 							})]
 						}, item.id);

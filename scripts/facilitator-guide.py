@@ -224,8 +224,8 @@ def main():
 
     rows = [
         ("Phase", "On screen", "Their timer", "Your cutoff"),
-        ("0", "Painpoint", "5:00", "Minute 0 to 5"),
-        ("1", "Idea brief", "5:00", "Minute 5 to 10"),
+        ("0", "Painpoint", "3:00", "Minute 0 to 3"),
+        ("1", "Idea brief", "7:00", "Minute 3 to 10"),
         ("2", "Design 3 screens", "8:00", "Minute 10 to 18"),
         ("3", "Demo", "12:00", "Minute 18 to 30"),
     ]
@@ -377,14 +377,14 @@ def main():
     phases = [
         (
             "0   Painpoint",
-            "5 minutes",
+            "3 minutes",
             "One card, or their own sentence in the bottom row. Next stays grey until then.",
             "Choosing a pain, or already designing the agent. A pain is a situation. An idea is a feature.",
             "“Which of these would you want gone before Thursday?”",
         ),
         (
             "1   Idea brief",
-            "5 minutes",
+            "7 minutes",
             "A short name and three boxes, in their words. Next needs all four. The pain at the top is locked.",
             "A name that sounds like a product. A job that is “helps with everything.” A benefit that fits any agent.",
             "“Say the name out loud.” For a thin box: “Write a bit more. After about ten words, Refine can help. You still press Accept.”",
