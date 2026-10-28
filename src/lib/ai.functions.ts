@@ -712,7 +712,7 @@ function prototypeRequest(data: PrototypeInput) {
       content: shots.length
         ? [
             ...shots.flatMap((url) => [
-              { type: "text", text: "This picture is the work area. Include its chart if it has one, drawn as inline SVG, plus the cards, numbers, and names. Do not leave those out." },
+              { type: "text", text: "This picture is the work area. Draw its chart as inline SVG if it has one, and still include one chart, inline SVG icons, and a progress bar. Keep the cards, numbers, and names." },
               { type: "image_url", image_url: { url, detail: "high" } },
             ]),
             { type: "text", text: `${instruction}\n${extra}` },
